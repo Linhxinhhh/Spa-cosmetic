@@ -1,0 +1,25 @@
+.container { max-width: none !important; }
+
+/* Header */
+.page-header {
+  background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+  border-radius: 16px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+.page-title { font-size: 2.0rem; font-weight: 800; margin-bottom: .25rem; position: relative; z-index: 2; }
+.page-subtitle { font-size: 1.05rem; opacity: .9; position: relative; z-index: 2; }
+
+/* Effects */
+.badge-glow { box-shadow: 0 0 8px rgba(59,130,246,.3); }
+.table-container { box-shadow: 0 4px 20px rgba(59,130,246,.15); }
+tr:hover { border-left: 4px solid #3b82f6; }
+
+/* Custom scrollbar (chỉ cho khu vực có overflow-x-auto) */
+.overflow-x-auto::-webkit-scrollbar { height: 6px; }
+.overflow-x-auto::-webkit-scrollbar-track { background: white; border-radius: 3px; }
+.overflow-x-auto::-webkit-scrollbar-thumb { background: #3b82f6; border-radius: 3px; }
+.overflow-x-auto::-webkit-scrollbar-thumb:hover { background: #2563eb; }
