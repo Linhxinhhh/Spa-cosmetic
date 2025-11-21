@@ -365,3 +365,6 @@ Route::get('/api/availability', [BookingController::class, 'availability'])->nam
 
 
 
+Route::get('/', function () {
+    return 'Laravel is running';
+});
