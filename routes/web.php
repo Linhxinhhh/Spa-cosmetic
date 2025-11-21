@@ -1,4 +1,6 @@
 <?php
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AdminAuthenticatedSessionController as AdminAuth;
@@ -27,6 +29,18 @@ use App\Http\Controllers\User\GuideUserController as FrontGuide;
 
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
+Route::get('/', function () {
+    if (Auth::guard('admin')->check()) {
+        return redirect()->route('admin.dashboard');
+    }
+
+    if (Auth::check()) {
+        return redirect()->route('users.home');
+    }
+
+    return redirect('/users/home');
+});
+
 Route::get('/gemini/models', function () {
     $key = env('GEMINI_API_KEY');
     return Http::get("https://generativelanguage.googleapis.com/v1/models?key=$key")->json();
@@ -365,6 +379,3 @@ Route::get('/api/availability', [BookingController::class, 'availability'])->nam
 
 
 
-Route::get('/', function () {
-    return 'Laravel is running';
-});
