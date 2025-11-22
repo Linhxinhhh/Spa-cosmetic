@@ -36,7 +36,8 @@ return new class extends Migration
             $table->json('images')->nullable();
             $table->string('thumbnail', 255)->nullable();
 
-            $table->boolean('status')->default(1);        // 1=active, 0=inactive
+            $table->boolean('status')->default(1);        
+            $table->tinyInteger('is_active')->nullable();
             $table->boolean('is_featured')->default(0);   // 1=nổi bật
 
             $table->timestamps();

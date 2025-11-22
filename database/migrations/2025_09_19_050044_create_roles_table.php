@@ -13,11 +13,25 @@ return new class extends Migration
     {
         Schema::create('roles', function (Blueprint $table) {
             $table->engine = 'InnoDB';
-            $table->bigIncrements('id');
+            $table->bigIncrements('role_id');
             $table->string('name', 100)->unique();
             $table->string('display_name', 150)->nullable();
             $table->timestamps();
         });
+        DB::table('roles')->insert([
+        [
+            'name' => 'admin',
+            'display_name' => 'Quản Trị Viên',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ],
+        [
+            'name' => 'staff',
+            'display_name' => 'Nhân Viên',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ],
+    ]);
     }
 
     /**
@@ -25,6 +39,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('role');
+        Schema::dropIfExists('roles');
     }
 };

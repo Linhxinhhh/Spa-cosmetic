@@ -17,7 +17,7 @@
             </svg>
             <h5 class="text-muted">Bạn chưa có đơn hàng nào</h5>
             <p class="text-muted">Hãy bắt đầu mua sắm để tạo đơn hàng đầu tiên!</p>
-            <a href="{{ route('users.shop') }}" class="btn btn-primary mt-3">
+            <a href="{{ route('users.home') }}" class="btn btn-primary mt-3">
                 <i class="bi bi-shop"></i> Bắt đầu mua sắm
             </a>
         </div>

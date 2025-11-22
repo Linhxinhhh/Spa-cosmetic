@@ -23,7 +23,7 @@ return new class extends Migration
 
             $table->text('description')->nullable();
             $table->string('image', 255)->nullable();
-
+            $table->string('slug', 255);
             // 1 = hoạt động, 0 = ngưng
             $table->tinyInteger('status')->default(1);
 
