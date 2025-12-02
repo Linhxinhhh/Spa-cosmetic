@@ -80,7 +80,12 @@ public function assignRole($role)
     $this->roles()->sync([$role->id]); // sync để chỉ có 1 role
 }
 protected $appends = ['avatar_url'];
-
+public function scopeStaff($query)
+    {
+        return $query->whereHas('roles', function ($q) {
+            $q->where('name', 'staff');
+        });
+    }
 public function getAvatarUrlAttribute(): string
     {
         $avatar = trim((string)($this->avatar ?? ''));

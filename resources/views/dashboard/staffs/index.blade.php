@@ -1,8 +1,8 @@
 @extends('dashboard.layouts.app')
 
 @section('breadcrumb-parent', 'Quản trị')
-@section('breadcrumb-child', 'Quản trị thương hiệu')
-@section('page-title', 'Danh mục thương hiệu')
+@section('breadcrumb-child', 'Quản trị nhân viên')
+@section('page-title', 'Nhân viên')
 
 @push('styles')
 <link href="{{ asset('admin/giaodien/css/style.css') }}" rel="stylesheet">
@@ -20,14 +20,14 @@
         <div class="row align-items-center">
             <div class="col-md-8">
                 <h1 class="mb-2" style="font-size:2.5rem;font-weight:700;">
-                    <i class="fas fa-tags mr-3"></i>Quản lý thương hiệu
+                    <i class="fas fa-users mr-3"></i>Quản lý nhân viên
                 </h1>
             </div>
             <div class="col-md-4">
                 <div class="d-flex justify-content-md-end gap-2">
-                
+                  
                     {{-- Thêm mới --}}
-                    <a href="{{ route('admin.brands.create') }}" class="btn-add">
+                    <a href="{{ route('admin.staffs.create') }}" class="btn-add">
                         <i class="fas fa-plus me-1"></i> Thêm mới
                     </a>
                 </div>
@@ -45,31 +45,41 @@
     {{-- Search & Filter --}}
     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
         {{-- Search --}}
-        <form action="{{ route('admin.brands.index') }}" method="GET"
+        <form action="{{ route('admin.staffs.index') }}" method="GET"
               class="d-flex gap-2 align-items-center bg-white rounded-xl shadow-lg px-3 py-2 border border-blue-100">
-            <input type="text" name="keyword" value="{{ request('keyword') }}"
-                   placeholder="Tìm kiếm thương hiệu theo tên, mô tả..."
+            <input type="text" name="search" value="{{ request('search') }}"
+                   placeholder="Tìm kiếm nhân viên theo tên, email..."
                    class="px-3 py-2 border border-gray-200 rounded-lg"
                    style="min-width:260px; width:300px">
             {{-- Giữ params lọc --}}
             <input type="hidden" name="status" value="{{ request('status') }}">
+            <input type="hidden" name="position" value="{{ request('position') }}">
             <button class="px-3 py-2 bg-blue-600 text-white rounded-lg"><i class="fas fa-search mr-1"></i></button>
         </form>
 
         {{-- Filter --}}
-        <form method="GET" action="{{ route('admin.brands.index') }}" 
+        <form method="GET" action="{{ route('admin.staffs.index') }}" 
               class="d-flex gap-2 align-items-center bg-white rounded-xl shadow-lg px-3 py-2 border border-blue-100">
             <select name="status" class="px-7 py-2 border border-gray-200 rounded-lg">
                 <option value="">Tất cả trạng thái</option>
-                <option value="1" {{ request('status')==='1' ? 'selected' : '' }}>Đang bán</option>
-                <option value="0" {{ request('status')==='0' ? 'selected' : '' }}>Ngưng bán</option>
-                <option value="2" {{ request('status')==='2' ? 'selected' : '' }}>Hết hàng</option>
+                <option value="1" {{ request('status')==='1' ? 'selected' : '' }}>Hoạt động</option>
+                <option value="0" {{ request('status')==='0' ? 'selected' : '' }}>Không hoạt động</option>
+            </select>
+
+            <select name="position" class="px-3 py-2 border border-gray-200 rounded-lg">
+                <option value="">Tất cả vị trí</option>
+                {{-- Giả sử pass $positions từ controller --}}
+                @foreach($positions ?? [] as $pos)
+                    <option value="{{ $pos->id }}" {{ request('position') == $pos->id ? 'selected' : '' }}>
+                        {{ $pos->name }}
+                    </option>
+                @endforeach
             </select>
 
             <button type="submit" class="px-3 py-2 bg-blue-50 text-blue-600 rounded-lg">
                 <i class="fas fa-filter mr-1"></i>Lọc
             </button>
-            <a href="{{ route('admin.brands.index') }}" class="px-3 py-2 bg-gray-50 text-gray-700 rounded-lg">Xoá lọc</a>
+            <a href="{{ route('admin.staffs.index') }}" class="px-3 py-2 bg-gray-50 text-gray-700 rounded-lg">Xoá lọc</a>
         </form>
     </div>
 
@@ -79,71 +89,58 @@
             <thead>
                 <tr>
                     <th style="width:80px">#ID</th>
-                    <th style="min-width:200px">Tên thương hiệu</th>
-                    <th style="min-width:200px" >Logo</th>
-                    <th style="min-width:200px">Mô tả</th>
-                    <th style="min-width:200px">Trạng thái</th>
-                    <th style="min-width:200px">Hành động</th> 
+                    <th style="min-width:60px">Avatar</th>
+                    <th style="min-width:200px">Tên nhân viên</th>
+                    <th style="min-width:180px">Email</th>
+                    <th>SĐT</th>
+                    <th>Vị trí</th>
+                  
+                    <th>Trạng thái</th>
+                    <th>Hành động</th>
                 </tr>
             </thead>
             <tbody>
-                @forelse($brands as $brand)
+                @forelse($staffs as $staff)
                     <tr>
-                        <td><strong>#{{ $brand->brand_id }}</strong></td>
-                        <td class="text-center">
-                            <strong>{{ $brand->brand_name }}</strong><br>
-                            @if($brand->description)
-                                <small class="text-muted">{{ Str::limit($brand->description, 80) }}</small>
+                        <td><strong>#{{ $staff->staff_id }}</strong></td>
+                        <td>
+                            <img src="{{ $staff->avatar_url }}" alt="Avatar" width="50" height="50" class="rounded-circle" 
+                                 onerror="this.src='{{ asset('images/no-avatar.png') }}'">
+                        </td>
+                        <td class="text-left">
+                            <strong>{{ $staff->full_name }}</strong><br>
+                            @if($staff->user)
+                                <small class="text-muted">User: {{ $staff->user->name ?? $staff->user->email }}</small>
                             @endif
                         </td>
-                    <td style="display: flex; align-items: center; justify-content: center; text-align: center; vertical-align: middle;">
-    @if($brand->logo)
-        @php
-            $logoPath = $brand->logo;
-            $logoSrc = null;
-            if (Storage::disk('public')->exists($logoPath)) {
-                $logoSrc = Storage::url($logoPath);
-            } elseif (Str::startsWith($logoPath, ['http://', 'https://', '//'])) {
-                $logoSrc = $logoPath;
-            } else {
-                $logoSrc = asset($logoPath);
-            }
-        @endphp
-        @if($logoSrc)
-            <img style="max-width: 150px; height: auto; display: block; margin: 0 auto; object-fit: contain;" src="{{ $logoSrc }}" class="service-image" alt="{{ $brand->brand_name }}">
-        @else
-            <div style="display: flex; align-items: center; justify-content: center; width: 150px; height: 100px; background: #f8f9fa; border-radius: 8px;">
-                <i class="fas fa-image text-muted" style="font-size: 2rem;"></i>
-            </div>
-        @endif
-    @else
-        <div style="display: flex; align-items: center; justify-content: center; width: 150px; height: 100px; background: #f8f9fa; border-radius: 8px;">
-            <span class="text-muted">Không có logo</span>
-        </div>
-    @endif
-</td>
-                        <td>{{ $brand->description ?? 'Chưa có mô tả' }}</td>
+                        <td>{{ $staff->email }}</td>
+                        <td>{{ $staff->phone }}</td>
+                        <td>{{ $staff->position }}</td>
+                      
                         <td>
-                            <span class="badge {{ $brand->status == 1 ? 'bg-success' : ($brand->status == 0 ? 'bg-danger' : 'bg-warning') }}">
-                                {{ $brand->status == 1 ? 'Đang bán' : ($brand->status == 0 ? 'Ngưng bán' : 'Hết hàng') }}
+                            <span class="badge {{ $staff->status ? 'bg-success' : 'bg-danger' }}">
+                                {{ $staff->status ? 'Hoạt động' : 'Không hoạt động' }}
                             </span>
                         </td>
                         <td>
                             <div class="action-buttons">
-                                <a href="{{ route('admin.brands.edit', $brand->brand_id) }}" class="btn btn-edit" title="Chỉnh sửa">
+                                <a href="{{ route('admin.staffs.show', $staff->staff_id) }}" class="btn btn-info btn-sm" title="Xem chi tiết">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a href="{{ route('admin.staffs.edit', $staff->staff_id) }}" class="btn btn-warning btn-sm" title="Chỉnh sửa">
                                     <i class="fas fa-edit"></i>
                                 </a>
-                                <form action="{{ route('admin.brands.destroy', $brand->brand_id) }}" method="POST" onsubmit="return confirm('Xoá thương hiệu này?')" style="display:inline;">
+                                <form action="{{ route('admin.staffs.destroy', $staff->staff_id) }}" method="POST" onsubmit="return confirm('Xoá nhân viên này?')" style="display:inline;">
                                     @csrf @method('DELETE')
-                                    <button class="btn btn-delete" title="Xoá"><i class="fas fa-trash"></i></button>
+                                    <button class="btn btn-danger btn-sm" title="Xoá"><i class="fas fa-trash"></i></button>
                                 </form>
                             </div>
                         </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="6" class="text-center py-5 text-muted">
-                            <i class="fas fa-tags fa-2x mb-2"></i><br>Chưa có thương hiệu nào
+                        <td colspan="9" class="text-center py-5 text-muted">
+                            <i class="fas fa-users fa-2x mb-2"></i><br>Chưa có nhân viên nào
                         </td>
                     </tr>
                 @endforelse
@@ -152,17 +149,17 @@
     </div>
     
     {{-- Pagination Footer --}}
-    @if($brands->hasPages())
+    @if($staffs->hasPages())
     <div class="bg-white border-top px-3 py-3 d-flex justify-content-between align-items-center">
         <div class="text-muted">
             Hiển thị
-            <span class="font-weight-bold">{{ $brands->firstItem() }}</span> –
-            <span class="font-weight-bold">{{ $brands->lastItem() }}</span>
+            <span class="font-weight-bold">{{ $staffs->firstItem() }}</span> –
+            <span class="font-weight-bold">{{ $staffs->lastItem() }}</span>
             trong tổng số
-            <span class="font-weight-bold">{{ $brands->total() }}</span> kết quả
+            <span class="font-weight-bold">{{ $staffs->total() }}</span> kết quả
         </div>
         <div>
-            {{ $brands->appends(request()->query())->onEachSide(1)->links() }}
+            {{ $staffs->appends(request()->query())->onEachSide(1)->links() }}
         </div>
     </div>
     @endif
@@ -189,12 +186,14 @@
     }
     .btn-excel:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(59,130,246,.45); }
     
-    .service-image { width: 50px; height: 50px; object-fit: cover; border-radius: 10px; }
+    .service-image { width: 80px; height: 80px; object-fit: cover; border-radius: 10px; }
     .chip { padding: 4px 8px; border-radius: 12px; font-size: 0.75rem; font-weight: 500; }
     .chip-type { background: #e0f2fe; color: #0369a1; }
     .chip-featured { background: #fef3c7; color: #d97706; }
     .price-display { font-weight: bold; color: #dc2626; font-size: 1.1em; }
     .price-old { text-decoration: line-through; color: #6b7280; font-size: 0.9em; }
+    
+
 </style>
 
 @push('scripts')

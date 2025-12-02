@@ -93,8 +93,8 @@
                 </li>
                    <li class="sidebar-item">
                     <a class="sidebar-link gap-3 py-2.5 my-1 text-base flex items-center relative rounded-md text-gray-500 w-full"
-                        href="{{route('admin.banners.index')}}">
-                        <i class="fas fa-sliders-h"></i>  <span>Banner</span>
+                        href="{{route('admin.staffs.index')}}">
+                        <i class="fas fa-user-circle"></i>  <span>Nhân viên</span>
                     </a>
                 </li>
                 <li class="sidebar-item">

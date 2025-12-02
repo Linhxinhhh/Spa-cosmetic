@@ -1,4 +1,5 @@
 <?php
+use App\Http\Controllers\Admin\StaffAccountController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 
@@ -10,7 +11,7 @@ use App\Http\Controllers\Admin\{
     AppointmentController, BannerController, BrandController, ServiceController,
     ProductController,ProductImageController, UserRoleController, CustomerController,
     ProductCategoryController, ServiceCategoryController, SearchController, GuideController,
-    GuideCategoryController, GuideTagController,ContactAdminController,FaqAdminController, TreatmentPlanController
+    GuideCategoryController, GuideTagController,ContactAdminController,FaqAdminController, TreatmentPlanController, TreatmentSessionController, StaffController
 };
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\User\{
@@ -133,7 +134,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('brands/{id}/edit',       [BrandController::class, 'edit'])->name('brands.edit')->middleware('checkrole:admin,edit');
         Route::put('brands/{id}',            [BrandController::class, 'update'])->name('brands.update')->middleware('checkrole:admin,update');
         Route::delete('brands/{id}',         [BrandController::class, 'destroy'])->name('brands.destroy')->middleware('checkrole:admin,destroy');
-
+        // nhan viên 
+        Route::resource('staffs', StaffController::class);
+         
         // Lịch hẹn
         Route::get('appointments',           [AppointmentController::class, 'index'])->name('appointments.index');
         Route::post('appointments',          [AppointmentController::class, 'store'])->name('appointments.store')->middleware('checkrole:admin,store');
