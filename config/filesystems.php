@@ -44,29 +44,28 @@ return [
             'throw' => false,
         ],
 
-        's3' => [
+      's3' => [
             'driver' => 's3',
-            'key' => env('AWS_ACCESS_KEY_ID'),
-            'secret' => env('AWS_SECRET_ACCESS_KEY'),
-            'region' => env('AWS_DEFAULT_REGION'),
-            'bucket' => env('AWS_BUCKET'),
-            'url' => env('AWS_URL'),
-            'endpoint' => env('AWS_ENDPOINT'),
-            'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
+            'key' => '8b20a0648f5a2494d26d9e4554dce38b',
+             'secret' => 'd5923b0e31ee07106b80e3ca718512b06f6546f5f01cb5739c6976c1ff2ee687',
+            'region' => 'auto',
+            'bucket' => 'hadophat-tmp',
+            'endpoint' => 'https://3010f952d9d6514cd60c2640d75b0c0c.r2.cloudflarestorage.com',
             'throw' => false,
         ],
         'r2' => [
-    'driver' => 's3',
-    'key' => env('CLOUDFLARE_R2_ACCESS_KEY_ID'),
-    'secret' => env('CLOUDFLARE_R2_SECRET_ACCESS_KEY'),
-    'region' => 'auto',
-    'bucket' => env('CLOUDFLARE_R2_BUCKET'),
-    'endpoint' => env('CLOUDFLARE_R2_URL'),
-    'use_path_style_endpoint' => true,
+            'driver' => 's3',
+            'key' => '8b20a0648f5a2494d26d9e4554dce38b',
+            'secret' => 'd5923b0e31ee07106b80e3ca718512b06f6546f5f01cb5739c6976c1ff2ee687',
+            'region' => 'auto',
+            'bucket' => 'hadophat-tmp',
+            'endpoint' => 'https://3010f952d9d6514cd60c2640d75b0c0c.r2.cloudflarestorage.com',
+            'use_path_style_endpoint' => true,
+        ],
 ],
 
 
-    ],
+    
 
     /*
     |--------------------------------------------------------------------------

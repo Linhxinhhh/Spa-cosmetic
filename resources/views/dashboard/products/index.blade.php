@@ -405,7 +405,7 @@
         // đã eager-load imagesRel(limit 2) trong controller
         $urls = $product->imagesRel->pluck('url')->all();
         // fallback: dùng accessor cũ nếu chưa có ảnh bảng product_images
-        $fallback = $product->image_url ?? asset('images/no-image.png');
+        $fallback =$product->image_url?Storage::disk('r2')->temporaryUrl($product->image_url, now()->addMinutes(5))  : "http://www.nhadattanphu.xyz/Content/images/noImage.png";
         $first  = $urls[0] ?? $fallback;
         $second = $urls[1] ?? null;
     @endphp

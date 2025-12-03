@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use function PHPUnit\Framework\isNull;
 
 class Product extends Model
 {
@@ -131,12 +132,15 @@ public function getImageUrlAttribute()
     }
 
     // Nếu dùng raw endpoint R2
-    return Storage::disk('r2')->url($this->image);
+    if(isNull($this->image)) {
+        return "http://www.nhadattanphu.xyz/Content/images/noImage.png";
+    }
+    return Storage::disk('r2')->temporaryUrl($this->image, now()->addMinutes(5));
 }
 
 public function getThumbnailAttribute()
 {
-    return $this->image_url; 
+    return  Storage::disk('r2')->temporaryUrl($this->image_url, now()->addMinutes(5)); 
 }
 
 public function imagesRel()
