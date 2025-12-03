@@ -45,6 +45,13 @@ public function getLogoUrlAttribute()
     }
     return asset('storage/' . ltrim($this->logo, '/'));
 }
+//    public function getLogoUrlAttribute()
+  //  {
+   //     if ($this->logo) {
+        //    return Storage::disk('r2')->url($this->logo);
+   //     }
+//        return null;
+ //   }
 
 // Link tới trang sản phẩm theo brand
 public function getLinkAttribute()

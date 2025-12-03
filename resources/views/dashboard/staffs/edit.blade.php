@@ -50,17 +50,18 @@
 
         <div class="form-group">
           <label class="form-label">
-            <i class="fas fa-user-tag mr-1"></i>Họ và tên <span class="required-mark">*</span>
+            <i class="fas fa-user-tag mr-1"></i>Họ tên <span class="required-mark">*</span>
           </label>
           <div class="input-icon">
             <i class="fas fa-user"></i>
             {{-- Fix: Sử dụng optional() để tránh null error --}}
             <input type="text" name="name"
                    class="form-control form-control-modern @error('name') is-invalid @enderror"
-                   value="{{ old('name', optional($staff->user)->name ?? $staff->full_name ?? '') }}" required>
+                   value="{{ old('name', optional($staff->user)->name ?? $staff->name ?? '') }}" required>
           </div>
           @error('name')<div class="invalid-feedback">{{ $message }}</div>@enderror
         </div>
+
 
         <div class="row">
           <div class="col-md-6">
@@ -94,6 +95,47 @@
       {{-- Thông tin liên hệ & lương --}}
       <div class="form-card">
         <h3 class="section-title"><i class="fas fa-phone mr-2"></i>Thông tin liên hệ & lương</h3>
+        {{-- Avatar Upload --}}
+<div class="form-group mb-4">
+    <label class="form-label d-block">
+        <i class="fas fa-image mr-1"></i>Ảnh đại diện
+    </label>
+    
+    <div class="avatar-upload-wrapper">
+        <div class="current-avatar">
+            @if($staff->user && $staff->user->avatar)
+                <img src="{{ Storage::url($staff->user->avatar) }}" 
+                     alt="Avatar" class="avatar-preview" id="currentAvatar">
+            @elseif($staff->avatar)
+                <img src="{{ Storage::url($staff->avatar) }}" 
+                     alt="Avatar" class="avatar-preview" id="currentAvatar">
+            @else
+                <img src="{{ asset('images/no-avatar.png') }}" 
+                     alt="No Avatar" class="avatar-preview" id="currentAvatar">
+            @endif
+        </div>
+
+        <div class="upload-area mt-3" id="uploadArea">
+            <input type="file" name="avatar" id="avatarInput" accept="image/*" style="display:none;">
+            <label for="avatarInput" class="upload-label">
+                <i class="fas fa-cloud-upload-alt fa-2x mb-2"></i>
+                <p><strong>Click để tải lên</strong> hoặc kéo thả ảnh vào đây</p>
+                <small class="text-muted">JPG, PNG, GIF tối đa 2MB</small>
+            </label>
+        </div>
+
+        <div id="previewContainer" class="mt-3" style="display:none;">
+            <img id="imagePreview" src="" alt="Preview" class="avatar-preview">
+            <button type="button" id="removePreview" class="btn btn-sm btn-danger mt-2">
+                <i class="fas fa-times"></i> Xóa ảnh
+            </button>
+        </div>
+    </div>
+
+    @error('avatar')
+        <div class="text-danger mt-2"><small>{{ $message }}</small></div>
+    @enderror
+</div>
         <div class="row">
           <div class="col-md-6">
             <div class="form-group">

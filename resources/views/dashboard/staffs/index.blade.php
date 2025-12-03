@@ -105,10 +105,10 @@
                         <td><strong>#{{ $staff->staff_id }}</strong></td>
                         <td>
                             <img src="{{ $staff->avatar_url }}" alt="Avatar" width="50" height="50" class="rounded-circle" 
-                                 onerror="this.src='{{ asset('images/no-avatar.png') }}'">
+                                 onerror="this.src='{{ asset('images/no_avatar.png') }}'">
                         </td>
                         <td class="text-left">
-                            <strong>{{ $staff->full_name }}</strong><br>
+                            <strong>{{ $staff->name }}</strong><br>
                             @if($staff->user)
                                 <small class="text-muted">User: {{ $staff->user->name ?? $staff->user->email }}</small>
                             @endif

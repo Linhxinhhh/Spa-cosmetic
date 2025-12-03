@@ -58,15 +58,15 @@
 
                 <div class="form-group">
                     <label class="form-label">
-                        <i class="fas fa-user-tag mr-1"></i>Họ và tên <span class="required-mark">*</span>
+                        <i class="fas fa-user-tag mr-1"></i>Tên <span class="required-mark">*</span>
                     </label>
                     <div class="input-icon">
                         <i class="fas fa-user"></i>
-                        <input type="text" name="full_name"
-                               class="form-control form-control-modern @error('full_name') is-invalid @enderror"
-                               value="{{ old('full_name') }}" required>
+                        <input type="text" name="name"
+                               class="form-control form-control-modern @error('name') is-invalid @enderror"
+                               value="{{ old('name') }}" required>
                     </div>
-                    @error('full_name')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                    @error('name')<div class="invalid-feedback">{{ $message }}</div>@enderror
                 </div>
 
                 <div class="row">
@@ -95,6 +95,22 @@
                             @error('password')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
                     </div>
+                    <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-lock mr-1"></i> Xác nhận mật khẩu <span class="required-mark">*</span>
+                        </label>
+                        <div class="input-icon">
+                            <i class="fas fa-key"></i>
+                            <input type="password" name="password_confirmation" 
+                                class="form-control form-control-modern" 
+                                required>
+                        </div>
+                        @error('password_confirmation')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
                 </div>
 
                 <div class="row">

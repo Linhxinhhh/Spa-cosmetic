@@ -133,7 +133,7 @@
                 
                 <li class="sidebar-item">
                     <a class="sidebar-link gap-3 py-2.5 my-1 text-base flex items-center relative rounded-md text-gray-500 w-full"
-                        href="#">
+                        href="{{ route('admin.analytics.index') }}">
                         <i class="bi bi-bar-chart me-2 text-success"></i> <span>Biểu Đồ</span>
                     </a>
                 </li>

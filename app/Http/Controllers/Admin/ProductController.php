@@ -262,7 +262,6 @@ if ($request->filled('delete_sub_images') && is_array($request->delete_sub_image
         $newMainId = $img->id;
     }
 
-    // ===== UPLOAD NHIỀU ẢNH PHỤ (gallery[]) =====
     if ($request->hasFile('gallery')) {
         foreach ($request->file('gallery') as $file) {
             if (!$file) continue;
@@ -275,17 +274,14 @@ if ($request->filled('delete_sub_images') && is_array($request->delete_sub_image
             ]);
         }
     }
-
-    // ===== CHỐT ẢNH CHÍNH =====
-    // Nếu hiện tại không còn ảnh nào là main (VD: đã xoá), hoặc có upload ảnh chính mới, thì set lại.
     $hasMain = ProductImage::where('product_id', $product->product_id)->where('is_main', true)->exists();
 
     if ($newMainId) {
-        // Có ảnh chính mới được upload → set nó làm main
+        
         ProductImage::where('product_id', $product->product_id)->update(['is_main' => false]);
         ProductImage::where('id', $newMainId)->update(['is_main' => true]);
     } elseif (!$hasMain) {
-        // Không có ảnh main nào (có thể do xoá main) → set ảnh đầu tiên còn lại làm main
+   
         $first = $product->imagesRel()->first();
         if ($first) { $first->update(['is_main' => true]); }
     }
@@ -306,8 +302,9 @@ if ($request->filled('delete_sub_images') && is_array($request->delete_sub_image
     // ===== Helper lưu file ảnh vào disk public và trả URL tuyệt đối =====
     protected function storeImageFile($file, $productId): string
     {
+         $path = Storage::disk('r2')->put("products/{$productId}", $file);
         // Lưu vào storage/app/public/uploads/products/{product_id}
         $path = $file->store("uploads/products/{$productId}", 'public');
-        return Storage::url($path); // ví dụ /storage/uploads/products/1/abc.jpg
+        return $path; // ví dụ /storage/uploads/products/1/abc.jpg
     }
 }
