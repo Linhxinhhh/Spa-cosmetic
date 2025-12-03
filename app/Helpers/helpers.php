@@ -140,6 +140,14 @@ if (!function_exists('product_hover_src')) {
    return $img?->url ? Storage::disk('r2')->temporaryUrl($img->url, now()->addMinutes(5)) : "http://www.nhadattanphu.xyz/Content/images/noImage.png";
     }
 }
+if (!function_exists('src_img_get')) {
+    function src_img_get($url)
+    {
+
+    // Nếu không có ảnh, trả về ảnh mặc định
+   return $url ? Storage::disk('r2')->temporaryUrl($url, now()->addMinutes(5)) : "http://www.nhadattanphu.xyz/Content/images/noImage.png";
+    }
+}
 
 if (!function_exists('product_final_price')) {
     function product_final_price($p)

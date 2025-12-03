@@ -10,7 +10,7 @@
                       flex items-center justify-center shadow-[0_1px_0_#eee_inset]
                       transition-transform duration-200 group-hover:-translate-y-1">
             <img
-              src="{{ $category->image ? asset('storage/'.$category->image) : asset('images/default-category.png') }}"
+              src="{{src_img_get( $category->image)}}"
               alt="{{ $category->category_name }}"
               class="category-image"
             >

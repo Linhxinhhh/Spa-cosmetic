@@ -43,7 +43,7 @@ public function getLogoUrlAttribute()
     if (!$this->logo) {
         return asset('images/no-logo.png');
     }
-    return asset('storage/' . ltrim($this->logo, '/'));
+    return $this->logo;
 }
 //    public function getLogoUrlAttribute()
   //  {

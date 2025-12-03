@@ -32,43 +32,15 @@
     if (!function_exists('service_img_src')) {
         function service_img_src($service) {
             $imgPath = $service->thumbnail ?: $service->images;
-            $imgPath = pick_first_image($imgPath);
-
-            if ($imgPath) {
-                // full URL?
-                if (\Illuminate\Support\Str::startsWith($imgPath, ['http://', 'https://', '//'])) {
-                    return $imgPath;
-                }
-                $imgPath = normalize_public_path($imgPath);
-
-                // file có thật trong disk public?
-                if (\Illuminate\Support\Facades\Storage::disk('public')->exists($imgPath)) {
-                    return \Illuminate\Support\Facades\Storage::url($imgPath); // => /storage/...
-                }
-
-                // fallback: asset (trường hợp ảnh nằm sẵn trong /public)
-                return asset($imgPath);
-            }
-            return asset('images/placeholder-4x3.jpg');
+            $imgPath = pick_first_image($imgPath);           
+            return src_img_get( $imgPath);
         }
     }
 
 if (!function_exists('category_img_src')) {
     function category_img_src($cat) {
         $imgPath = $cat->image ?? null;
-        if ($imgPath) {
-            if (\Illuminate\Support\Str::startsWith($imgPath, ['http://', 'https://', '//'])) {
-                return $imgPath;
-            }
-            $imgPath = ltrim($imgPath, '/');
-            $imgPath = preg_replace('#^(storage/|public/)#', '', $imgPath);
-
-            if (\Illuminate\Support\Facades\Storage::disk('public')->exists($imgPath)) {
-                return \Illuminate\Support\Facades\Storage::url($imgPath);
-            }
-            return asset($imgPath);
-        }
-        return asset('images/price-banner.jpg');
+         return src_img_get( $imgPath);
     }
 }
 @endphp

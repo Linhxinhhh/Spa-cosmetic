@@ -135,12 +135,12 @@ public function getImageUrlAttribute()
     if(isNull($this->image)) {
         return "http://www.nhadattanphu.xyz/Content/images/noImage.png";
     }
-    return Storage::disk('r2')->temporaryUrl($this->image, now()->addMinutes(5));
+    return $this->image;
 }
 
 public function getThumbnailAttribute()
 {
-    return  Storage::disk('r2')->temporaryUrl($this->image_url, now()->addMinutes(5)); 
+    return $this->image;
 }
 
 public function imagesRel()
