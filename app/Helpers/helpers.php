@@ -134,8 +134,10 @@ if (!function_exists('product_main_src')) {
 if (!function_exists('product_hover_src')) {
     function product_hover_src($product)
     {
-        $img = $product->imagesRel->skip(1)->first(); // lấy ảnh thứ 2
-        return $img?->url ? asset($img->url) : null;
+         $img = $product->imagesRel->skip(1)->first();
+
+    // Nếu không có ảnh, trả về ảnh mặc định
+   return $img?->url ? Storage::disk('r2')->temporaryUrl($img->url, now()->addMinutes(5)) : "http://www.nhadattanphu.xyz/Content/images/noImage.png";
     }
 }
 

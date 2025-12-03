@@ -71,17 +71,38 @@
 {{-- Thumbnail list + Nút yêu thích --}}
 <div class="d-flex align-items-center justify-content-between mt-3">
   {{-- Thumbnails --}}
-  <div class="d-flex flex-wrap gap-2">
+<div class="d-flex flex-wrap gap-2">
     @foreach($product->imagesRel as $img)
-      <div class="border rounded p-1 thumb-item"
-           style="width:70px; height:70px; cursor:pointer; overflow:hidden;">
-        <img src="{{ $img->url }}"
-             class="img-fluid h-100 w-100"
-             style="object-fit: contain;"
-             onclick="document.getElementById('mainPreview').src=this.src">
-      </div>
+        @php
+            // Nếu ảnh có URL
+            if ($img->url) {
+                // Nếu là full URL (http/https), dùng trực tiếp
+                if (Str::startsWith($img->url, ['http://','https://','//'])) {
+                    $src = $img->url;
+                } 
+                // Nếu lưu trên R2, dùng temporaryUrl
+                elseif (Storage::disk('r2')->exists($img->url)) {
+                    $src = Storage::disk('r2')->temporaryUrl($img->url, now()->addMinutes(5));
+                } 
+                // Fallback nếu chưa tìm thấy file
+                else {
+                    $src = 'http://www.nhadattanphu.xyz/Content/images/noImage.png';
+                }
+            } else {
+                $src = 'http://www.nhadattanphu.xyz/Content/images/noImage.png';
+            }
+        @endphp
+
+        <div class="border rounded p-1 thumb-item"
+             style="width:70px; height:70px; cursor:pointer; overflow:hidden;">
+            <img src="{{ $src }}"
+                 class="img-fluid h-100 w-100"
+                 style="object-fit: contain;"
+                 onclick="document.getElementById('mainPreview').src=this.src">
+        </div>
     @endforeach
-  </div>
+</div>
+
 
  {{-- Nhóm nút yêu thích & so sánh --}}
 <div class="d-flex align-items-center gap-2">
