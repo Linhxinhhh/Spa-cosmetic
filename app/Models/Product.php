@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class Product extends Model
 {
@@ -119,21 +120,23 @@ public function setDiscountPercentAttribute($value)
     }
 public function getImageUrlAttribute()
 {
-    // Lấy ảnh main trong bảng product_images
-    $main = $this->mainImageRel()->first();
-
-    if ($main) {
-        return $main->url;
+      // Nếu DB đã lưu full URL thì trả về luôn
+    if (str_starts_with($this->image, 'http')) {
+        return $this->image;
     }
 
-    // Nếu chưa có ảnh main thì lấy ảnh đầu tiên trong imagesRel
-    $first = $this->imagesRel()->first();
-    return $first ? $first->url : null;
+    // Nếu bạn dùng custom domain
+    if (env('R2_PUBLIC_DOMAIN')) {
+        return env('R2_PUBLIC_DOMAIN') . '/' . ltrim($this->image, '/');
+    }
+
+    // Nếu dùng raw endpoint R2
+    return Storage::disk('r2')->url($this->image);
 }
 
 public function getThumbnailAttribute()
 {
-    return $this->image_url; // đã viết sẵn accessor image_url rồi
+    return $this->image_url; 
 }
 
 public function imagesRel()

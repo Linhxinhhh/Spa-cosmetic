@@ -23,6 +23,19 @@ class ServiceController extends Controller
             default => null,
         };
     }
+    private function uploadToR2($file, $folder)
+{
+    // Upload file lên Cloudflare R2
+    $path = Storage::disk('r2')->put($folder, $file);
+
+    // Sinh URL public
+    if (env('R2_PUBLIC_DOMAIN')) {
+        return env('R2_PUBLIC_DOMAIN') . '/' . $path;
+    }
+
+    return Storage::disk('r2')->url($path);
+}
+
 
     public function index(Request $request)
     {
@@ -92,13 +105,14 @@ class ServiceController extends Controller
         if (array_key_exists('slug', $data) && blank($data['slug'])) {
             $data['slug'] = null;
         }
+            if ($request->hasFile('thumbnail')) {
+                $data['thumbnail'] = $this->uploadToR2($request->file('thumbnail'), "services/thumbnails");
+            }
 
-        if ($request->hasFile('thumbnail')) {
-            $data['thumbnail'] = $request->file('thumbnail')->store('services', 'public');
-        }
-        if ($request->hasFile('images')) {
-            $data['images'] = $request->file('images')->store('services', 'public');
-        }
+            if ($request->hasFile('images')) {
+                $data['images'] = $this->uploadToR2($request->file('images'), "services/images");
+            }
+
 
         $data['status']      = $request->boolean('status') ? 1 : 0;
         $data['is_featured'] = $request->boolean('is_featured');
@@ -143,19 +157,28 @@ class ServiceController extends Controller
         if (array_key_exists('slug', $data) && blank($data['slug'])) {
             $data['slug'] = null;
         }
+if ($request->hasFile('thumbnail')) {
 
-        if ($request->hasFile('thumbnail')) {
-            if ($service->thumbnail && Storage::disk('public')->exists($service->thumbnail)) {
-                Storage::disk('public')->delete($service->thumbnail);
-            }
-            $data['thumbnail'] = $request->file('thumbnail')->store('services', 'public');
-        }
-        if ($request->hasFile('images')) {
-            if ($service->images && Storage::disk('public')->exists($service->images)) {
-                Storage::disk('public')->delete($service->images);
-            }
-            $data['images'] = $request->file('images')->store('services', 'public');
-        }
+    // Xóa ảnh cũ trên R2 nếu muốn
+    if ($service->thumbnail) {
+        $old = str_replace(env('R2_PUBLIC_DOMAIN') . '/', '', $service->thumbnail);
+        Storage::disk('r2')->delete($old);
+    }
+
+    $data['thumbnail'] = $this->uploadToR2($request->file('thumbnail'), "services/thumbnails");
+}
+
+if ($request->hasFile('images')) {
+
+    // Xóa ảnh cũ trên R2
+    if ($service->images) {
+        $old = str_replace(env('R2_PUBLIC_DOMAIN') . '/', '', $service->images);
+        Storage::disk('r2')->delete($old);
+    }
+
+    $data['images'] = $this->uploadToR2($request->file('images'), "services/images");
+}
+
 
         $data['status']      = $request->boolean('status') ? 1 : 0;
         $data['is_featured'] = $request->boolean('is_featured');
@@ -169,12 +192,16 @@ class ServiceController extends Controller
     {
         $service = Service::findOrFail($id);
 
-        if ($service->images && Storage::disk('public')->exists($service->images)) {
-            Storage::disk('public')->delete($service->images);
-        }
-        if ($service->thumbnail && Storage::disk('public')->exists($service->thumbnail)) {
-            Storage::disk('public')->delete($service->thumbnail);
-        }
+       if ($service->thumbnail) {
+    $old = str_replace(env('R2_PUBLIC_DOMAIN') . '/', '', $service->thumbnail);
+    Storage::disk('r2')->delete($old);
+}
+
+if ($service->images) {
+    $old = str_replace(env('R2_PUBLIC_DOMAIN') . '/', '', $service->images);
+    Storage::disk('r2')->delete($old);
+}
+
 
         $service->delete();
 
