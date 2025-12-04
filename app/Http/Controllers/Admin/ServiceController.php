@@ -107,13 +107,13 @@ class ServiceController extends Controller
         }
             if ($request->hasFile('thumbnail')) {
                 $updatethumbnail = $this->uploadToR2($request->file('thumbnail'), "services/thumbnails");
-                $data['thumbnail'] = "services/thumbnails/" . $request->file('thumbnail')->getClientOriginalName();
+                $data['thumbnail'] = 'services/thumbnails/' . $request->file('thumbnail')->getClientOriginalName();
 
             }
 
             if ($request->hasFile('images')) {
                 $updateImg = $this->uploadToR2($request->file('images'), "services/images");
-                $data['images'] = "services/images/" . $request->file('images')->getClientOriginalName();
+                $data['images'] = 'services/images/' . $request->file('images')->getClientOriginalName();
 
             }
 
