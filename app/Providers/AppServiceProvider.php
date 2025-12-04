@@ -24,6 +24,9 @@ class AppServiceProvider extends ServiceProvider
      */
   public function boot(): void
     {
+        if (app()->environment('production')) {
+        URL::forceScheme('https');
+    }
         View::composer('*', function ($view) {
             $cart       = null;   // giỏ DB (khi đã đăng nhập)
             $cartCount  = 0;      // tổng số lượng
@@ -123,6 +126,7 @@ class AppServiceProvider extends ServiceProvider
             ]);
         });
     }
+    
 
     
 }
