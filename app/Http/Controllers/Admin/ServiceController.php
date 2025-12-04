@@ -106,16 +106,21 @@ class ServiceController extends Controller
             $data['slug'] = null;
         }
             if ($request->hasFile('thumbnail')) {
-                $data['thumbnail'] = $this->uploadToR2($request->file('thumbnail'), "services/thumbnails");
+                $updatethumbnail = $this->uploadToR2($request->file('thumbnail'), "services/thumbnails");
+                $data['thumbnail'] = "services/thumbnails/" . $request->file('thumbnail')->getClientOriginalName();
+
             }
 
             if ($request->hasFile('images')) {
-                $data['images'] = $this->uploadToR2($request->file('images'), "services/images");
+                $updateImg = $this->uploadToR2($request->file('images'), "services/images");
+                $data['images'] = "services/images/" . $request->file('images')->getClientOriginalName();
+
             }
 
 
         $data['status']      = $request->boolean('status') ? 1 : 0;
         $data['is_featured'] = $request->boolean('is_featured');
+        // $data['effects'] = " ";
 
         Service::create($data);
 
@@ -157,32 +162,33 @@ class ServiceController extends Controller
         if (array_key_exists('slug', $data) && blank($data['slug'])) {
             $data['slug'] = null;
         }
-if ($request->hasFile('thumbnail')) {
+    if ($request->hasFile('thumbnail')) {
 
-    // Xóa ảnh cũ trên R2 nếu muốn
-    if ($service->thumbnail) {
-        $old = str_replace(env('R2_PUBLIC_DOMAIN') . '/', '', $service->thumbnail);
-        Storage::disk('r2')->delete($old);
+        // Xóa ảnh cũ trên R2 nếu muốn
+        if ($service->thumbnail) {
+            
+            Storage::disk('r2')->delete($service->thumbnail);
+        }
+
+        $uploadthumbnail= $this->uploadToR2($request->file('thumbnail'), "services/thumbnails");
+        $data['thumbnail']= "services/thumbnail/"+$request->file('thumbnail');
     }
 
-    $data['thumbnail'] = $this->uploadToR2($request->file('thumbnail'), "services/thumbnails");
-}
+    if ($request->hasFile('images')) {
 
-if ($request->hasFile('images')) {
-
-    // Xóa ảnh cũ trên R2
-    if ($service->images) {
-        $old = str_replace(env('R2_PUBLIC_DOMAIN') . '/', '', $service->images);
-        Storage::disk('r2')->delete($old);
+        // Xóa ảnh cũ trên R2
+        if ($service->images) {
+            $old = $service->images;
+            Storage::disk('r2')->delete($old);
+        }
+        $uploadimages=$this->uploadToR2($request->file('images'), "services/images");
+        $data['images'] = "services/images/"+$request->file('images');
     }
-
-    $data['images'] = $this->uploadToR2($request->file('images'), "services/images");
-}
 
 
         $data['status']      = $request->boolean('status') ? 1 : 0;
         $data['is_featured'] = $request->boolean('is_featured');
-
+        // $data['effects']='';
         $service->update($data);
 
         return redirect()->route('admin.services.index')->with('success', 'Cập nhật dịch vụ thành công');

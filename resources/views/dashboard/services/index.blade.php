@@ -165,19 +165,8 @@
         // - Lưu trên storage (services/..)
         // - Đường dẫn cũ trong public/ (uploads/..)
         // - URL tuyệt đối (http/https)
-        $src = null;
-        if ($imgPath) {
-            if (Storage::disk('public')->exists($imgPath)) {
-                // Ảnh nằm trong storage/app/public
-                $src = Storage::url($imgPath); // => /storage/services/xxx.jpg
-            } elseif (Str::startsWith($imgPath, ['http://', 'https://', '//'])) {
-                // Trường hợp ảnh là URL tuyệt đối
-                $src = $imgPath;
-            } else {
-                // Ảnh cũ nằm trong public/uploads/... (không qua storage)
-                $src = asset($imgPath);
-            }
-        }
+        $src = src_img_get( url: $imgPath);
+        
     @endphp
 
     @if($src)

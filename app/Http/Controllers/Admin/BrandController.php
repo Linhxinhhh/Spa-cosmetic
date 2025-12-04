@@ -43,7 +43,7 @@ class BrandController extends Controller
     if ($request->hasFile('logo')) {
         $file = $request->file('logo');
         $path = Storage::disk('r2')->put('brands', $file);
-        $validated['logo'] = Storage::disk('r2')->url($path);
+        $validated['logo'] = $path;
     }
 
     try {
@@ -85,13 +85,12 @@ class BrandController extends Controller
     if ($request->hasFile('logo')) {
         // Xóa logo cũ nếu cần (chỉ xóa nếu bạn lưu path đầy đủ trên R2)
         if ($brand->logo) {
-            $oldPath = str_replace(Storage::disk('r2')->url(''), '', $brand->logo);
-            Storage::disk('r2')->delete($oldPath);
+            Storage::disk('r2')->delete(paths: $brand->logo);
         }
 
         $file = $request->file('logo');
         $path = Storage::disk('r2')->put('brands', $file);
-        $validated['logo'] = Storage::disk('r2')->url($path);
+        $validated['logo'] = $path;
     }
 
     try {

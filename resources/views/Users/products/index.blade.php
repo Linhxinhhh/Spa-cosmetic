@@ -259,7 +259,7 @@
                         <div class="featured-product-item d-flex align-items-center mb-3">
                             <a href="{{ route('users.products.show', $p->slug) }}" class="rounded me-4 d-block"
                             style="width:100px;height:100px;overflow:hidden;">
-                            <img src="{{ $img ?? asset('images/placeholder-4x3.jpg') }}"
+                            <img src="{{ src_img_get( url: $img)  }}"
                                 class="img-fluid rounded"
                                 alt="{{ $p->product_name }}"
                                 style="width:100%;height:100%;object-fit:cover;">

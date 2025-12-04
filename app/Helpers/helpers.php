@@ -7,23 +7,15 @@ if (!function_exists('product_img_url')) {
     function product_img_url($item)
     {
         $p = $item->thumbnail ?: $item->images;
-        if (!$p)
-            return asset('images/placeholder-4x3.jpg');
-        if (Str::startsWith($p, ['http://', 'https://', '//']))
-            return $p;
-        $p = ltrim(preg_replace('#^(public/|storage/)#', '', $p), '/');
-        return Storage::disk('public')->exists($p) ? Storage::url($p) : asset($p);
+        
+        return $p;
     }
 }
 
 if (!function_exists('banner_img_url')) {
     function banner_img_url($banner)
-    {
-        if (!$banner || !$banner->image)
-            return asset('images/placeholder-16x9.jpg');
-        $p = ltrim($banner->image, '/');
-        $p = preg_replace('#^(storage/|public/)#', '', $p);
-        return Storage::disk('public')->exists($p) ? Storage::url($p) : asset($p);
+    {        
+        return !$banner || $banner->image ? Storage::disk('r2')->temporaryUrl($banner->image, now()->addMinutes(5)) : "http://www.nhadattanphu.xyz/Content/images/noImage.png";
     }
 }
 

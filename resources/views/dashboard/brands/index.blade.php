@@ -100,14 +100,8 @@
     @if($brand->logo)
         @php
             $logoPath = $brand->logo;
-            $logoSrc = null;
-            if (Storage::disk('public')->exists($logoPath)) {
-                $logoSrc = Storage::url($logoPath);
-            } elseif (Str::startsWith($logoPath, ['http://', 'https://', '//'])) {
-                $logoSrc = $logoPath;
-            } else {
-                $logoSrc = asset($logoPath);
-            }
+            $logoSrc = src_img_get( url: $logoPath);
+            
         @endphp
         @if($logoSrc)
             <img style="max-width: 150px; height: auto; display: block; margin: 0 auto; object-fit: contain;" src="{{ $logoSrc }}" class="service-image" alt="{{ $brand->brand_name }}">

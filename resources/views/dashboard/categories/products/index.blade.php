@@ -150,8 +150,9 @@
                     @foreach($categories as $index => $category)
                         <tr class="hover:bg-blue-100 hover:border-l-4 hover:border-blue-500 transition-colors duration-150 group">
                                 <td class="px-6 py-4">
+                                    <label>{{ $category->image }}</label>
                                     <img
-                                    src="{{ $category->image ? asset('storage/'.$category->image) : asset('images/default-category.png') }}"
+                                    src="{{  src_img_get( url: $category->image)  }}"
                                     alt="{{ $category->category_name }}"
                                     class="w-12 h-12 rounded-lg object-cover ring-1 ring-gray-200"
                                     >

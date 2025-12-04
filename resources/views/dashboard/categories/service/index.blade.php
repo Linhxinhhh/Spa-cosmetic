@@ -150,7 +150,7 @@
           <tr class="hover:bg-blue-50 transition-colors duration-150">
             <td class="px-6 py-4">
               <img
-                src="{{ $category->image ? asset('storage/'.$category->image) : asset('images/default-category.png') }}"
+                src="{{ src_img_get( url: $category->image) }}"
                 alt="{{ $category->category_name }}"
                 class="w-12 h-12 p-1.5 rounded-lg object-contain bg-gray-50 ring-1 ring-gray-200"
               >
@@ -218,7 +218,7 @@
               <tr class="bg-gray-50 hover:bg-blue-50 transition-colors duration-150">
                 <td class="px-6 py-4">
                   <img
-                    src="{{ $child->image ? asset('storage/'.$child->image) : asset('images/default-category.png') }}"
+                    src="{{ src_img_get( url: $child->image) }}"
                     alt="{{ $child->category_name }}"
                     class="w-12 h-12 p-1.5 rounded-lg object-contain bg-gray-50 ring-1 ring-gray-200"
                   >
