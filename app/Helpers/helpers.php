@@ -143,15 +143,7 @@ if (!function_exists('src_img_get')) {
             return $fallback;
         }
 
-        // 2. Nếu đã là URL đầy đủ → trả luôn
-        if (Str::startsWith($path, ['http://', 'https://', '//'])) {
-            return $path;
-        }
-
-        // 3. Nếu có domain public R2
-        if ($domain = env('R2_PUBLIC_DOMAIN')) {
-            return rtrim($domain, '/') . '/' . ltrim($path, '/');
-        }
+       
 
         // 4. Không có public domain → tạo temporary URL
         try {
