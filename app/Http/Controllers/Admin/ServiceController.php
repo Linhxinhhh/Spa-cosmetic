@@ -106,16 +106,19 @@ class ServiceController extends Controller
             $data['slug'] = null;
         }
             if ($request->hasFile('thumbnail')) {
-                $updatethumbnail = $this->uploadToR2($request->file('thumbnail'), "services/thumbnails");
-                $data['thumbnail'] = 'services/thumbnails/' . $request->file('thumbnail')->getClientOriginalName();
+    $url = $this->uploadToR2($request->file('thumbnail'), "services/thumbnails");
 
-            }
+    // Lưu URL vào DB
+    $data['thumbnail'] = $url;
+}
 
-            if ($request->hasFile('images')) {
-                $updateImg = $this->uploadToR2($request->file('images'), "services/images");
-                $data['images'] = 'services/images/' . $request->file('images')->getClientOriginalName();
+if ($request->hasFile('images')) {
+    $url = $this->uploadToR2($request->file('images'), "services/images");
 
-            }
+    // Lưu URL vào DB
+    $data['images'] = $url;
+}
+
 
 
         $data['status']      = $request->boolean('status') ? 1 : 0;
@@ -164,26 +167,26 @@ class ServiceController extends Controller
         }
     if ($request->hasFile('thumbnail')) {
 
-        // Xóa ảnh cũ trên R2 nếu muốn
-        if ($service->thumbnail) {
-            
-            Storage::disk('r2')->delete($service->thumbnail);
-        }
-
-        $uploadthumbnail= $this->uploadToR2($request->file('thumbnail'), "services/thumbnails");
-        $data['thumbnail']= "services/thumbnail/"+$request->file('thumbnail');
+    // Xóa ảnh cũ trên R2 nếu có
+    if ($service->thumbnail) {
+        $old = str_replace(env('R2_PUBLIC_DOMAIN').'/', '', $service->thumbnail);
+        Storage::disk('r2')->delete($old);
     }
 
-    if ($request->hasFile('images')) {
+    $url = $this->uploadToR2($request->file('thumbnail'), "services/thumbnails");
+    $data['thumbnail'] = $url;
+}
 
-        // Xóa ảnh cũ trên R2
-        if ($service->images) {
-            $old = $service->images;
-            Storage::disk('r2')->delete($old);
-        }
-        $uploadimages=$this->uploadToR2($request->file('images'), "services/images");
-        $data['images'] = "services/images/"+$request->file('images');
+if ($request->hasFile('images')) {
+
+    if ($service->images) {
+        $old = str_replace(env('R2_PUBLIC_DOMAIN').'/', '', $service->images);
+        Storage::disk('r2')->delete($old);
     }
+
+    $url = $this->uploadToR2($request->file('images'), "services/images");
+    $data['images'] = $url;
+}
 
 
         $data['status']      = $request->boolean('status') ? 1 : 0;
