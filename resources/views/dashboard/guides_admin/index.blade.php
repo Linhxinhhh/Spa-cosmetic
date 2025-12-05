@@ -141,14 +141,23 @@
                 <tr class="hover:bg-blue-100 hover:border-l-4 hover:border-blue-500 transition-colors duration-150 group">
                   <td class="px-6 py-4">
                     @php
-                      $thumb = $g->thumbnail ?? $g->image ?? $g->cover ?? null;
-                      $thumbUrl = $thumb
-                        ? Storage::disk('r2')->url($thumb)
-                        : asset('images/default-post.png');
+                      // Ưu tiên thumbnail → image → cover
+                      $thumb = $g->thumbnail
+                        ?? $g->image
+                        ?? $g->cover
+                        ?? null;
+
+                      // Nếu có ảnh thì dùng Storage::url()
+                      if ($thumb && Storage::disk('r2')->exists($thumb)) {
+                        $thumbUrl = Storage::disk('r2')->url($thumb);
+                      } else {
+                        $thumbUrl = asset('images/default-post.png');
+                      }
                     @endphp
 
                     <img src="{{ $thumbUrl }}" class="w-20 h-20 rounded-lg object-cover">
                   </td>
+
 
                   <td class="px-6 py-4">
                     <div class="flex items-center space-x-3">
