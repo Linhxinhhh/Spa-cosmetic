@@ -139,7 +139,7 @@
             @endphp
             <tr class="hover:bg-blue-100 hover:border-l-4 hover:border-blue-500 transition-colors duration-150 group">
               <td class="px-6 py-4">
-                <img src="{{ Storage::disk('r2')->url($guide->thumbnail) }}" alt="{{ $g->title }}"
+                <img src="{{ Storage::disk('r2')->url($guides->thumbnail) }}" alt="{{ $g->title }}"
                      class="w-12 h-12 rounded-lg object-cover ring-1 ring-gray-200">
               </td>
               <td class="px-6 py-4">
