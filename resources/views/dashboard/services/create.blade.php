@@ -212,73 +212,33 @@
         </div>
       </div>
 
-      {{-- Mô tả & Hình ảnh --}}
+   
+{{-- Mô tả & Hình ảnh --}}
 <div class="form-card">
-  <h3 class="section-title"><i class="fas fa-cog mr-2"></i>Mô tả & hình ảnh</h3>
+    <h3 class="section-title"><i class="fas fa-images mr-2"></i>Mô tả & hình ảnh</h3>
 
-  <div class="form-group">
-    <label class="form-label"><i class="fas fa-paragraph mr-1"></i>Mô tả dịch vụ</label>
-    <textarea name="description" rows="6"
-              class="form-control form-control-modern @error('description') is-invalid @enderror">{{ old('description') }}</textarea>
-    @error('description')<div class="invalid-feedback">{{ $message }}</div>@enderror
-  </div>
+    <div class="form-group mb-4">
+        <label class="form-label"><i class="fas fa-paragraph mr-1"></i>Mô tả dịch vụ</label>
+        <textarea name="description" rows="6" class="form-control form-control-modern @error('description') is-invalid @enderror">{{ old('description') }}</textarea>
+        @error('description')<div class="invalid-feedback">{{ $message }}</div>@enderror
+    </div>
 
-  {{-- BỌC 2 CỘT TRONG .row --}}
-  <div class="row g-3">
-{{-- Thumbnail --}}
-<div class="col-md-6">
-  <label class="form-label d-block mb-2"><i class="fas fa-image mr-1"></i>Ảnh đại diện (thumbnail)</label>
+    <div class="row g-4">
+        <div class="col-lg-6">
+            <label class="form-label"><i class="fas fa-image mr-1"></i>Ảnh đại diện</label>
+            <input type="file" name="thumbnail" id="thumbnail" accept="image/*" class="form-control" required>
+            <small class="text-muted">Ảnh chính hiển thị ở danh sách và chi tiết</small>
+            @error('thumbnail')<div class="text-danger mt-1">{{ $message }}</div>@enderror
+        </div>
 
-  <label for="thumbnail"
-         class="file-upload-area d-flex align-items-center justify-content-center w-100 p-4 bg-transparent border-0 shadow-none"
-         style="cursor:pointer; border:0!important; background:transparent!important; box-shadow:none!important; outline:0!important;">
-  <div class="upload-ui text-center border border-2 border-primary rounded-3 p-4 w-100 bg-white"
-     style="background-color:aliceblue;border:2px dashed #0ea5e9;border-radius:12px;
-            transition:background-color .2s, border-color .2s, box-shadow .2s, transform .2s;"
-     onmouseover="this.style.backgroundColor='#e6f4ff';this.style.borderColor='#0284c7';
-                  this.style.boxShadow='0 6px 16px rgba(2,132,199,.2)';this.style.transform='translateY(-2px)'"
-     onmouseout="this.style.backgroundColor='aliceblue';this.style.borderColor='#0ea5e9';
-                 this.style.boxShadow='none';this.style.transform='none'">
-  <i class="fas fa-cloud-upload-alt fa-2x mb-2 text-primary"></i>
-  <p class="mb-1 font-weight-bold text-primary">Nhấp/Thả ảnh để chọn</p>
-  <small class="text-muted">JPG, PNG, WEBP (tối đa 4MB)</small>
+        <div class="col-lg-6">
+            <label class="form-label"><i class="fas fa-images mr-1"></i>Ảnh chi tiết (tối đa 6 ảnh)</label>
+            <input type="file" name="gallery[]" id="gallery" accept="image/*" multiple class="form-control">
+            <small class="text-muted">Giữ Ctrl/Cmd để chọn nhiều ảnh</small>
+            @error('gallery')<div class="text-danger mt-1">{{ $message }}</div>@enderror
+        </div>
+    </div>
 </div>
-
-    <div class="preview-ui d-none"><img class="preview-img" style="max-width:100%;height:auto;display:block"></div>
-  </label>
-
-  <input type="file" id="thumbnail" name="thumbnail" accept="image/*" class="d-none">
-  @error('thumbnail')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
-</div>
-
-{{-- Images (phụ) --}}
-<div class="col-md-6">
-  <label class="form-label d-block mb-2"><i class="fas fa-images mr-1"></i>Ảnh khác</label>
-
-  <label for="images"
-         class="file-upload-area d-flex align-items-center justify-content-center w-100 p-4 bg-transparent border-0 shadow-none"
-         style="background-color:aliceblue; cursor:pointer; border:0!important; background:transparent!important; box-shadow:!important; outline:0!important;">
- <div class="upload-ui text-center border border-2 border-primary rounded-3 p-4 w-100 bg-white"
-     style="background-color:aliceblue;border:2px dashed #0ea5e9;border-radius:12px;
-            transition:background-color .2s, border-color .2s, box-shadow .2s, transform .2s;"
-     onmouseover="this.style.backgroundColor='#e6f4ff';this.style.borderColor='#0284c7';
-                  this.style.boxShadow='0 6px 16px rgba(2,132,199,.2)';this.style.transform='translateY(-2px)'"
-     onmouseout="this.style.backgroundColor='aliceblue';this.style.borderColor='#0ea5e9';
-                 this.style.boxShadow='none';this.style.transform='none'">
-  <i class="fas fa-cloud-upload-alt fa-2x mb-2 text-primary"></i>
-  <p class="mb-1 font-weight-bold text-primary">Nhấp/Thả ảnh để chọn</p>
-  <small class="text-muted">JPG, PNG, WEBP (tối đa 4MB)</small>
-</div>
-
-    <div class="preview-ui d-none"><img class="preview-img" style="max-width:100%;height:auto;display:block"></div>
-  </label>
-
-  <input type="file" id="images" name="images" accept="image/*" class="d-none">
-  @error('images')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
-</div>
-  </div>
-</div>
-
 
 
       {{-- Actions --}}

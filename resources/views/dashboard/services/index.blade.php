@@ -156,27 +156,35 @@
                             @endif
                         </td>
                         
-                        <td>
-                          @php
-        // Ưu tiên thumbnail, sau đó images
-        $imgPath = $service->thumbnail ?: $service->images;
+             <td>
+    @php
+    
+        $imgPath = $service->thumbnail;
 
-        // Xây src an toàn cho 3 trường hợp:
-        // - Lưu trên storage (services/..)
-        // - Đường dẫn cũ trong public/ (uploads/..)
-        // - URL tuyệt đối (http/https)
-        $src = src_img_get( url: $imgPath);
-        
+        // Nếu không có thumbnail → lấy ảnh đầu tiên trong gallery (images là mảng JSON)
+        if (!$imgPath && is_array($service->images) && count($service->images) > 0) {
+            $imgPath = $service->images[0];
+        }
+
+        $src = $imgPath ? src_img_get($imgPath) : null;
     @endphp
 
     @if($src)
-        <img src="{{ $src }}" class="service-image" alt="{{ $service->service_name }}">
+        <img src="{{ $src }}"
+             class="service-image rounded shadow-sm"
+             alt="{{ $service->service_name }}"
+             style="width: 80px; height: 80px; object-fit: cover; border: 2px solid #e2e8f0;">
     @else
-        <div style="width:80px;height:80px;background:#f3f4f6;border-radius:10px;display:flex;align-items:center;justify-content:center;margin:0 auto">
-            <i class="fas fa-image text-muted"></i>
+        <div style="width:80px;height:80px;background:#f3f4f6;border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto;box-shadow:0 2px 8px rgba(0,0,0,.1)">
+            <i class="fas fa-image fa-2x text-muted"></i>
         </div>
     @endif
-                        </td>
+    @if(is_array($service->images) && count($service->images) > 0)
+    <small class="d-block text-center text-primary mt-1">
+        <i class="fas fa-images"></i> {{ count($service->images) }} ảnh
+    </small>
+@endif
+</td>
                         <td>
                             <div class="action-buttons">
                                 <a href="{{ route('admin.services.edit', $service->service_id) }}" class="btn btn-edit" title="Chỉnh sửa">
