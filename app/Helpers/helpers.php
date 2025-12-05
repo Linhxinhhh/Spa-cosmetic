@@ -135,26 +135,32 @@ if (!function_exists('product_hover_src')) {
 if (!function_exists('src_img_get')) {
     function src_img_get($path)
     {
-        // Nếu không có đường dẫn → ảnh mặc định
+        // Ảnh fallback chuẩn
+        $fallback = "http://www.nhadattanphu.xyz/Content/images/noImage.png";
+
+        // 1. Không có ảnh → trả ảnh mặc định
         if (!$path) {
-            return asset('admin/images/no-image.png');
+            return $fallback;
         }
 
-        // Nếu đã là full URL → trả luôn
+        // 2. Nếu đã là URL đầy đủ → trả luôn
         if (Str::startsWith($path, ['http://', 'https://', '//'])) {
             return $path;
         }
 
-        // CÁCH TỐT NHẤT: DÙNG PUBLIC DOMAIN (nếu có)
-        if (env('R2_PUBLIC_DOMAIN')) {
-            return rtrim(env('R2_PUBLIC_DOMAIN'), '/') . '/' . ltrim($path, '/');
+        // 3. Nếu có domain public R2
+        if ($domain = env('R2_PUBLIC_DOMAIN')) {
+            return rtrim($domain, '/') . '/' . ltrim($path, '/');
         }
 
-        // CÁCH DỰ PHÒNG: DÙNG TEMPORARY URL 7 NGÀY (vẫn hiện dù bucket private)
+        // 4. Không có public domain → tạo temporary URL
         try {
-            return Storage::disk('r2')->temporaryUrl($path, now()->addDays(7));
-        } catch (Exception $e) {
-            return asset('admin/images/no-image.png');
+            return Storage::disk('r2')->temporaryUrl(
+                $path,
+                now()->addMinutes(5)
+            );
+        } catch (\Throwable $e) {
+            return $fallback;
         }
     }
 }
