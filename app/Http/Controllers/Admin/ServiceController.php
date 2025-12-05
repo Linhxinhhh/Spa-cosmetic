@@ -195,7 +195,25 @@ if ($request->hasFile('images')) {
         $data['status']      = $request->boolean('status') ? 1 : 0;
         $data['is_featured'] = $request->boolean('is_featured');
         // $data['effects']='';
-        $service->update($data);
+        $data = $request->only([
+    'service_name',
+    'short_desc',
+    'category_id',
+    'effects',
+    'slug',
+    'price',
+    'price_original',
+    'price_sale',
+    'duration',
+    'description',
+    'status',
+    'is_active',
+    'is_featured',
+]);
+
+// GIỮ LẠI TYPE CŨ NẾU KHÔNG CHỌN MỚI
+$data['type'] = $request->input('type', $service->type);
+
 
         return redirect()->route('admin.services.index')->with('success', 'Cập nhật dịch vụ thành công');
     }
