@@ -130,12 +130,9 @@
                       $url = src_img_get($f->cover_image);
                     @endphp
 
-                    @if($f->cover_image)
-                      <img src="{{ $url }}" class="rounded" style="width:48px;height:48px;object-fit:cover;">
-                    @else
-                      <span class="text-muted">—</span>
-                    @endif
+                    <img src="{{ $url }}" class="w-14 h-14 rounded-lg object-cover border border-gray-200 shadow-sm">
                   </td>
+
 
                   <td class="px-6 py-4">
                     <div class="text-sm font-medium text-gray-900 flex items-start">
@@ -158,7 +155,7 @@
                       @php $isPub = $f->status === 'Xuất bản'; @endphp
                       <button
                         class="inline-flex items-center px-3 py-1 rounded-lg text-xs font-medium
-                                       {{ $isPub ? 'bg-emerald-100 text-emerald-800 hover:bg-emerald-200' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}">
+                                           {{ $isPub ? 'bg-emerald-100 text-emerald-800 hover:bg-emerald-200' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}">
                         <span class="w-2 h-2 rounded-full mr-2 {{ $isPub ? 'bg-emerald-500' : 'bg-gray-400' }}"></span>
                         {{ $f->status }}
                       </button>
