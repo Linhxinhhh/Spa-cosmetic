@@ -133,11 +133,23 @@ if (!function_exists('product_hover_src')) {
     }
 }
 if (!function_exists('src_img_get')) {
-    function src_img_get($url)
+    function src_img_get($path)
     {
+        if (!$path) {
+            return asset('admin/images/no-image.png');
+        }
 
-    // Nếu không có ảnh, trả về ảnh mặc định
-   return $url ? Storage::disk('r2')->temporaryUrl($url, now()->addMinutes(5)) : "http://www.nhadattanphu.xyz/Content/images/noImage.png";
+        // Nếu đã là URL đầy đủ → trả luôn
+        if (Str::startsWith($path, ['http://', 'https://', '//'])) {
+            return $path;
+        }
+
+        // BUỘC DÙNG TEMPORARY URL CÓ THỜI GIAN DÀI (24 GIỜ)
+        try {
+            return Storage::disk('r2')->temporaryUrl($path, now()->addHours(24));
+        } catch (Exception $e) {
+            return asset('admin/images/no-image.png');
+        }
     }
 }
 
