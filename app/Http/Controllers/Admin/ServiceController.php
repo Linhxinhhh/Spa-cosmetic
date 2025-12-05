@@ -165,16 +165,17 @@ if ($request->hasFile('images')) {
         if (array_key_exists('slug', $data) && blank($data['slug'])) {
             $data['slug'] = null;
         }
-    if ($request->hasFile('thumbnail')) {
+if ($request->hasFile('thumbnail')) {
 
-    // Xóa ảnh cũ trên R2 nếu có
     if ($service->thumbnail) {
         $old = str_replace(env('R2_PUBLIC_DOMAIN').'/', '', $service->thumbnail);
         Storage::disk('r2')->delete($old);
     }
 
-    $url = $this->uploadToR2($request->file('thumbnail'), "services/thumbnails");
-    $data['thumbnail'] = $url;
+    $data['thumbnail'] = $this->uploadToR2($request->file('thumbnail'), "services/thumbnails");
+
+} else {
+    $data['thumbnail'] = $service->thumbnail;
 }
 
 if ($request->hasFile('images')) {
@@ -184,8 +185,10 @@ if ($request->hasFile('images')) {
         Storage::disk('r2')->delete($old);
     }
 
-    $url = $this->uploadToR2($request->file('images'), "services/images");
-    $data['images'] = $url;
+    $data['images'] = $this->uploadToR2($request->file('images'), "services/images");
+
+} else {
+    $data['images'] = $service->images;
 }
 
 
