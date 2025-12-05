@@ -133,33 +133,33 @@ if (!function_exists('product_hover_src')) {
     }
 }
 if (!function_exists('src_img_get')) {
-    function src_img_get($path)
+    function src_img_get($url)
     {
         // Ảnh fallback
         $fallback = "http://www.nhadattanphu.xyz/Content/images/noImage.png";
 
         // Không có ảnh → trả fallback
-        if (!$path) {
+        if (!$url) {
             return $fallback;
         }
 
         // Nếu path là URL trực tiếp → trả luôn
-        if (Str::startsWith($path, ['http://', 'https://'])) {
-            return $path;
+        if (Str::startsWith($url, ['http://', 'https://'])) {
+            return $url;
         }
 
         // Nếu có domain public từ .env (dùng Cloudflare Images/R2 public URL)
         if ($domain = env('R2_PUBLIC_DOMAIN')) {
-            return rtrim($domain, '/') . '/' . ltrim($path, '/');
+            return rtrim($domain, '/') . '/' . ltrim($url, '/');
         }
 
         // Nếu bucket private → tạo temporary URL (giống product_main_src)
         try {
             return Storage::disk('r2')->temporaryUrl(
-                $path,
+                $url,
                 now()->addMinutes(10)
             );
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return $fallback;
         }
     }

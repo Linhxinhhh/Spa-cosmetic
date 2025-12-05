@@ -19,7 +19,7 @@ class MomoService
             'accessKey'   => $accessKey,
             'requestId'   => $data['txn_ref'],
             'amount'      => (string)$data['amount'],
-            'orderId'     => $data['txn_ref'],
+            'orderId'     => $data['txn_ref_tmp'],
             'orderInfo'   => $data['order_info'],
             'redirectUrl' => $returnUrl,
             'ipnUrl'      => $ipnUrl,
@@ -31,7 +31,7 @@ class MomoService
         // raw signature theo thứ tự field của MoMo
         $raw = "accessKey=$accessKey&amount={$payload['amount']}&extraData={$payload['extraData']}&ipnUrl=$ipnUrl&orderId={$payload['orderId']}&orderInfo={$payload['orderInfo']}&partnerCode=$partnerCode&redirectUrl=$returnUrl&requestId={$payload['requestId']}&requestType={$payload['requestType']}";
         $payload['signature'] = hash_hmac('sha256', $raw, $secretKey);
-
+        dd($payload);
         $res = Http::asJson()->post($endpoint, $payload)->json();
         return $res; // gồm payUrl, deeplink, resultCode...
     }
@@ -39,7 +39,6 @@ class MomoService
     public function verify(array $params): bool
     {
         $secretKey = config('services.momo.secret_key');
-        // Field xác minh theo doc MoMo IPN/return
         $raw = "accessKey={$params['accessKey']}&amount={$params['amount']}&extraData={$params['extraData']}&message={$params['message']}&orderId={$params['orderId']}&orderInfo={$params['orderInfo']}&orderType={$params['orderType']}&partnerCode={$params['partnerCode']}&payType={$params['payType']}&requestId={$params['requestId']}&responseTime={$params['responseTime']}&resultCode={$params['resultCode']}&transId={$params['transId']}";
         $calc = hash_hmac('sha256', $raw, $secretKey);
         return isset($params['signature']) && hash_equals($calc, $params['signature']);

@@ -71,18 +71,20 @@ class CustomerSyncService
         $address = $order->shipping_address ?? $order->billing_address ?? $user->address ?? null;
 
         DB::transaction(function () use ($userKey, $orderKey, $order, $name, $email, $phone, $address, $paid) {
+
+            // 1) Tìm customer theo user_id
             $customer = Customer::where('user_id', $userKey)->first();
-            dump($customer);
-            if (!$customer) {
-                // Nếu không có thì dừng — KHÔNG TẠO MỚI
-                return;
-            }
+
+            // 2) Nếu không có -> không tạo mới -> dừng
+            if (!$customer) return;
+
+            // 3) Kiểm tra xem đơn này đã được tính chưa
             $alreadyCounted = $paid
-                && $customer->exists
                 && $customer->last_order_id === $orderKey
                 && $customer->last_status === 'paid';
 
-            $customer->fill([
+            // 4) Cập nhật các trường
+            $customer->update([
                 'name'          => $name,
                 'email'         => $email,
                 'phone'         => $phone,
@@ -92,17 +94,10 @@ class CustomerSyncService
                 'last_status'   => $order->payment_status ?? $order->status ?? ($paid ? 'paid' : 'pending'),
             ]);
 
-            if (!$customer->exists) {
-                $customer->orders_count = (int) ($customer->orders_count ?? 0);
-             
-            }
-
-            $customer->save();
-
+            // 5) Nếu đã thanh toán thì tăng orders_count
             if ($paid && !$alreadyCounted) {
-                $amount = (float)($order->grand_total ?? $order->total ?? $order->amount ?? 0);
                 $customer->increment('orders_count');
-              
+
                 $customer->forceFill([
                     'last_status'   => 'paid',
                     'last_order_id' => $orderKey,

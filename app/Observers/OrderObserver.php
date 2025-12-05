@@ -10,7 +10,7 @@ class OrderObserver
     // Khi tạo đơn -> chờ thanh toán
     public function created(Order $order): void
     {
-        CustomerSyncService::touchFromOrder($order, false);
+        CustomerSyncService::Update_Address_User($order, false);
     }
 
     // Khi cập nhật trạng thái thanh toán -> trả tiền thành công
@@ -18,12 +18,12 @@ class OrderObserver
     {
         // Chỉ khi payment_status thực sự đổi sang 'paid'
         if ($order->wasChanged('payment_status') && $order->payment_status === 'paid') {
-            CustomerSyncService::touchFromOrder($order, true);
+            CustomerSyncService::Update_Address_User($order, true);
         }
 
         // Nếu dự án bạn xài cột 'status' thay vì 'payment_status'
         if ($order->wasChanged('status') && $order->status === 'paid') {
-            CustomerSyncService::touchFromOrder($order, true);
+            CustomerSyncService::Update_Address_User($order, true);
         }
     }
 }

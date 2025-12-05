@@ -198,7 +198,7 @@ class PaymentController extends Controller
             $order->save();
 
             // Đồng bộ bảng customers (cộng orders_count, total_spent, ...)
-            CustomerSyncService::touchFromOrder($order, true);
+            CustomerSyncService::Update_Address_User($order, true);
 
             // Ghi chú thêm về gateway (tuỳ bạn muốn log ở đâu)
             // $payment->update(['note' => trim(($payment->note ?? '') . " [paid_by:$gateway]")]);

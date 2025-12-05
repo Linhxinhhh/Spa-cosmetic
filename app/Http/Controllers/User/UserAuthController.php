@@ -31,7 +31,7 @@ public function register(Request $request)
         'email'    => ['required','email','max:255','unique:users,email'],
         'password' => [
             'required','confirmed',
-            Password::min(8)->letters()->numbers()->mixedCase()->symbols()->uncompromised(),
+            Password::min(8)->letters()->numbers()->mixedCase()->symbols(),//->uncompromised()
         ],
     ]);
 

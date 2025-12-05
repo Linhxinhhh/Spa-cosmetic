@@ -44,7 +44,8 @@ class CheckoutController extends Controller
             $orderCode = 'LCS'.now()->format('YmdHis').Str::upper(Str::random(3));
         }
 
-        $txnRef = Str::upper(Str::random(12));
+        $txnRef_requertId =  Str::uuid()->toString();
+        $txnRef_orderId =  Str::uuid()->toString();
 
         // 1) TẠO ĐƠN + ITEM (PENDING)
         $order = DB::transaction(function () use ($user, $cart, $orderCode, $request) {
@@ -86,7 +87,8 @@ class CheckoutController extends Controller
             'order_code' => $order->order_code,
             'amount'     => $amount,
             'order_info' => $order->order_code,   // DÙNG CHÍNH MÃ ĐƠN để đối chiếu
-            'txn_ref'    => $txnRef,
+            'txn_ref'    => $txnRef_requertId,
+            'txn_ref_tmp'    => $txnRef_orderId,
         ];
 
         // 2) TẠO PAYMENT gắn order_id
@@ -97,7 +99,7 @@ class CheckoutController extends Controller
             'amount'          => $amount,
             'currency'        => 'VND',
             'status'          => 'pending',
-            'txn_ref'         => $txnRef,
+            'txn_ref'         => $txnRef_requertId,
             'request_payload' => json_encode($payload),
         ]);
 
