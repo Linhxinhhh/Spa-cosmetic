@@ -100,7 +100,7 @@
     @if($brand->logo)
         @php
             $logoPath = $brand->logo;
-            $logoSrc = src_img_get( url: $logoPath);
+            $logoSrc = src_img_get( $logoPath);
             
         @endphp
         @if($logoSrc)
