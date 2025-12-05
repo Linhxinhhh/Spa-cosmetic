@@ -31,7 +31,6 @@ class MomoService
         // raw signature theo thứ tự field của MoMo
         $raw = "accessKey=$accessKey&amount={$payload['amount']}&extraData={$payload['extraData']}&ipnUrl=$ipnUrl&orderId={$payload['orderId']}&orderInfo={$payload['orderInfo']}&partnerCode=$partnerCode&redirectUrl=$returnUrl&requestId={$payload['requestId']}&requestType={$payload['requestType']}";
         $payload['signature'] = hash_hmac('sha256', $raw, $secretKey);
-        dd($payload);
         $res = Http::asJson()->post($endpoint, $payload)->json();
         return $res; // gồm payUrl, deeplink, resultCode...
     }
