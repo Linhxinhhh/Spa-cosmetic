@@ -42,6 +42,7 @@ class Service extends Model
         'status'         => 'boolean',
         'is_featured'    => 'boolean',
         'category_id'    => 'string',
+        'images'         => 'array',
     ];
 
     /**

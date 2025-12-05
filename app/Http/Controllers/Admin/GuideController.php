@@ -17,34 +17,36 @@ class GuideController extends Controller
             ->with([
                 // FIX: eager load đúng cột (tránh N+1)
                 'category:category_id,name', // chọn đúng PK + cột cần dùng
-    'tags:tag_id,name',
+                'tags:tag_id,name',
             ])
             // FIX: lọc status đúng cả giá trị "0"
-            ->when($r->has('status') && $r->status !== '', fn ($q) =>
+            ->when(
+                $r->has('status') && $r->status !== '',
+                fn($q) =>
                 $q->where('status', (int) $r->status)
             )
             ->search($r->q)
             ->latest('published_at')->latest('created_at')
             ->paginate(12)->withQueryString();
-            $items = Faq::query()->groupBy(fn($f) => $f->category ?: 'Khác');
-            $topPosts = Guide::query()
+        $items = Faq::query()->groupBy(fn($f) => $f->category ?: 'Khác');
+        $topPosts = Guide::query()
             ->where('status', '1')           // hoặc scopePublished()
-            
+
             ->orderByDesc('views')                  // nếu có cột views
             ->latest('published_at')                // nếu có cột published_at
             ->limit(6)
-            ->get(['guide_id','title','slug']);   // cover nếu có
+            ->get(['guide_id', 'title', 'slug']);   // cover nếu có
 
-        return view('dashboard.guides_admin.index', compact('guides','topPosts','items'));
+        return view('dashboard.guides_admin.index', compact('guides', 'topPosts', 'items'));
     }
 
     public function create()
     {
         return view('dashboard.guides_admin.create', [
-            'categories' => GuideCategory::orderBy('name')->get(['category_id','name']),
-            'tags'       => GuideTag::orderBy('name')->get(['tag_id','name']),
+            'categories' => GuideCategory::orderBy('name')->get(['category_id', 'name']),
+            'tags' => GuideTag::orderBy('name')->get(['tag_id', 'name']),
         ]);
-       
+
 
     }
 
@@ -54,9 +56,10 @@ class GuideController extends Controller
         $data['slug'] = Guide::uniqueSlug($data['title']);
 
         if ($req->hasFile('thumbnail')) {
-            $data['thumbnail'] = $req->file('thumbnail')->store('guides/covers', 'public');
+            $data['thumbnail'] = $req->file('thumbnail')
+                ->store('guides/covers', 'r2');   // ← Lưu đúng lên Cloudflare R2
         }
-        if ((int)($data['status'] ?? 0) === 1 && empty($data['published_at'])) {
+        if ((int) ($data['status'] ?? 0) === 1 && empty($data['published_at'])) {
             $data['published_at'] = now();
         }
 
@@ -66,14 +69,14 @@ class GuideController extends Controller
 
             $tagIds = collect($req->input('tags', []))
                 ->filter()                  // loại null/'' nếu có
-                ->map(fn ($v) => (int) $v)  // ép kiểu int
+                ->map(fn($v) => (int) $v)  // ép kiểu int
                 ->all();
 
             $guide->tags()->sync($tagIds);
             return $guide;
         });
 
-       return redirect()->route('admin.guides.index', ['guide' => $guide]);
+        return redirect()->route('admin.guides.index', ['guide' => $guide]);
     }
 
     public function edit(Guide $guide)
@@ -81,11 +84,11 @@ class GuideController extends Controller
         return view('dashboard.guides_admin.edit', [
             // FIX: load cả category để view dùng $guide->category->name
             'guide' => $guide->load([
-    'category:category_id,name', // chọn đúng PK + cột cần dùng
-    'tags:tag_id,name',
-]),
-            'categories' => GuideCategory::orderBy('name')->get(['category_id','name']),
-            'tags'       => GuideTag::orderBy('name')->get(['tag_id','name']),
+                'category:category_id,name', // chọn đúng PK + cột cần dùng
+                'tags:tag_id,name',
+            ]),
+            'categories' => GuideCategory::orderBy('name')->get(['category_id', 'name']),
+            'tags' => GuideTag::orderBy('name')->get(['tag_id', 'name']),
         ]);
     }
 
@@ -98,31 +101,36 @@ class GuideController extends Controller
         }
 
         if ($req->hasFile('thumbnail')) {
+
+            // Xóa ảnh cũ trên R2 nếu có
             if ($guide->thumbnail) {
-                Storage::disk('public')->delete($guide->thumbnail);
+                Storage::disk('r2')->delete($guide->thumbnail);
             }
-            $data['thumbnail'] = $req->file('thumbnail')->store('guides/covers', 'public');
+
+            // Upload ảnh mới lên R2
+            $data['thumbnail'] = $req->file('thumbnail')
+                ->store('guides/covers', 'r2');
         }
 
-        if (array_key_exists('status', $data) && (int)$data['status'] === 1 && !$guide->published_at) {
+        if (array_key_exists('status', $data) && (int) $data['status'] === 1 && !$guide->published_at) {
             $data['published_at'] = now();
         }
 
         DB::transaction(function () use ($guide, $data, $req) {
-            $guide->update($data,['status' => 0]);
-            
+            $guide->update($data, ['status' => 0]);
+
 
             $tagIds = collect($req->input('tags', []))
                 ->filter()
-                ->map(fn ($v) => (int) $v)
+                ->map(fn($v) => (int) $v)
                 ->all();
 
             $guide->tags()->sync($tagIds);
         });
 
-      return redirect()
-    ->route('admin.guides.index')
-    ->with('success', 'Đã cập nhật.');
+        return redirect()
+            ->route('admin.guides.index')
+            ->with('success', 'Đã cập nhật.');
     }
 
     public function destroy(Guide $guide)
@@ -131,34 +139,34 @@ class GuideController extends Controller
         return back()->with('success', 'Đã xoá.');
     }
 
-// Tệp: App\Http\Controllers\Admin\GuideController.php
+    // Tệp: App\Http\Controllers\Admin\GuideController.php
 
-public function togglePublish(Guide $guide)
-{
-    // Tính trạng thái mới
-    $newStatus = $guide->status ? 0 : 1;
+    public function togglePublish(Guide $guide)
+    {
+        // Tính trạng thái mới
+        $newStatus = $guide->status ? 0 : 1;
 
-    $payload = ['status' => $newStatus];
+        $payload = ['status' => $newStatus];
 
-    if ($newStatus === 1) {
-        // Lần đầu xuất bản thì set published_at
-        if (empty($guide->published_at)) {
-            $payload['published_at'] = now();
+        if ($newStatus === 1) {
+            // Lần đầu xuất bản thì set published_at
+            if (empty($guide->published_at)) {
+                $payload['published_at'] = now();
+            }
+        } else {
+            // Nếu muốn khi chuyển về nháp thì xóa thời điểm xuất bản:
+            // $payload['published_at'] = null;
+
+            // Hoặc nếu muốn giữ nguyên published_at thì bỏ dòng trên.
         }
-    } else {
-        // Nếu muốn khi chuyển về nháp thì xóa thời điểm xuất bản:
-        // $payload['published_at'] = null;
 
-        // Hoặc nếu muốn giữ nguyên published_at thì bỏ dòng trên.
+        // update/save
+        $guide->update($payload);
+
+        return back()->with(
+            'success',
+            $newStatus === 1 ? 'Đã xuất bản bài viết.' : 'Đã chuyển bài viết về nháp.'
+        );
     }
-
-    // update/save
-    $guide->update($payload);
-
-    return back()->with(
-        'success',
-        $newStatus === 1 ? 'Đã xuất bản bài viết.' : 'Đã chuyển bài viết về nháp.'
-    );
-}
 
 }

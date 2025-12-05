@@ -409,8 +409,9 @@
         $firstUrl  = $urls[0] ?? null;
         $secondUrl = $urls[1] ?? null;
 
-        $first  = $firstUrl ? src_img_get(url: $firstUrl) : $fallback;
-        $second = $secondUrl ? src_img_get(url: $secondUrl) : null;
+        $first  = $firstUrl ? src_img_get($firstUrl) : $fallback;
+        $second = $secondUrl ? src_img_get($secondUrl) : null;
+
     @endphp
 
     <div class="thumb-wrap">

@@ -29,7 +29,7 @@
     <div class="product-card-inner border rounded position-relative">
       <div class="product-figure position-relative">
         <div class="product-thumb">
-          <img src="{{ product_main_src($product) }}" class="main-img">
+          <img src="{{ product_main_src(product: $product) }}" class="main-img">
           @if(product_hover_src($product))
             <img src="{{ product_hover_src($product) }}" class="hover-img">
           @endif

@@ -211,72 +211,62 @@
         </div>
       </div>
 
-      {{-- Mô tả & Hình ảnh --}}
-      <div class="form-card">
-        <h3 class="section-title"><i class="fas fa-cog mr-2"></i>Mô tả & hình ảnh</h3>
+     
+    {{-- Mô tả & Hình ảnh --}}
+{{-- Mô tả & Hình ảnh --}}
+<div class="form-card">
+    <h3 class="section-title"><i class="fas fa-images mr-2"></i>Mô tả & hình ảnh</h3>
 
-        <div class="form-group">
-          <label class="form-label"><i class="fas fa-paragraph mr-1"></i>Mô tả dịch vụ</label>
-          <textarea name="description" rows="6"
-                    class="form-control form-control-modern @error('description') is-invalid @enderror">{{ old('description', $service->description) }}</textarea>
-          @error('description')<div class="invalid-feedback">{{ $message }}</div>@enderror
+    <div class="form-group">
+        <label class="form-label"><i class="fas fa-paragraph mr-1"></i>Mô tả dịch vụ</label>
+        <textarea name="description" rows="6" class="form-control form-control-modern @error('description') is-invalid @enderror">{{ old('description', $service->description) }}</textarea>
+        @error('description')<div class="invalid-feedback">{{ $message }}</div>@enderror
+    </div>
+
+    <div class="row g-4">
+        {{-- Ảnh đại diện --}}
+        <div class="col-lg-6">
+            <label class="form-label"><i class="fas fa-image mr-1"></i>Ảnh đại diện</label>
+
+            @if($service->thumbnail)
+                <div class="current-image mb-3 text-center">
+                    <img src="{{ src_img_get($service->thumbnail) }}" alt="Thumbnail" class="img-thumbnail" style="max-height: 220px; border-radius: 12px;">
+                    <p class="mt-2 text-success"><i class="fas fa-check-circle"></i> Ảnh đại diện hiện tại</p>
+                </div>
+            @endif
+
+            <input type="file" name="thumbnail" id="thumbnail" accept="image/*" class="form-control">
+            <small class="text-muted">JPG, PNG, WEBP, GIF ≤ 5MB</small>
+            @error('thumbnail')<div class="text-danger mt-1">{{ $message }}</div>@enderror
         </div>
 
-        <div class="row">
-            @php
-            use Illuminate\Support\Facades\Storage;
-            use Illuminate\Support\Str;
-            
-            // Thumbnail
-            $thumb = $service->thumbnail;
-            $thumbSrc = null;
-            if ($thumb) {
-                $thumbSrc = Storage::disk('public')->exists($thumb) ? Storage::url($thumb)
-                        : (Str::startsWith($thumb, ['http://','https://','//']) ? $thumb : asset($thumb));
-            }
+        {{-- Ảnh phụ (gallery) --}}
+        <div class="col-lg-6">
+            <label class="form-label"><i class="fas fa-images mr-1"></i>Ảnh chi tiết (tối đa 6 ảnh)</label>
 
-            // Images (ảnh phụ)
-            $img = $service->images;
-            $imgSrc = null;
-            if ($img) {
-                $imgSrc = Storage::disk('public')->exists($img) ? Storage::url($img)
-                        : (Str::startsWith($img, ['http://','https://','//']) ? $img : asset($img));
-            }
-        @endphp
-                  <label  class="form-label"><i class="fas fa-image mr-1"></i>
-Ảnh đại diện</label>
-          @if($thumbSrc)
-        <div class="current-image">
-            <img src="{{ $thumbSrc }}" alt="thumb">
-            <p class="mt-2 mb-0 text-primary font-weight-bold">Ảnh đại diện hiện có</p>
+            <!-- Danh sách ảnh hiện tại -->
+            @if(is_array($service->images) && count($service->images) > 0)
+                <div class="row g-2 mb-3">
+                    @foreach($service->images as $index => $url)
+                        <div class="col-4 position-relative">
+                            <img src="{{ src_img_get($url) }}" class="img-thumbnail" style="height: 120px; object-fit: cover; width: 100%;">
+                            <label class="position-absolute top-0 end-0 m-1">
+                                <input type="checkbox" name="delete_images[]" value="{{ $url }}" class="form-check-input">
+                                <small class="text-danger fw-bold">Xóa</small>
+                            </label>
+                        </div>
+                    @endforeach
+                </div>
+            @endif
+
+            <!-- Upload ảnh mới -->
+            <input type="file" name="gallery[]" id="gallery" accept="image/*" multiple class="form-control">
+            <small class="text-muted">Chọn nhiều ảnh cùng lúc (tối đa 6 ảnh)</small>
+            @error('gallery')<div class="text-danger mt-1">{{ $message }}</div>@enderror
+            @error('gallery.*')<div class="text-danger mt-1">Một số ảnh không hợp lệ</div>@enderror
         </div>
-        @endif
-  
-
-        {{-- Fallback KHÔNG CẦN JS --}}
-        
-        <input type="file" id="thumbnail" name="thumbnail" accept="image/*" class="d-none">
-        <label for="thumbnail" class="btn btn-sm btn-outline-primary mt-2 text-white">Chọn ảnh </label>
-        @error('thumbnail')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
-
-
-          {{-- Images (phụ) --}}
-                    <label style="margin-top:10px" class="form-label"><i class="fas fa-image mr-1"></i>
-Ảnh chi tiết</label>
-         @if($imgSrc)
-        <div style="margin-top:10px;" class="current-image">
-            <img src="{{ $imgSrc }}" alt="image">
-            <p class="mt-2 mb-0 text-primary font-weight-bold">Ảnh chi tiết hiện có</p>
-        </div>
-        @endif
-        
-{{-- Fallback KHÔNG CẦN JS --}}
-<input type="file" id="images" name="images" accept="image/*" class="d-none">
-<label for="images" class="btn btn-sm btn-outline-primary mt-2 text-white">Chọn ảnh</label>
-@error('images')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
-
-        </div>
-      </div>
+    </div>
+</div>
 
       <div class="button-group">
         <button class="btn btn-update" type="submit">
