@@ -182,6 +182,23 @@
   .cart-item { animation: fadeInUp 0.5s ease-out; }
   .qty-input:disabled { opacity: 0.6; cursor: not-allowed; }
   .updated { background: #f0fdf4 !important; border-left: 4px solid var(--success-color); }
+  .payment-card {
+    border: 2px solid #ddd;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    transition: 0.2s;
+    cursor: pointer;
+}
+
+input[type="radio"]:checked + label .payment-card {
+    border-color: #007bff;
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.4);
+}
+
+.payment-icon img {
+    width: 100px;
+}
 </style>
 @endpush
 
@@ -376,33 +393,43 @@
             <label class="form-label fw-semibold">Phương thức thanh toán</label>
 
             <div class="row g-3">
+              {{-- COD --}}
+              <div class="col-md-4">
+                  <input type="radio" name="provider" id="payment-cod" value="cod" hidden required>
+                  <label class="payment-option" for="payment-cod">
+                      <div class="payment-card">
+                          <div class="payment-icon">
+                              <img src="/pay/7630510.png" alt="Cod">
+                          </div>
+                      </div>
+                  </label>
+              </div>
 
-                {{-- VNPay --}}
-                <div class="col-md-6">
-                    
+              {{-- VNPay --}}
+              <div class="col-md-4">
+                  <input type="radio" name="provider" id="payment-vnpay" value="vnpay" hidden required>
+                  <label class="payment-option" for="payment-vnpay">
+                      <div class="payment-card">
+                          <div class="payment-icon">
+                              <img src="/pay/vnpay.png" alt="VNPay">
+                          </div>
+                      </div>
+                  </label>
+              </div>
 
-                    <label class="payment-option" for="payment-vnpay">
-                        <div class="payment-card">
-                            <div class="payment-icon">
-                                <img src="/pay/vnpay.png" alt="VNPay">
-                            </div>
-                        </div>
-                    </label>
-                </div>
+              {{-- MoMo --}}
+              <div class="col-md-4">
+                  <input type="radio" name="provider" id="payment-momo" value="momo" hidden required>
+                  <label class="payment-option" for="payment-momo">
+                      <div class="payment-card">
+                          <div class="payment-icon">
+                              <img src="/pay/momo.png" alt="MoMo">
+                          </div>
+                      </div>
+                  </label>
+              </div>
 
-                {{-- MoMo --}}
-                <div class="col-md-6">
-                    
-                    <label class="payment-option" for="payment-momo">
-                        <div class="payment-card">
-                            <div class="payment-icon">
-                                <img src="/pay/momo.png" alt="Momo">
-                            </div>
-                        </div>
-                    </label>
-                </div>
-
-            </div>
+          </div>
 
             <button type="submit" class="btn btn-primary w-100 btn-lg mt-4">
                 <i class="fas fa-credit-card me-2"></i>
