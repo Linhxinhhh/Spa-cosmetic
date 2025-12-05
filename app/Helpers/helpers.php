@@ -135,18 +135,24 @@ if (!function_exists('product_hover_src')) {
 if (!function_exists('src_img_get')) {
     function src_img_get($path)
     {
+        // Nếu không có đường dẫn → ảnh mặc định
         if (!$path) {
             return asset('admin/images/no-image.png');
         }
 
-        // Nếu đã là URL đầy đủ → trả luôn
+        // Nếu đã là full URL → trả luôn
         if (Str::startsWith($path, ['http://', 'https://', '//'])) {
             return $path;
         }
 
-        // BUỘC DÙNG TEMPORARY URL CÓ THỜI GIAN DÀI (24 GIỜ)
+        // CÁCH TỐT NHẤT: DÙNG PUBLIC DOMAIN (nếu có)
+        if (env('R2_PUBLIC_DOMAIN')) {
+            return rtrim(env('R2_PUBLIC_DOMAIN'), '/') . '/' . ltrim($path, '/');
+        }
+
+        // CÁCH DỰ PHÒNG: DÙNG TEMPORARY URL 7 NGÀY (vẫn hiện dù bucket private)
         try {
-            return Storage::disk('r2')->temporaryUrl($path, now()->addHours(24));
+            return Storage::disk('r2')->temporaryUrl($path, now()->addDays(7));
         } catch (Exception $e) {
             return asset('admin/images/no-image.png');
         }
