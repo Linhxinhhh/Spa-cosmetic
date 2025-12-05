@@ -140,11 +140,16 @@
                 @endphp
                 <tr class="hover:bg-blue-100 hover:border-l-4 hover:border-blue-500 transition-colors duration-150 group">
                   <td class="px-6 py-4">
-                    @foreach ($guides as $guide)
-                      <img src="{{ Storage::disk('r2')->url($guide->thumbnail) }}" class="w-20 h-20">
-                    @endforeach
+                    @php
+                      $thumb = $g->thumbnail ?? $g->image ?? $g->cover ?? null;
+                      $thumbUrl = $thumb
+                        ? Storage::disk('r2')->url($thumb)
+                        : asset('images/default-post.png');
+                    @endphp
 
+                    <img src="{{ $thumbUrl }}" class="w-20 h-20 rounded-lg object-cover">
                   </td>
+
                   <td class="px-6 py-4">
                     <div class="flex items-center space-x-3">
                       <div
