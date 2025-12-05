@@ -251,7 +251,7 @@ if (!function_exists('product_img')) {
           <a href="{{ route('users.products.byBrand', ['brand' => $brand->slug]) }}"
              class="brand-card" title="{{ $brand->brand_name }}">
             @if(!empty($brand->logo_url))
-              <img src="{{ src_img_get( url: $brand->logo_url) }}" alt="Logo {{ $brand->brand_name }}" loading="lazy" width="160" height="80">
+              <img src="{{ src_img_get( $brand->logo_url) }}" alt="Logo {{ $brand->brand_name }}" loading="lazy" width="160" height="80">
             @else
               <span class="brand-fallback">
                 {{ mb_strtoupper(mb_substr($brand->brand_name,0,1,'UTF-8'),'UTF-8') }}
@@ -266,7 +266,7 @@ if (!function_exists('product_img')) {
           <a href="{{ route('users.products.byBrand', ['brand' => $brand->slug]) }}"
              class="brand-card" title="{{ $brand->brand_name }}" aria-hidden="true" tabindex="-1">
             @if(!empty($brand->logo_url))
-            <img src="{{ src_img_get( url: $brand->logo_url) }}" alt="{{ $brand->logo_url }}" loading="lazy" width="160" height="80">
+            <img src="{{ src_img_get(  $brand->logo_url) }}" alt="{{ $brand->logo_url }}" loading="lazy" width="160" height="80">
             @else
               <span class="brand-fallback">
                 {{ mb_strtoupper(mb_substr($brand->brand_name,0,1,'UTF-8'),'UTF-8') }}

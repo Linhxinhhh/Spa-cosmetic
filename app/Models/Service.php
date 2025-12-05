@@ -87,7 +87,11 @@ public function mainImage()
 {
     return $this->hasMany(\App\Models\Appointment::class, 'service_id', 'service_id');
 }
-
+public function getMainImageAttribute()
+{
+    return $this->images->where('is_main', true)->first()
+           ?? $this->images->first();
+}
     /**
      * Giá cuối cùng để hiển thị (ưu tiên price_sale, sau đó price_original, cuối cùng price)
      */

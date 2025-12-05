@@ -155,35 +155,33 @@
                                 @endif
                             </td>
 
-                            <td class="text-center">
-                                @php
-                                    // Lấy ảnh đại diện: ưu tiên thumbnail, nếu không có thì lấy ảnh đầu tiên có is_main = 1
-                                    $mainImage = $service->images->where('is_main', true)->first()
-                                        ?? $service->images->first();
+<td class="text-center">
+    @php
+        $images = $service->images ?? collect(); // phòng trường hợp null
+        $mainImage = $images->where('is_main', true)->first()
+                     ?? $images->first();
 
-                                    $src = $mainImage ? src_img_get($mainImage->image_url) : null;
-                                @endphp
+        $src = $mainImage?->image_url ? src_img_get($mainImage->image_url) : null;
+    @endphp
 
-                                @if($src)
-                                    <div class="position-relative d-inline-block">
-                                        <img src="{{ $src }}" class="rounded shadow-sm" alt="{{ $service->service_name }}"
-                                            style="width: 80px; height: 80px; object-fit: cover; border: 3px solid #fff; box-shadow: 0 4px 12px rgba(0,0,0,.15);">
+    @if($src)
+        <div class="position-relative d-inline-block">
+            <img src="{{ $src }}"
+                 class="rounded shadow-sm"
+                 style="width:80px;height:80px;object-fit:cover;border:3px solid #fff;box-shadow:0 4px 15px rgba(0,0,0,.15);">
 
-                                        {{-- Hiển thị số lượng ảnh phụ --}}
-                                        @if($service->images->count() > 1)
-                                            <span class="badge bg-primary position-absolute bottom-0 end-0 translate-middle-x mb-2"
-                                                style="font-size: 0.7rem;">
-                                                <i class="fas fa-images"></i> {{ $service->images->count() }}
-                                            </span>
-                                        @endif
-                                    </div>
-                                @else
-                                    <div
-                                        style="width:80px;height:80px;background:#f1f5f9;border-radius:12px;display:flex;align-items:center;justify-content:center;margin:auto;">
-                                        <i class="fas fa-image fa-2x text-muted"></i>
-                                    </div>
-                                @endif
-                            </td>
+            @if($images->count() > 1)
+                <span class="badge bg-primary position-absolute bottom-0 end-0 mb-2 me-1" style="font-size:0.7rem;">
+                    {{ $images->count() }} ảnh
+                </span>
+            @endif
+        </div>
+    @else
+        <div style="width:80px;height:80px;background:#f1f5f9;border-radius:12px;display:flex;align-items:center;justify-content:center;">
+            <i class="fas fa-image fa-2x text-muted"></i>
+        </div>
+    @endif
+</td>
                             <td>
                                 <div class="action-buttons">
                                     <a href="{{ route('admin.services.edit', $service->service_id) }}" class="btn btn-edit"
