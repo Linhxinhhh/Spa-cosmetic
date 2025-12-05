@@ -240,31 +240,41 @@
             @error('thumbnail')<div class="text-danger mt-1">{{ $message }}</div>@enderror
         </div>
 
-        {{-- Ảnh phụ (gallery) --}}
-        <div class="col-lg-6">
-            <label class="form-label"><i class="fas fa-images mr-1"></i>Ảnh chi tiết (tối đa 6 ảnh)</label>
 
-            <!-- Danh sách ảnh hiện tại -->
-            @if(is_array($service->images) && count($service->images) > 0)
-                <div class="row g-2 mb-3">
-                    @foreach($service->images as $index => $url)
-                        <div class="col-4 position-relative">
-                            <img src="{{ src_img_get($url) }}" class="img-thumbnail" style="height: 120px; object-fit: cover; width: 100%;">
-                            <label class="position-absolute top-0 end-0 m-1">
-                                <input type="checkbox" name="delete_images[]" value="{{ $url }}" class="form-check-input">
-                                <small class="text-danger fw-bold">Xóa</small>
-                            </label>
-                        </div>
-                    @endforeach
+     {{-- Ảnh phụ (gallery) --}}
+<div class="col-lg-6">
+    <label class="form-label">Ảnh chi tiết (tối đa 6 ảnh)</label>
+
+  @hasimages($service)
+    <div class="row g-2 mb-3">
+        @foreach($service->images as $image)
+            <div class="col-4 position-relative">
+                <img src="{{ src_img_get($image->image_url) }}"
+                     class="img-thumbnail"
+                     style="height: 120px; width: 100%; object-fit: cover; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,.1);">
+
+                <div class="position-absolute top-0 end-0 m-1 bg-white rounded p-1 shadow-sm">
+                    <label class="d-flex align-items-center gap-1 mb-0 cursor-pointer">
+                        <input type="checkbox"
+                               name="delete_images[]"
+                               value="{{ $image->id }}"
+                               class="form-check-input mt-0">
+                        <small class="text-danger fw-bold">Xóa</small>
+                    </label>
                 </div>
-            @endif
-
-            <!-- Upload ảnh mới -->
-            <input type="file" name="gallery[]" id="gallery" accept="image/*" multiple class="form-control">
-            <small class="text-muted">Chọn nhiều ảnh cùng lúc (tối đa 6 ảnh)</small>
-            @error('gallery')<div class="text-danger mt-1">{{ $message }}</div>@enderror
-            @error('gallery.*')<div class="text-danger mt-1">Một số ảnh không hợp lệ</div>@enderror
-        </div>
+            </div>
+        @endforeach
+    </div>
+@else
+    <div class="text-muted text-center py-4">
+        <i class="fas fa-images fa-3x mb-3 opacity-25"></i>
+        <p>Chưa có ảnh chi tiết nào</p>
+    </div>
+@endhasimages
+    <input type="file" name="gallery[]" id="gallery" accept="image/*" multiple class="form-control">
+    <small class="text-muted d-block mt-1">Chọn nhiều ảnh – Tối đa 6 ảnh</small>
+    @error('gallery')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
+</div>
     </div>
 </div>
 

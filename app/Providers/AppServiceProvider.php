@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
 use App\Models\Cart;
 use App\Models\Product;
+use Illuminate\Support\Facades\Blade;
 
 
 class AppServiceProvider extends ServiceProvider
@@ -23,7 +24,16 @@ class AppServiceProvider extends ServiceProvider
      * Bootstrap any application services.
      */
   public function boot(): void
+
     {
+        Blade::if('hasimages', function ($model) {
+        return optional($model->images)->count() > 0;
+    });
+
+    // Hoặc chung cho mọi relation bạn muốn
+    Blade::if('hasrelation', function ($model, string $relation) {
+        return optional($model->{$relation})->count() > 0;
+    });
         if (app()->environment('production')) {
         URL::forceScheme('https');
     }
