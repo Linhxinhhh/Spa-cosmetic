@@ -211,72 +211,71 @@
         </div>
       </div>
 
-      {{-- Mô tả & Hình ảnh --}}
-      <div class="form-card">
-        <h3 class="section-title"><i class="fas fa-cog mr-2"></i>Mô tả & hình ảnh</h3>
+     
+    {{-- Mô tả & Hình ảnh --}}
+<div class="form-card">
+    <h3 class="section-title"><i class="fas fa-cog mr-2"></i>Mô tả & hình ảnh</h3>
 
-        <div class="form-group">
-          <label class="form-label"><i class="fas fa-paragraph mr-1"></i>Mô tả dịch vụ</label>
-          <textarea name="description" rows="6"
-                    class="form-control form-control-modern @error('description') is-invalid @enderror">{{ old('description', $service->description) }}</textarea>
-          @error('description')<div class="invalid-feedback">{{ $message }}</div>@enderror
+    <div class="form-group">
+        <label class="form-label"><i class="fas fa-paragraph mr-1"></i>Mô tả dịch vụ</label>
+        <textarea name="description" rows="6"
+                  class="form-control form-control-modern @error('description') is-invalid @enderror"
+                  placeholder="Nhập mô tả chi tiết dịch vụ...">{{ old('description', $service->description) }}</textarea>
+        @error('description')<div class="invalid-feedback">{{ $message }}</div>@enderror
+    </div>
+
+    <div class="row">
+        {{-- Ảnh đại diện (thumbnail) --}}
+        <div class="col-md-6">
+            <label class="form-label"><i class="fas fa-image mr-1"></i>Ảnh đại diện</label>
+
+            @if($service->thumbnail)
+                @php
+                    // Hàm hỗ trợ lấy URL ảnh đúng (dùng lại từ index)
+                    $thumbSrc = src_img_get($service->thumbnail);
+                @endphp
+                <div class="current-image mb-3">
+                    <img src="{{ $thumbSrc }}" alt="Thumbnail hiện tại" style="max-height: 200px; border-radius: 12px;">
+                    <p class="mt-2 mb-0 text-primary"><i class="fas fa-check-circle"></i> Ảnh đại diện hiện tại</p>
+                </div>
+            @endif
+
+            <div class="custom-file-upload">
+                <input type="file" id="thumbnail" name="thumbnail" accept="image/*" class="d-none">
+                <label for="thumbnail" class="btn btn-outline-primary">
+                    <i class="fas fa-upload mr-1"></i> Chọn ảnh đại diện mới
+                </label>
+                <small class="text-muted d-block mt-1">JPG, PNG, WEBP, GIF ≤ 5MB</small>
+            </div>
+            @error('thumbnail')<div class="text-danger mt-1">{{ $message }}</div>@enderror
         </div>
 
-        <div class="row">
-            @php
-            use Illuminate\Support\Facades\Storage;
-            use Illuminate\Support\Str;
-            
-            // Thumbnail
-            $thumb = $service->thumbnail;
-            $thumbSrc = null;
-            if ($thumb) {
-                $thumbSrc = Storage::disk('public')->exists($thumb) ? Storage::url($thumb)
-                        : (Str::startsWith($thumb, ['http://','https://','//']) ? $thumb : asset($thumb));
-            }
+        {{-- Ảnh chi tiết (images) --}}
+        <div class="col-md-6">
+            <label class="form-label"><i class="fas fa-images mr-1"></i>Ảnh chi tiết</label>
 
-            // Images (ảnh phụ)
-            $img = $service->images;
-            $imgSrc = null;
-            if ($img) {
-                $imgSrc = Storage::disk('public')->exists($img) ? Storage::url($img)
-                        : (Str::startsWith($img, ['http://','https://','//']) ? $img : asset($img));
-            }
-        @endphp
-                  <label  class="form-label"><i class="fas fa-image mr-1"></i>
-Ảnh đại diện</label>
-          @if($thumbSrc)
-        <div class="current-image">
-            <img src="{{ $thumbSrc }}" alt="thumb">
-            <p class="mt-2 mb-0 text-primary font-weight-bold">Ảnh đại diện hiện có</p>
+            @if($service->images)
+                @php
+                    $imgSrc = src_img_get($service->images);
+                @endphp
+                <div class="current-image mb-3">
+                    <img src="{{ $imgSrc }}" alt="Ảnh chi tiết hiện tại" style="max-height: 200px; border-radius: 12px;">
+                    <p class="mt-2 mb-0 text-primary"><i class="fas fa-check-circle"></i> Ảnh chi tiết hiện tại</p>
+                </div>
+            @endif
+
+            <div class="custom-file-upload">
+                <!-- SỬA LỖI CHÍNH TẠI ĐÂY: type="file" chứ không phải typefile -->
+                <input type="file" id="images" name="images" accept="image/*" class="d-none">
+                <label for="images" class="btn btn-outline-primary">
+                    <i class="fas fa-upload mr-1"></i> Chọn ảnh chi tiết mới
+                </label>
+                <small class="text-muted d-block mt-1">JPG, PNG, WEBP, GIF ≤ 5MB</small>
+            </div>
+            @error('images')<div class="text-danger mt-1">{{ $message }}</div>@enderror
         </div>
-        @endif
-  
-
-        {{-- Fallback KHÔNG CẦN JS --}}
-        
-        <input type="file" id="thumbnail" name="thumbnail" accept="image/*" class="d-none">
-        <label for="thumbnail" class="btn btn-sm btn-outline-primary mt-2 text-white">Chọn ảnh </label>
-        @error('thumbnail')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
-
-
-          {{-- Images (phụ) --}}
-                    <label style="margin-top:10px" class="form-label"><i class="fas fa-image mr-1"></i>
-Ảnh chi tiết</label>
-         @if($imgSrc)
-        <div style="margin-top:10px;" class="current-image">
-            <img src="{{ $imgSrc }}" alt="image">
-            <p class="mt-2 mb-0 text-primary font-weight-bold">Ảnh chi tiết hiện có</p>
-        </div>
-        @endif
-        
-{{-- Fallback KHÔNG CẦN JS --}}
-<input type="file" id="images" name="images" accept="image/*" class="d-none">
-<label for="images" class="btn btn-sm btn-outline-primary mt-2 text-white">Chọn ảnh</label>
-@error('images')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
-
-        </div>
-      </div>
+    </div>
+</div>
 
       <div class="button-group">
         <button class="btn btn-update" type="submit">
