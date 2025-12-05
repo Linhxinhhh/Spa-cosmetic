@@ -73,6 +73,16 @@ class Service extends Model
     {
         return $this->belongsTo(ServiceCategory::class, 'category_id', 'category_id');
     }
+    public function images()
+{
+    return $this->hasMany(ServiceImage::class, 'service_id')->orderBy('sort_order');
+}
+
+// Optional: Lấy ảnh chính
+public function mainImage()
+{
+    return $this->hasOne(ServiceImage::class, 'service_id')->where('is_main', true);
+}
     public function appointments()
 {
     return $this->hasMany(\App\Models\Appointment::class, 'service_id', 'service_id');
