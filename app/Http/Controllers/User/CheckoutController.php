@@ -27,9 +27,11 @@ class CheckoutController extends Controller
     public function pay(Request $request, VnpayService $vnpay, MomoService $momo)
     {
         $request->validate([
-            'provider'   => 'required|in:vnpay,momo',
+            'provider'   => 'required|in:vnpay,momo',  
             'order_code' => 'required|string',
-            // tuỳ ý: 'phone','address','note'...
+            'phone'      => 'required|string|max:20',
+            'address'    => 'required|string|max:255',
+            'note'       => 'nullable|string',
         ]);
 
         $user = $request->user();
@@ -37,8 +39,6 @@ class CheckoutController extends Controller
         if (!$cart || $cart->items->isEmpty()) {
             return back()->with('error','Giỏ hàng trống.');
         }
-
-        // Nếu trùng mã đơn, sinh lại để tránh unique conflict
         $orderCode = $request->order_code;
         if (Order::where('order_code',$orderCode)->exists()) {
             $orderCode = 'LCS'.now()->format('YmdHis').Str::upper(Str::random(3));
@@ -51,7 +51,7 @@ class CheckoutController extends Controller
             $order = $user->orders()->create([
                 'order_code'      => $orderCode,
                 'total_amount'    => 0,                 // cập nhật sau
-                'payment_method'  => $request->provider, // 'vnpay' | 'momo'
+                'payment_method'  => $request->provider, // 'vnpay' | 'momo'|'cod'
                 'payment_status'  => 'pending',
                 'status'          => 'pending',
                 'shipping_address'=> $request->input('address'),
@@ -79,7 +79,7 @@ class CheckoutController extends Controller
             $order->update(['total_amount' => $total]);
             return $order;
         });
-         CustomerSyncService::touchFromOrder($order, false);
+        CustomerSyncService::Update_Address_User($order, false);
 
         $amount  = (int) $order->total_amount;
         $payload = [
@@ -105,7 +105,7 @@ class CheckoutController extends Controller
         if ($request->provider === 'vnpay') {
             $url = $vnpay->createPaymentUrl($payload);  // trả về URL đầy đủ
             return redirect()->away($url);
-        } else {
+        } else if ($request->provider === 'momo'){
             $res = $momo->createPayment($payload);      // JSON từ MoMo
             if (($res['resultCode'] ?? 99) == 0 && !empty($res['payUrl'])) {
                 return redirect()->away($res['payUrl']);

@@ -241,15 +241,7 @@ Route::get('/products/brand/{brand:slug}', [ProductUserController::class, 'byBra
         ->where('type','product|service');
 
 // PUBLIC (không gắn auth)
-Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
-Route::post('/cart/add/{product:slug}', [CartController::class, 'add'])
-    ->name('cart.add');
-    Route::post('/cart/add/id/{product:product_id}', [CartController::class, 'add'])
-    ->name('cart.addById');
-// Dùng {item} là số (id cart_item khi user) hoặc product_id (guest)
-Route::patch('/cart/update/{item}', [CartController::class, 'update'])->name('cart.update');
-Route::delete('/cart/remove/{item}', [CartController::class, 'remove'])->name('cart.remove');
-    
+
     Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
     Route::post('/wishlist/toggle/{product}', [WishlistController::class, 'toggle'])->name('wishlist.toggle');
     // Compare (cho phép KHÁCH dùng session)
@@ -281,6 +273,15 @@ Route::get('/dich-vu/danh-muc/{category:slug}', [ServiceUserController::class, '
     Route::get('/faq', [FaqController::class, 'index'])->name('faq.index');
     // ===== AUTH ONLY (bắt buộc đăng nhập) =====
     Route::middleware('auth')->group(function () {
+        Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+        Route::post('/cart/add/{product:slug}', [CartController::class, 'add'])
+            ->name('cart.add');
+            Route::post('/cart/add/id/{product:product_id}', [CartController::class, 'add'])
+            ->name('cart.addById');
+        // Dùng {item} là số (id cart_item khi user) hoặc product_id (guest)
+        Route::patch('/cart/update/{item}', [CartController::class, 'update'])->name('cart.update');
+        Route::delete('/cart/remove/{item}', [CartController::class, 'remove'])->name('cart.remove');
+            
         Route::get('/checkout', [CheckoutController::class, 'show'])->name('checkout.show');
         Route::post('/checkout/pay', [CheckoutController::class, 'pay'])->name('checkout.pay');
 
