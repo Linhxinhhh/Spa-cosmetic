@@ -3,8 +3,13 @@
 
 @section('content')
 <div class="container py-4">
-
-
+    @php
+      $images = $service->images ?? collect();
+                  $firstUrl  = optional($images->first())->image_url;
+                  $secondUrl = optional($images->skip(1)->first())->image_url;
+                  $first  = $firstUrl ? src_img_get($firstUrl) : src_img_get($service->thumbnail);
+                  $second = $secondUrl ? src_img_get($secondUrl) : null;
+    @endphp
 <nav aria-label="breadcrumb" class="mb-4">
     <ol class="breadcrumb">
         <li class="breadcrumb-item">
@@ -37,12 +42,12 @@
     <div class="col-lg-6">
       <div class="position-relative overflow-hidden rounded-3 shadow-sm" style="height: 450px;">
         <img class="w-100 h-100 object-fit-cover" 
-             src="{{ asset('storage/'.$service->thumbnail) }}" 
-             alt="{{ $service->service_name }}">
+              src="{{ $first }}"
+                  alt="{{ $service->service_name }}">
       </div>
     </div>
 
-    <!-- Service Info -->
+    <!-- Service Info -->1
     <div class="col-lg-6">
       <div class="bg-white rounded-3 shadow-sm p-4 h-100">
         <h1 class="h2 fw-bold mb-3">{{ $service->name }}</h1>
