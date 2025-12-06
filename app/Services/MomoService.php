@@ -11,7 +11,7 @@ class MomoService
         $partnerCode = 'MOMO';
         $accessKey   = 'F8BBA842ECF85';
         $secretKey   = 'K951B6PE1waDMi640xX08PD3vg6EkVlz';
-        $returnUrl   = 'https://spa-cosmetic-copy-production.up.railway.app/users/paysuccess';
+        $returnUrl   = 'https://spa-cosmetic-copy-production.up.railway.app/users/cart';
         $ipnUrl      = 'https://spa-cosmetic-copy-production.up.railway.app/users/cart';
 
         $payload = [

@@ -42,15 +42,7 @@ class PaymentController extends Controller
         $payment = Payment::where('request_payload->txn_ref', $txnRef)->first();
 
         if ($rsp === '00' && $payment) {
-            // cập nhật trạng thái giao dịch
-            $payment->update([
-                'status'           => 'success',
-                'callback_payload' => $data,
-            ]);
-
-            // Đánh dấu đơn đã thanh toán (idempotent)
-            $this->markOrderPaid($payment, 'vnpay');
-            return redirect()->route('users.checkout.show')->with('success', 'Thanh toán thành công');
+            return redirect()->away(url('/users/paysuccess'));
         }
 
         return redirect()->route('users.checkout.show')->with('error', 'Thanh toán thất bại: ' . $rsp);
@@ -99,9 +91,7 @@ class PaymentController extends Controller
         $payment->update(['callback_payload' => $params]);
 
         if ($valid && $code === 0) {
-            $payment->update(['status' => 'success']);
-            $this->markOrderPaid($payment, 'momo'); // idempotent
-            return view('payment.result', ['success' => true, 'msg' => 'Thanh toán MoMo thành công!']);
+            return redirect()->away(url('/users/paysuccess'));
         }
 
         $payment->update(['status' => 'failed']);

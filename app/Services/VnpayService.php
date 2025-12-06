@@ -15,7 +15,7 @@ class VnpayService
         $vnpUrl     = 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html';
         $tmnCode    = '4JN2S4S8'; // Lấy chuẩn từ portal merchant của bạn
         $hashSecret = 'SI38CXSTJ02YML4FX31B4W2NAR8GH3JZ'; // Lấy chuẩn từ portal merchant của bạn
-        $returnUrl  = 'https://spa-cosmetic-copy-production.up.railway.app/users/paysuccess';
+        $returnUrl  = 'https://spa-cosmetic-copy-production.up.railway.app/users/cart';
         // 3. Khai báo dữ liệu động
         $txnRef    = $p['txn_ref'] ?? strtoupper(bin2hex(random_bytes(6)));
         $amount    = (int)($p['amount'] ?? 0);
