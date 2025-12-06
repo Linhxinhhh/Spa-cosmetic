@@ -635,7 +635,8 @@
                   ?? $svc->thumbnail
                   ?? $svc->image
                   ?? null;
-              $thumb = $toUrl($raw) ?? asset('images/placeholder-4x3.png');
+                  
+              $thumb = src_img_get($raw);
 
               $giam = !is_null($it->discount_price)
                         ? $money($it->discount_price)
