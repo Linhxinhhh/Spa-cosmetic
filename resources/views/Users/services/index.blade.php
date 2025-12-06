@@ -346,10 +346,10 @@
                   $compare = $po;
                   $hasCompare = $compare > $display && $display > 0;
                   $discount = $hasCompare ? (100 - round($display * 100 / $compare)) : null;
-                  $images = $service->images ?? collect();
+                  $images = $sv->images ?? collect();
                   $firstUrl  = optional($images->first())->image_url;
                   $secondUrl = optional($images->skip(1)->first())->image_url;
-                  $first  = $firstUrl ? src_img_get($firstUrl) : src_img_get($service->thumbnail);
+                  $first  = $firstUrl ? src_img_get($firstUrl) : src_img_get($sv->thumbnail);
                   $second = $secondUrl ? src_img_get($secondUrl) : null;
                 @endphp
 

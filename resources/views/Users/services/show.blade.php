@@ -13,7 +13,7 @@
 
     <!-- Breadcrumb -->
     <nav aria-label="breadcrumb" class="mb-4">
-        <ol class="breadcrumb bg-light rounded-3 p-3 mb-0">
+        <ol class="breadcrumb ">
             <li class="breadcrumb-item">
                 <a href="{{ route('users.services.index') }}" class="cat-link">
                     <i class="bi bi-house-door me-1"></i>Dịch vụ
@@ -233,7 +233,7 @@
 }
 
 .cat-link:hover {
-    color: var(--primary-color);
+    color: gray;
 }
 
 /* Image Effects */
@@ -368,4 +368,4 @@
 }
 </style>
 
-@endsect
+@endsection
