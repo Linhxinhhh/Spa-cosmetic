@@ -144,17 +144,25 @@
         </svg>
       </a>
     </div>
-
+    @php
+       $images = $service->images ?? collect();
+                  $firstUrl  = optional($images->first())->image_url;
+                  $secondUrl = optional($images->skip(1)->first())->image_url;
+                  $first  = $firstUrl ? src_img_get($firstUrl) : src_img_get($service->thumbnail);
+                  $second = $secondUrl ? src_img_get($secondUrl) : null;
+    @endphp
     <div class="row g-4">
       @foreach($related as $r)
       <div class="col-6 col-md-4 col-lg-3">
         <a class="text-decoration-none" href="{{ route('users.services.show',$r->slug) }}">
           <div class="card h-100 border-0 shadow-sm hover-lift transition-all">
             <div class="position-relative overflow-hidden">
-              <img class="card-img-top" 
-                   style="height: 200px; object-fit: cover;"
-                   src="{{ asset('storage/' . $r->thumbnail) }}"
-                   alt="{{ $r->name }}">
+                 <img class="card-img-top"
+                  src="{{ $first }}"
+                  alt="{{ $r->service_name }}"
+                  style="height: 200px; object-fit: cover;">
+          </a>
+             
               <div class="position-absolute top-0 end-0 m-2">
                 <span class="badge bg-white text-dark">{{ $r->duration ?? '' }} phút</span>
               </div>
