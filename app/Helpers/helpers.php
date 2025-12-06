@@ -135,7 +135,7 @@ if (!function_exists('product_hover_src')) {
 if (!function_exists('src_img_get')) {
     function src_img_get($url)
     {
-        $fallback = asset('images/placeholder-4x3.jpg');
+        $fallback = 'http://www.nhadattanphu.xyz/Content/images/noImage.png';
 
         if (!$url) {
             return $fallback;
@@ -199,7 +199,7 @@ if (!function_exists('service_image')) {
             return src_img_get($firstImage->image_url);
         }
 
-        return $fallback ? asset('images/default-service.jpg') : null;
+        return $fallback ? 'http://www.nhadattanphu.xyz/Content/images/noImage.png': null;
     }
 }
 function r2_url($path)
