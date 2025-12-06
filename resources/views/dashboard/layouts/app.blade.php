@@ -36,6 +36,11 @@
         .content-wrapper {
             margin-left: 270px; /* Chiều rộng sidebar */
             padding-top: 160px; /* Tổng chiều cao app-topstrip (60px) + header phụ (80px) */
+            margin-left: 270px;
+    padding-top: 160px;
+    display: flex;
+    flex-direction: column;
+    flex: 1; /* quan trọng → giúp footer đẩy xuống */
         }
 
         main {
@@ -51,7 +56,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @stack('styles')
 </head>
-<body class="@yield('body-class', 'bg-gray-100')">
+<body class="min-h-screen flex flex-col @yield('body-class', 'bg-gray-100')">
     <div class="app-topstrip z-40 sticky top-0 py-[15px] px-6 bg-[linear-gradient(90deg,_#0f0533_0%,_#1b0a5c_100%)]">
         <div class="flex flex-col lg:flex-row gap-4 items-center justify-between">
             <div class="flex flex-col md:flex-row items-center gap-4 justify-center">
@@ -64,7 +69,7 @@
     @include('dashboard.layouts.sidebar')
     <div class="content-wrapper">
         @include('dashboard.layouts.header')
-        <main>
+        <main class="flex-1">
             @yield('content')
         </main>
         @include('dashboard.layouts.footer')

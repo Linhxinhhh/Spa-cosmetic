@@ -177,3 +177,34 @@ if (!function_exists('product_final_price')) {
         return $price;
     }
 }
+if (!function_exists('service_image')) {
+    function service_image($service, $fallback = true)
+    {
+        if (is_string($service) && filter_var($service, FILTER_VALIDATE_URL)) {
+            return $service;
+        }
+
+        if (!is_object($service)) {
+            return $fallback ?  "http://www.nhadattanphu.xyz/Content/images/noImage.png": null;
+        }
+
+        // Ưu tiên thumbnail    
+        if (!empty($service->thumbnail)) {
+            return src_img_get($service->thumbnail);
+        }
+
+        // Lấy ảnh đầu tiên từ images (an toàn tuyệt đối)
+        $firstImage = optional($service->images)->first();
+
+        if ($firstImage?->image_url) {
+            return src_img_get($firstImage->image_url);
+        }
+
+        return $fallback ? asset('images/default-service.jpg') : null;
+    }
+}
+function r2_url($path)
+{
+    return rtrim(env('R2_PUBLIC_URL'), '/') . '/' . ltrim($path, '/');
+}
+

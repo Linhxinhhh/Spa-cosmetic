@@ -14,7 +14,7 @@
 @endphp
 
 @section('content')
-<div class="container-fluid">
+<div class="service-container">
     {{-- Header --}}
     <div class="service-header">
         <div class="row align-items-center">
@@ -23,9 +23,9 @@
                     <i class="fas fa-tags mr-3"></i>Quản lý thương hiệu
                 </h1>
             </div>
-            <div class="col-md-4">
-                <div class="d-flex justify-content-md-end gap-2">
-                
+           <div class="col-lg-4 text-end">
+                <div class="d-flex justify-content-end gap-3">
+                     <a href="#" class="btn-excel"><i class="fas fa-file-excel"></i> Xuất Excel</a>
                     {{-- Thêm mới --}}
                     <a href="{{ route('admin.brands.create') }}" class="btn-add">
                         <i class="fas fa-plus me-1"></i> Thêm mới
@@ -78,12 +78,12 @@
         <table class="table table-modern">
             <thead>
                 <tr>
-                    <th style="width:80px">#ID</th>
-                    <th style="min-width:200px">Tên thương hiệu</th>
-                    <th style="min-width:200px" >Logo</th>
+                    <th style="width:120px">#ID</th>
+                    <th style="min-width:220px">Tên thương hiệu</th>
+                    <th style="min-width:210px" >Logo</th>
                     <th style="min-width:200px">Mô tả</th>
                     <th style="min-width:200px">Trạng thái</th>
-                    <th style="min-width:200px">Hành động</th> 
+                    <th style="min-width:210px">Hành động</th> 
                 </tr>
             </thead>
             <tbody>
@@ -96,7 +96,7 @@
                                 <small class="text-muted">{{ Str::limit($brand->description, 80) }}</small>
                             @endif
                         </td>
-                    <td style="display: flex; align-items: center; justify-content: center; text-align: center; vertical-align: middle;">
+                    <td style=" align-items: center; justify-content: center; text-align: center;">
     @if($brand->logo)
         @php
             $logoPath = $brand->logo;
@@ -162,34 +162,6 @@
     @endif
 </div>
 
-<style>
-    .btn-add {
-        background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
-        border: none; color: #fff;
-        padding: 12px 20px; border-radius: 12px;
-        font-weight: 600; box-shadow: 0 6px 18px rgba(37,99,235,.35);
-        transition: transform .2s ease, box-shadow .2s ease;
-    }
-    .btn-add:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(37,99,235,.45); }
-
-    /* Nút Export Excel (gradient xanh như mock) */
-    .btn-excel {
-        background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
-        border: none; color: #fff;
-        padding: 12px 20px; border-radius: 12px;
-        font-weight: 600; box-shadow: 0 6px 18px rgba(59,130,246,.35);
-        display: inline-flex; align-items: center; gap:.5rem;
-        transition: transform .2s ease, box-shadow .2s ease;
-    }
-    .btn-excel:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(59,130,246,.45); }
-    
-    .service-image { width: 50px; height: 50px; object-fit: cover; border-radius: 10px; }
-    .chip { padding: 4px 8px; border-radius: 12px; font-size: 0.75rem; font-weight: 500; }
-    .chip-type { background: #e0f2fe; color: #0369a1; }
-    .chip-featured { background: #fef3c7; color: #d97706; }
-    .price-display { font-weight: bold; color: #dc2626; font-size: 1.1em; }
-    .price-old { text-decoration: line-through; color: #6b7280; font-size: 0.9em; }
-</style>
 
 @push('scripts')
 <script>

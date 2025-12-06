@@ -5,274 +5,210 @@
 @section('page-title', 'Dịch vụ')
 
 @push('styles')
-    <link href="{{asset('admin/giaodien/css/style.css')}}" rel="stylesheet">
-@endpush
-@php
-    use Illuminate\Support\Facades\Storage;
-    use Illuminate\Support\Str;
-@endphp
-@section('content')
-    <div class="container-fluid">
-        {{-- Header --}}
-        <div class="service-header">
-            <div class="row align-items-center">
-                <div class="col-md-8">
-                    <h1 class="mb-2" style="font-size:2.5rem;font-weight:700;">
-                        <i class="fas fa-concierge-bell mr-3"></i>Quản lý dịch vụ
-                    </h1>
+<link href="{{ asset('admin/giaodien/css/style.css') }}" rel="stylesheet">
 
-                </div>
-                <div class="col-md-4">
-                    <div class="d-flex justify-content-md-end gap-2">
-                        {{-- Xuất Excel --}}
-                        <a href="" class="btn-excel">
-                            <i class="fas fa-download"></i> Xuất Excel
-                        </a>
-                        {{-- Thêm mới --}}
-                        <a href="{{ route('admin.services.create') }}" class="btn-add">
-                            <i class="fas fa-plus me-1"></i> Thêm mới
-                        </a>
-                    </div>
+@endpush
+
+@section('content')
+<div class="container-fluid">
+
+    <!-- Header -->
+    <div class="service-header">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="mb-2" style="font-size:2.6rem;font-weight:800">
+                    <i class="fas fa-concierge-bell me-3"></i> Quản lý dịch vụ
+                </h1>
+                <p class="mb-0 opacity-90">Tổng cộng: <strong>{{ $services->total() }}</strong> dịch vụ</p>
+            </div>
+            <div class="col-lg-4 text-end">
+                <div class="d-flex justify-content-end gap-3">
+                    <a href="#" class="btn-excel"><i class="fas fa-file-excel"></i> Xuất Excel</a>
+                    <a href="{{ route('admin.services.create') }}" class="btn-add"><i class="fas fa-plus me-2"></i>Thêm dịch vụ</a>
                 </div>
             </div>
         </div>
+    </div>
 
-        {{-- Alert --}}
-        @if(session('success'))
-            <div class="alert alert-modern mb-4">
-                <i class="fas fa-check-circle mr-2"></i>{{ session('success') }}
-            </div>
-        @endif
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show rounded-3 shadow-sm mb-4">
+            <i class="fas fa-check-circle me-2"></i>{{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
 
-        {{-- Search & Filter --}}
-        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
-
-            {{-- Search --}}
-            <form action="{{ route('admin.services.index') }}" method="GET"
-                class="d-flex gap-2 align-items-center bg-white rounded-xl shadow-lg px-3 py-2 border border-blue-100">
-                <input type="text" name="q" value="{{ request('q') }}" placeholder="Tìm kiếm dịch vụ theo tên, mô tả..."
-                    class="px-3 py-2 border border-gray-200 rounded-lg" style="min-width:260px; width:300px">
-
-                {{-- giữ lại params lọc khi search --}}
-                <input type="hidden" name="status" value="{{ request('status') }}">
-                <input type="hidden" name="category_id" value="{{ request('category_id') }}">
-                <input type="hidden" name="type" value="{{ request('type') }}">
-                <input type="hidden" name="featured" value="{{ request('featured') }}">
-                <button class="px-3 py-2 bg-blue-600 text-white rounded-lg"><i class="fas fa-search mr-1"></i></button>
+    <!-- Search & Filter -->
+    <div class="row mb-4 g-3">
+        <div class="col-xl-5">
+            <form action="{{ route('admin.services.index') }}" method="GET" class="input-group shadow-sm">
+                <input type="text" name="q" value="{{ request('q') }}" class="form-control py-3" placeholder="Tìm tên, mô tả dịch vụ..." style="border-radius:12px 0 0 12px;">
+                <button class="btn btn-primary px-4" style="border-radius:0 12px 12px 0;"><i class="fas fa-search"></i></button>
             </form>
-
-            {{-- Filter --}}
-            <form method="GET" action="{{ route('admin.services.index') }}"
-                class="d-flex gap-2 align-items-center bg-white rounded-xl shadow-lg px-3 py-2 border border-blue-100">
-
-                <select name="status" class="px-7 py-2 border border-gray-200 rounded-lg">
-                    <option value="">Tất cả trạng thái</option>
-                    <option value="1" {{ request('status') === '1' ? 'selected' : '' }}>Hoạt động</option>
-                    <option value="0" {{ request('status') === '0' ? 'selected' : '' }}>Tạm ngưng</option>
+        </div>
+        <div class="col-xl-7">
+            <form method="GET" class="d-flex flex-wrap gap-2 align-items-center justify-content-end">
+                <select name="status" class="form-select w-auto py-2">
+                    <option value="">Trạng thái</option>
+                    <option value="1" {{ request('status')=='1'?'selected':'' }}>Hoạt động</option>
+                    <option value="0" {{ request('status')=='0'?'selected':'' }}>Tạm ngưng</option>
                 </select>
-
-                <select name="category_id" class="px-3 py-2 border border-gray-200 rounded-lg">
-                    <option value="">Tất cả danh mục</option>
+                <select name="category_id" class="form-select w-auto py-2">
+                    <option value="">Danh mục</option>
                     @foreach($categories as $cat)
-                        <option value="{{ $cat->category_id }}" {{ request('category_id') == $cat->category_id ? 'selected' : '' }}>
+                        <option value="{{ $cat->category_id }}" {{ request('category_id')==$cat->category_id?'selected':'' }}>
                             {{ $cat->category_name }}
                         </option>
                     @endforeach
                 </select>
-
-                <select name="type" class="px-7 py-2 border border-gray-200 rounded-lg">
-                    <option value="">Loại dịch vụ</option>
-                    <option value="single" {{ request('type') === 'single' ? 'selected' : '' }}>Single</option>
-                    <option value="combo" {{ request('type') === 'combo' ? 'selected' : '' }}>Combo</option>
+                <select name="type" class="form-select w-auto py-2">
+                    <option value="">Loại</option>
+                    <option value="Lẻ" {{ request('type')=='Lẻ'?'selected':'' }}>Lẻ</option>
+                    <option value="Gói" {{ request('type')=='Gói'?'selected':'' }}>Gói</option>
                 </select>
-
-                <label class="d-flex align-items-center gap-1 mb-0">
-                    <input type="checkbox" name="featured" value="1" {{ request('featured') ? 'checked' : '' }}>
-                    <span>Nổi bật</span>
-                </label>
-
-                <button type="submit" class="px-3 py-2 bg-blue-50 text-blue-600 rounded-lg">
-                    <i class="fas fa-filter mr-1"></i>Lọc
-                </button>
-                <a href="{{ route('admin.services.index') }}" class="px-3 py-2 bg-gray-50 text-gray-700 rounded-lg">Xoá
-                    lọc</a>
+                <div class="form-check ms-3">
+                    <input class="form-check-input" type="checkbox" name="featured" value="1" {{ request('featured')?'checked':'' }}>
+                    <label class="form-check-label text-primary fw-600">Nổi bật</label>
+                </div>
+                <button type="submit" class="btn btn-outline-primary px-4">Lọc</button>
+                <a href="{{ route('admin.services.index') }}" class="btn btn-outline-secondary px-4">Xóa lọc</a>
             </form>
         </div>
+    </div>
 
-        {{-- Table --}}
+    <!-- Table -->
+    <div class="card border-0 shadow rounded-3 overflow-hidden">
         <div class="table-responsive">
-            <table class="table table-modern">
+            <table class="table table-hover table-modern mb-0">
                 <thead>
                     <tr>
-                        <th style="width:80px">#ID</th>
-                        <th class="w-25" style="min-width:260px">Tên dịch vụ</th>
+                        <th class="text-center">#</th>
+                        <th>Tên dịch vụ</th>
                         <th>Danh mục</th>
                         <th>Loại</th>
                         <th>Giá</th>
                         <th>Thời lượng</th>
                         <th>Nổi bật</th>
-
-                        <th>Hình</th>
-                        <th>Hành động</th>
+                        <th class="text-center">Hình ảnh</th>
+                        <th class="text-center">Thao tác</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse($services as $service)
-                        <tr>
-                            <td><strong>#{{ $service->service_id }}</strong></td>
-                            <td class="text-left w-25">
-                                <strong>{{ $service->service_name }}</strong><br>
+                        <tr class="align-middle">
+                            <td class="text-center"><strong>#{{ $service->service_id }}</strong></td>
+                            <td>
+                                <div class="fw-bold">{{ $service->service_name }}</div>
                                 @if($service->short_desc)
-                                    <small class="text-muted">{{ Str::limit($service->short_desc, 80) }}</small>
+                                    <small class="text-muted">{{ Str::limit($service->short_desc, 60) }}</small>
                                 @endif
                             </td>
                             <td>
-                                <span class="badge" style="color:#1e40af;border-radius:20px;padding:6px 12px">
-                                    {{ optional($service->category)->category_name ?? 'Không có' }}
+                                <span class="badge bg-info text-dark px-3 py-2 rounded-pill">
+                                    {{ optional($service->category)->category_name ?? '—' }}
                                 </span>
                             </td>
-                            <td>
-                                <span class="chip chip-type">{{ strtoupper($service->type) }}</span>
-                            </td>
+                            <td><span class="chip chip-type">{{ $service->type == 'Lẻ' ? 'LẺ' : 'GÓI' }}</span></td>
                             <td>
                                 @php
                                     $sale = $service->price_sale;
-                                    $orig = $service->price_original ?? $service->price;
+                                    $orig = $service->price_original;
                                 @endphp
-                                @if(!is_null($sale) && $sale > 0)
-                                    <span class="price-display">{{ number_format($sale, 0, ',', '.') }}đ</span>
-                                    <span class="price-old">{{ number_format($orig, 0, ',', '.') }}đ</span>
+                                @if($sale && $sale > 0 && $sale < $orig)
+                                    <div>
+                                        <span class="text-danger fw-bold fs-5">{{ number_format($sale) }}đ</span>
+                                        <del class="text-muted small">{{ number_format($orig) }}đ</del>
+                                    </div>
                                 @else
-                                    <span class="price-display">{{ number_format($orig, 0, ',', '.') }}đ</span>
+                                    <span class="fw-bold text-success fs-5">{{ number_format($orig) }}đ</span>
                                 @endif
                             </td>
-                            <td><span style="color: #7c3aed" class="">{{ $service->duration }} phút</span></td>
-                            <td>
+                            <td class="text-center"><strong class="text-primary">{{ $service->duration }}</strong> phút</td>
+                            <td class="text-center">
                                 @if($service->is_featured)
-                                    <span class="chip chip-featured">Nổi Bật</span>
+                                    <span class="chip chip-featured">Nổi bật</span>
                                 @else
-                                    —
+                                    <small class="text-muted">—</small>
                                 @endif
                             </td>
 
+                            <!-- CỘT ẢNH – SIÊU ỔN ĐỊNH, KHÔNG LỖI -->
+                            <!-- CỘT ẢNH – HOÀN HẢO 100%, KHÔNG LỖI DÙ CÓ HAY KHÔNG CÓ ẢNH -->
 <td class="text-center">
-    @php
-        $images = $service->images ?? collect(); // phòng trường hợp null
-        $mainImage = $images->where('is_main', true)->first()
-                     ?? $images->first();
+@php
+    $images = $service->images ?? collect();
 
-        $src = $mainImage?->image_url ? src_img_get($mainImage->image_url) : null;
-    @endphp
+    $firstUrl  = optional($images->first())->image_url;
+    $secondUrl = optional($images->skip(1)->first())->image_url;
 
-    @if($src)
-        <div class="position-relative d-inline-block">
-            <img src="{{ $src }}"
-                 class="rounded shadow-sm"
-                 style="width:80px;height:80px;object-fit:cover;border:3px solid #fff;box-shadow:0 4px 15px rgba(0,0,0,.15);">
+    $first  = $firstUrl ? src_img_get($firstUrl) : src_img_get($service->thumbnail);
+    $second = $secondUrl ? src_img_get($secondUrl) : null;
+    $total  = $images->count();
+@endphp
 
-            @if($images->count() > 1)
-                <span class="badge bg-primary position-absolute bottom-0 end-0 mb-2 me-1" style="font-size:0.7rem;">
-                    {{ $images->count() }} ảnh
-                </span>
-            @endif
-        </div>
-    @else
-        <div style="width:80px;height:80px;background:#f1f5f9;border-radius:12px;display:flex;align-items:center;justify-content:center;">
-            <i class="fas fa-image fa-2x text-muted"></i>
-        </div>
+<div class="thumb-wrap position-relative d-inline-block">
+    {{-- Ảnh chính --}}
+    <img class="img-primary rounded-3 shadow"
+         src="{{ $first }}"
+         style="width:90px;height:90px;object-fit:cover"
+         onerror="this.src='{{ asset("images/default-service.jpg") }}'"
+         loading="lazy">
+
+    {{-- Ảnh chi tiết (không phải main) --}}
+    @if($second)
+        <img class="img-secondary rounded-3"
+             src="{{ $second }}"
+             style="width:90px;height:90px;object-fit:cover"
+             loading="lazy">
     @endif
+
+    {{-- Badge số lượng ảnh còn lại --}}
+    @if($total > 1)
+        <div class="badge-count">+{{ $total - 1 }}</div>
+    @endif
+</div>
+
 </td>
-                            <td>
-                                <div class="action-buttons">
-                                    <a href="{{ route('admin.services.edit', $service->service_id) }}" class="btn btn-edit"
-                                        title="Chỉnh sửa">
+
+
+                            <td class="text-center">
+                                <div class="btn-group" role="group">
+                                    <a href="{{ route('admin.services.edit', $service->service_id) }}"
+                                       class="btn btn-warning btn-sm rounded-pill px-3">
                                         <i class="fas fa-edit"></i>
                                     </a>
                                     <form action="{{ route('admin.services.destroy', $service->service_id) }}" method="POST"
-                                        onsubmit="return confirm('Xoá dịch vụ này?')">
+                                        class="d-inline" onsubmit="return confirm('Xóa dịch vụ «{{ $service->service_name }}»?')">
                                         @csrf @method('DELETE')
-                                        <button class="btn btn-delete" title="Xoá"><i class="fas fa-trash"></i></button>
+                                        <button type="submit" class="btn btn-delete btn-sm rounded-pill px-3">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
                                     </form>
                                 </div>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="10" class="text-center py-5 text-muted">
-                                <i class="fas fa-inbox fa-2x mb-2"></i><br>Chưa có dịch vụ nào
+                            <td colspan="9" class="text-center py-5 text-muted">
+                                <i class="fas fa-inbox fa-4x mb-3"></i>
+                                <p class="fs-5">Chưa có dịch vụ nào</p>
                             </td>
                         </tr>
-
                     @endforelse
-
                 </tbody>
-                {{-- Pagination --}}
-
             </table>
-
-
         </div>
-        <div class="bg-white border-top px-3 py-3 d-flex justify-content-between align-items-center">
-            <div class="text-muted">
-                Hiển thị
-                <span class="font-weight-bold">{{ $services->firstItem() }}</span> –
-                <span class="font-weight-bold">{{ $services->lastItem() }}</span>
-                trong tổng số
-                <span class="font-weight-bold">{{ $services->total() }}</span> kết quả
-            </div>
-            <div>
-                {{ $services->onEachSide(1)->links() }}
+
+        <!-- Pagination -->
+        <div class="card-footer bg-white border-top">
+            <div class="row align-items-center">
+                <div class="col-md-6 text-muted">
+                    Hiển thị {{ $services->firstItem() }} đến {{ $services->lastItem() }} trong {{ $services->total() }} dịch vụ
+                </div>
+                <div class="col-md-6 text-end">
+                    {{ $services->appends(request()->query())->links() }}
+                </div>
             </div>
         </div>
     </div>
-    <style>
-        .btn-add {
-            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
-            border: none;
-            color: #fff;
-            padding: 12px 20px;
-            border-radius: 12px;
-            font-weight: 600;
-            box-shadow: 0 6px 18px rgba(37, 99, 235, .35);
-            transition: transform .2s ease, box-shadow .2s ease;
-        }
-
-        .btn-add:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 24px rgba(37, 99, 235, .45);
-        }
-
-        /* Nút Export Excel (gradient xanh như mock) */
-        .btn-excel {
-            background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
-            border: none;
-            color: #fff;
-            padding: 12px 20px;
-            border-radius: 12px;
-            font-weight: 600;
-            box-shadow: 0 6px 18px rgba(59, 130, 246, .35);
-            display: inline-flex;
-            align-items: center;
-            gap: .5rem;
-            transition: transform .2s ease, box-shadow .2s ease;
-        }
-
-        .btn-excel:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 24px rgba(59, 130, 246, .45);
-        }
-    </style>
-    @push('scripts')
-        <script>
-            // Add Font Awesome if not already included
-            if (!document.querySelector('link[href*="font-awesome"]')) {
-                const link = document.createElement('link');
-                link.rel = 'stylesheet';
-                link.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css';
-                document.head.appendChild(link);
-            }
-        </script>
-        <script src="{{asset('admin/giaodien/js/main.js')}}"></script>
-    @endpush
-
+</div>
 @endsection

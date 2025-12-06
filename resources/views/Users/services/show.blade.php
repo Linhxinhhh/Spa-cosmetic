@@ -14,7 +14,7 @@
         @if($service->category)
         
          <li class="breadcrumb-item">
-    <a href="{{ route('users.services.byCategory', $service->category->slug) }}" class="cat-link">
+    <a href="{{ route('users.services.byCategory', $service->slug) }}" class="cat-link">
         {{ $service->category->category_name }}
     </a>
     

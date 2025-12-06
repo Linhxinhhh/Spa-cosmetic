@@ -61,6 +61,7 @@ return [
             'bucket' => 'hadophat-tmp',
             'endpoint' => 'https://3010f952d9d6514cd60c2640d75b0c0c.r2.cloudflarestorage.com',
             'use_path_style_endpoint' => true,
+            'visibility' => 'public',
         ],
 ],
 
