@@ -510,7 +510,7 @@
         <div class="info-card-icon {{ $order->payment_status === 'paid' ? 'success' : ($order->payment_status === 'failed' ? 'danger' : 'primary') }}">
           <i class="bi {{ $payIcon }}"></i>
         </div>
-        <div class="info-card-label">Thanh toán</div>
+        <div class="info-card-label"> thanh toán ( <font color="red">{{ strtoupper($order->payment_method) }}</font> )</div>
         <div class="info-card-value">
           <span class="badge-custom {{ $payClass }}">
             <i class="bi {{ $payIcon }}"></i>

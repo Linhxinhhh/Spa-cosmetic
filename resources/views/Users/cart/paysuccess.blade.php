@@ -18,7 +18,7 @@
                 </div>
 
                 <h2 class="mt-3 fw-bold" style="color: #28a745;">
-                    Thanh toán thành công!
+                    Đặt hàng thành công!
                 </h2>
 
                 <p class="text-muted mt-2">
