@@ -109,7 +109,7 @@ if (!function_exists('product_image_candidates')) {
         if (!empty($item->thumbnail))
             array_unshift($list, asset_from_mixed($item->thumbnail));
         if (!$list)
-            $list[] = 'http://www.nhadattanphu.xyz/Content/images/noImage.png';
+            $list[] = asset('images/placeholder-4x3.jpg');
         return array_values(array_unique($list));
     }
 }
@@ -135,34 +135,35 @@ if (!function_exists('product_hover_src')) {
 if (!function_exists('src_img_get')) {
     function src_img_get($url)
     {
-        $fallback = 'http://www.nhadattanphu.xyz/Content/images/noImage.png';
+        // Ảnh fallback
+        $fallback = "http://www.nhadattanphu.xyz/Content/images/noImage.png";
 
+        // Không có ảnh → trả fallback
         if (!$url) {
             return $fallback;
         }
 
-        // Nếu đã là full URL R2 → TRẢ LUÔN
+        // Nếu path là URL trực tiếp → trả luôn
         if (Str::startsWith($url, ['http://', 'https://'])) {
             return $url;
         }
 
-        // Nếu bạn có public domain trong .env
+        // Nếu có domain public từ .env (dùng Cloudflare Images/R2 public URL)
         if ($domain = env('R2_PUBLIC_DOMAIN')) {
             return rtrim($domain, '/') . '/' . ltrim($url, '/');
         }
 
-        // Trường hợp bucket private
+        // Nếu bucket private → tạo temporary URL (giống product_main_src)
         try {
             return Storage::disk('r2')->temporaryUrl(
                 $url,
                 now()->addMinutes(10)
             );
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return $fallback;
         }
     }
 }
-
 
 
 if (!function_exists('product_final_price')) {
@@ -199,7 +200,7 @@ if (!function_exists('service_image')) {
             return src_img_get($firstImage->image_url);
         }
 
-        return $fallback ? 'http://www.nhadattanphu.xyz/Content/images/noImage.png': null;
+        return $fallback ? asset('images/default-service.jpg') : null;
     }
 }
 function r2_url($path)

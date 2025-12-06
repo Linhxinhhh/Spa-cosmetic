@@ -144,17 +144,18 @@
       <tbody class="bg-white divide-y divide-gray-100">
         @forelse($categories as $category)
           {{-- ===== ROW CHA ===== --}}
+          
           @php
             $totalServices = ($category->services_count ?? 0) + ($category->children?->sum('services_count') ?? 0);
+            
           @endphp
           <tr class="hover:bg-blue-50 transition-colors duration-150">
-            <td class="px-6 py-4">
-              <img
-                src="{{ src_img_get( url: $category->image) }}"
-                alt="{{ $category->category_name }}"
-                class="w-12 h-12 p-1.5 rounded-lg object-contain bg-gray-50 ring-1 ring-gray-200"
-              >
-            </td>
+              <td class="border px-4 py-2">
+    <img src="{{ src_img_get($category->image) }}"
+         alt="{{ $category->category_name }}"
+         class="w-16 h-16 object-contain rounded-lg">
+</td>
+
 
             <td class="px-6 py-4">
               <div class="flex items-center space-x-3">

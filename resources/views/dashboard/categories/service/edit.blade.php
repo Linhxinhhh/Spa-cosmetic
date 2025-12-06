@@ -108,8 +108,11 @@
                           <div>
                         <label class="block text-sm font-medium">Ảnh danh mục</label>
                         <div class="flex items-center gap-4">
-                        <img src="{{ $category->image ? asset('storage/'.$category->image) : asset('images/default-category.png') }}"
-                            class="w-20 h-20 object-cover rounded-lg ring-1 ring-gray-200" alt="">
+                       <img src="{{ src_img_get($category->image) }}"
+     class="w-12 h-12 p-1.5 rounded-lg object-contain bg-gray-50 ring-1 ring-gray-200" 
+     alt="{{ $category->category_name }}">
+
+                           
                         <input type="file" name="image" accept="image/*" class="input">
                         </div>
                         @if($category->image)
