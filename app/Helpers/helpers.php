@@ -147,18 +147,28 @@ if (!function_exists('src_img_get')) {
         if (Str::startsWith($url, ['http://', 'https://'])) {
             return $url;
         }
+       
 
         // Nếu có domain public từ .env (dùng Cloudflare Images/R2 public URL)
         if ($domain = env('R2_PUBLIC_DOMAIN')) {
             return rtrim($domain, '/') . '/' . ltrim($url, '/');
         }
+     
+        // THÊM 2 DÒNG NÀY ĐỂ FIX 100% (chỉ thêm – không xóa gì cả)
+        $paths = [$url, 'hadophat-tmp/' . ltrim($url, '/'), 'hadophat-tmp/service_categories/' . basename($url)];
 
         // Nếu bucket private → tạo temporary URL (giống product_main_src)
         try {
-            return Storage::disk('r2')->temporaryUrl(
-                $url,
-                now()->addMinutes(10)
-            );
+            foreach ($paths as $path) {
+                if (Storage::disk('r2')->exists($path)) {
+                    return Storage::disk('r2')->temporaryUrl(
+                        $path,
+                        now()->addMinutes(30) // tăng lên 30 phút cho ổn định
+                    );
+                }
+            }
+            // nếu không tồn tại ở cả 3 đường dẫn → trả fallback
+            return $fallback;
         } catch (Throwable $e) {
             return $fallback;
         }

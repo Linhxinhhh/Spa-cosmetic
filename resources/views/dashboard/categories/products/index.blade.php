@@ -150,7 +150,7 @@
                     @foreach($categories as $index => $category)
                         <tr class="hover:bg-blue-100 hover:border-l-4 hover:border-blue-500 transition-colors duration-150 group">
                                 <td class="px-6 py-4">
-                                    <label>{{ $category->image }}</label>
+                                  <label for="">{{ $category->image }}</label>
                                     <img
                                     src="{{  src_img_get( url: $category->image)  }}"
                                     alt="{{ $category->category_name }}"
@@ -249,13 +249,15 @@
                         @if($category->children && $category->children->count() > 0)
                             @foreach($category->children as $child)
                                 <tr class="hover:bg-blue-100 hover:border-l-4 hover:border-blue-500 transition-colors duration-150 group bg-gray-50">
-                                        <td class="px-6 py-4">
-                                          <img
-                                            src="{{ $child->image ? asset('storage/'.$child->image) : asset('images/default-category.png') }}"
-                                            alt="{{ $child->category_name }}"
-                                            class="w-12 h-12 p-1.5 rounded-lg object-contain bg-gray-50 ring-1 ring-gray-200"
-                                            />
-                                        </td>
+                               <td class="px-6 py-4">
+                                    
+                                    <img
+                                    src="{{  src_img_get( url:$child->image)  }}"
+                                    alt="{{ $child->category_name}}"
+                                      class="w-12 h-12 p-1.5 rounded-lg object-contain bg-gray-50 ring-1 ring-gray-200"
+                                    >
+                                </td>
+                                        
                                     <td class="px-6 py-4">
                                         <div class="flex items-center space-x-3">
                                            
