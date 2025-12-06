@@ -1,4 +1,4 @@
-@extends('users.servicehome')
+@extends('Users.servicehome')
 
 @section('title', 'Liên hệ')
 
