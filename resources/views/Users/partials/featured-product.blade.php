@@ -18,24 +18,41 @@
       return ($orig > 0 && $final < $orig) ? round(100 - ($final / $orig * 100)) : 0;
     }
   }
-
-
 if (!function_exists('spa_prod_img')) {
     function spa_prod_img($product)
     {
+        $fallback = 'http://www.nhadattanphu.xyz/Content/images/noImage.png';
+
+        // Lấy ảnh ưu tiên: thumbnail → image_main
         $imgPath = $product->thumbnail ?: $product->image_main;
 
-        // Nếu không có gì, trả về ảnh mặc định
+        // Không có ảnh → trả fallback
         if (!$imgPath) {
-            return 'http://www.nhadattanphu.xyz/Content/images/noImage.png';
+            return $fallback;
         }
-    
 
+        // Nếu đã là full URL (http/https) → return luôn
+        if (Str::startsWith($imgPath, ['http://', 'https://'])) {
+            return $imgPath;
+        }
 
-        // Tạo temporary URL trực tiếp (R2)
-        return Storage::disk('r2')->temporaryUrl($imgPath, now()->addMinutes(5));
+        // Nếu có domain public R2 trong .env
+        if ($domain = env('R2_PUBLIC_DOMAIN')) {
+            return rtrim($domain, '/') . '/' . ltrim($imgPath, '/');
+        }
+
+        // Tạo temporary URL nếu bucket private
+        try {
+            return Storage::disk('r2')->temporaryUrl(
+                $imgPath,
+                now()->addMinutes(5)
+            );
+        } catch (\Throwable $e) {
+            return $fallback;
+        }
     }
 }
+
 @endphp
 
 <!-- Spa Product Offers -->
