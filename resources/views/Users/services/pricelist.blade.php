@@ -61,33 +61,38 @@
     @foreach($topServices as $ts)
       <div class="best-item">
         <a href="{{ route('users.services.show', $ts->slug) }}" class="text-decoration-none text-body">
-         @if($ts->thumbnail)
-          <img class="best-item-img"
-              src="{{ asset('storage/'.$ts->thumbnail) }}"
-              alt="{{ $ts->service_name }}">
+    
+    @if($ts->thumbnail)
+        <img class="best-item-img"
+             src="{{ src_img_get($ts->thumbnail) }}"
+             alt="{{ $ts->service_name }}">
+    @else
+        <img class="best-item-img"
+             src="{{ src_img_get(null) }}"
+             alt="no-image">
+    @endif
+
+    <div class="best-item-price">
+        {{ number_format($ts->effective_price, 0, ',', '.') }} đ
+    </div>
+
+    <div class="best-item-name">
+        {{ $ts->service_name }}
+    </div>
+
+    <div class="best-item-meta">
+        <span class="star">★★★★★</span>
+        <span>({{ $ts->booked_count }})</span>
+        <span class="mx-2">|</span>
+
+        @if(!empty($ts->duration))
+            <span>{{ $ts->duration }} phút</span>
+        @else
+            <span>1 lần</span>
         @endif
+    </div>
+</a>
 
-          <div class="best-item-price">
-            {{ number_format($ts->effective_price, 0, ',', '.') }} đ
-          </div>
-
-          <div class="best-item-name">
-            {{ $ts->service_name }}
-          </div>
-
-          <div class="best-item-meta">
-            {{-- Hàng sao kiểu minh hoạ – bạn có thể thay rating thật nếu có --}}
-            <span class="star">★★★★★</span>
-            <span> ({{ $ts->booked_count }}) </span>
-            <span class="mx-2">|</span>
-            {{-- info gói & thời lượng (tuỳ bạn có trường nào) --}}
-            @if(!empty($ts->duration))
-              <span>{{ $ts->duration }} phút</span>
-            @else
-              <span>1 lần</span>
-            @endif
-          </div>
-        </a>
       </div>
     @endforeach
   </aside>

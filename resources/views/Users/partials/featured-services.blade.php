@@ -143,21 +143,33 @@ if (!function_exists('category_img_src')) {
         <div class="text-muted">Chưa có dịch vụ nổi bật.</div>
       @endif
     </div>
-
+    
     {{-- ======= TAB 2: Price list by category ======= --}}
   {{-- ======= TAB 2: Price list by category (giống ảnh) ======= --}}
 <div class="tab-pane fade" id="pane-pricelist" role="tabpanel" aria-labelledby="tab-pricelist">
   @forelse(($priceCategories ?? collect()) as $cat)
+  @php
+                $imgPath = $cat->image;
+              if (is_string($imgPath) && str_starts_with(trim($imgPath), '[')) {
+                  $arr = json_decode($imgPath, true);
+                  if (json_last_error() === JSON_ERROR_NONE && is_array($arr)) {
+                      $imgPath = $arr[0] ?? null;
+                  }
+}
+  @endphp
     <div class="card border-0 shadow-sm rounded-4 mb-4">
       <div class="card-body p-3 p-md-4">
         <div class="row g-4 align-items-stretch">
           {{-- LEFT: banner --}}
           <div class="col-lg-5">
             <div class="rounded-4 overflow-hidden h-100">
-              <img
-              src="{{ category_img_src($cat) }}"
-              alt="{{ $cat->category_name }}"
-              class="w-100 h-100" style="object-fit:cover;">
+              <img src="{{ category_img_src($cat) }}"
+     alt="{{ $cat->category_name }}"
+     class="w-100 h-100"
+     style="object-fit:cover;">
+
+
+
 
             </div>
           </div>
