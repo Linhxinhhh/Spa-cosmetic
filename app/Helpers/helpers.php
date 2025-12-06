@@ -109,7 +109,7 @@ if (!function_exists('product_image_candidates')) {
         if (!empty($item->thumbnail))
             array_unshift($list, asset_from_mixed($item->thumbnail));
         if (!$list)
-            $list[] = asset('images/placeholder-4x3.jpg');
+            $list[] = 'http://www.nhadattanphu.xyz/Content/images/noImage.png';
         return array_values(array_unique($list));
     }
 }
