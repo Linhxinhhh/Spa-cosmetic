@@ -10,7 +10,7 @@ use Illuminate\Routing\Controller;
 class ContactController extends Controller
 {
     public function index() {
-    return view('users.contact.index');
+    return view('Users.contact.index');
 }
 
 public function submit(Request $request)
