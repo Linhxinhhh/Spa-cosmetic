@@ -6,9 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Product;
+use App\Services\ordersService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Arr;
+use App\Services\OrderService;
 
 class CartController extends Controller
 {
@@ -99,7 +100,51 @@ public function index()
     ]);
 }
 
+public function paysuccess(Request $request)
+{
+    $user = $request->user();
+    $cart = $user->cart()->with('items.product')->first();
 
+    if (!$cart || $cart->items->isEmpty()) {
+        return redirect()->route('cart.index')->with('error', 'Giỏ hàng trống.');
+    }
+
+    // 1. Lấy dữ liệu tạm lưu
+    $address = session('checkout_address');
+    $phone   = session('checkout_phone');
+    $note    = session('checkout_note');
+    $provider = session('checkout_provider'); // momo | vnpay
+    $order_code = session('checkout_order_code'); // momo | vnpay
+
+    
+    // 3. Fake request để chuyển vào createOrder()
+    $fakeRequest = new \Illuminate\Http\Request();
+    $fakeRequest->merge([
+        'address'  => $address,
+        'phone'    => $phone,
+        'note'     => $note,
+        'provider' => $provider,
+        'order_code' => $order_code,
+    ]);
+
+    // 4. Tạo Order từ hàm bạn đã có
+    $service = new ordersService();
+    $created = $service->createOrder($user, $cart, $order_code, $fakeRequest);
+    if (!$created) {
+        return redirect()->route('users.cart')->with('error', 'Không thể tạo đơn hàng.');
+    }
+
+    // 5. Xóa giỏ hàng
+    $cart->items()->delete();
+    session()->forget([
+        'checkout_provider',
+        'checkout_phone',
+        'checkout_address',
+        'checkout_note',
+        'checkout_order_code',
+    ]);
+    return view('Users.cart.paysuccess');
+}
 public function add(Request $request, Product $product)
 {
     $qty = max(1, (int) $request->input('quantity', 1));

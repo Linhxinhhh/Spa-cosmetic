@@ -274,6 +274,7 @@ Route::get('/dich-vu/danh-muc/{category:slug}', [ServiceUserController::class, '
     // ===== AUTH ONLY (bắt buộc đăng nhập) =====
     Route::middleware('auth')->group(function () {
         Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+        Route::get('/paysuccess', [CartController::class, 'paysuccess'])->name('cart.paysuccess');
         Route::post('/cart/add/{product:slug}', [CartController::class, 'add'])
             ->name('cart.add');
             Route::post('/cart/add/id/{product:product_id}', [CartController::class, 'add'])

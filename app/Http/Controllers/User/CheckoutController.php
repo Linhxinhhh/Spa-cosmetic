@@ -27,7 +27,7 @@ class CheckoutController extends Controller
     public function pay(Request $request, VnpayService $vnpay, MomoService $momo)
     {
         $request->validate([
-            'provider'   => 'required|in:vnpay,momo',  
+            'provider'   => 'required|in:vnpay,momo,cod',  
             'order_code' => 'required|string',
             'phone'      => 'required|string|max:20',
             'address'    => 'required|string|max:255',
@@ -48,74 +48,63 @@ class CheckoutController extends Controller
         $txnRef_orderId =  Str::uuid()->toString();
 
         // 1) TẠO ĐƠN + ITEM (PENDING)
-        $order = DB::transaction(function () use ($user, $cart, $orderCode, $request) {
-            $order = $user->orders()->create([
-                'order_code'      => $orderCode,
-                'total_amount'    => 0,                 // cập nhật sau
-                'payment_method'  => $request->provider, // 'vnpay' | 'momo'|'cod'
-                'payment_status'  => 'pending',
-                'status'          => 'pending',
-                'shipping_address'=> $request->input('address'),
-                'phone'           => $request->input('phone'),
-                'note'            => $request->input('note'),
-            ]);
+        $total = 0;
+        foreach ($cart->items as $ci) {
+            $price = (int) product_final_price($ci->product);
+            $qty   = (int) $ci->quantity;
+            $total += $price * $qty;
+        }
 
-            $total = 0;
-            foreach ($cart->items as $ci) {
-                $price = (int) product_final_price($ci->product);
-                $qty   = (int) $ci->quantity;
-
-                OrderItem::create([
-                    'order_id'        => $order->order_id,
-                    'product_id'      => $ci->product_id,
-                    'quantity'        => $qty,
-                    'price'           => $price,
-                    'discount_percent'=> 0,
-                    'discount_price'  => 0,
-                ]);
-
-                $total += $price * $qty;
-            }
-
-            $order->update(['total_amount' => $total]);
-            return $order;
-        });
-        CustomerSyncService::Update_Address_User($order, false);
-
-        $amount  = (int) $order->total_amount;
+        $amount  = (int) $total;
+        
         $payload = [
-            'order_code' => $order->order_code,
+            'order_code' => $orderCode,
             'amount'     => $amount,
-            'order_info' => $order->order_code,   // DÙNG CHÍNH MÃ ĐƠN để đối chiếu
+            'order_info' => $orderCode,   // DÙNG CHÍNH MÃ ĐƠN để đối chiếu
             'txn_ref'    => $txnRef_requertId,
             'txn_ref_tmp'    => $txnRef_orderId,
         ];
 
-        // 2) TẠO PAYMENT gắn order_id
-        Payment::create([
-            'provider'        => $request->provider,
-            'order_code'      => $order->order_code,
-            'order_id'        => $order->order_id,
-            'amount'          => $amount,
-            'currency'        => 'VND',
-            'status'          => 'pending',
-            'txn_ref'         => $txnRef_requertId,
-            'request_payload' => json_encode($payload),
-        ]);
-
         // 3) ĐI CỔNG
         if ($request->provider === 'vnpay') {
+            session([
+                'checkout_phone' => $request->phone,
+                'checkout_address' => $request->address,
+                'checkout_note' => $request->note,
+                'checkout_provider'=>'vnpay',
+                'checkout_order_code'=>$orderCode
+            ]);
             $url = $vnpay->createPaymentUrl($payload);  // trả về URL đầy đủ
       
             return redirect()->away($url);
         } else if ($request->provider === 'momo'){
+            session([
+                'checkout_phone' => $request->phone,
+                'checkout_address' => $request->address,
+                'checkout_note' => $request->note,
+                'checkout_provider'=>'momo',
+                'checkout_order_code'=>$orderCode
+            ]);
             $res = $momo->createPayment($payload);      // JSON từ MoMo
             if (($res['resultCode'] ?? 99) == 0 && !empty($res['payUrl'])) {
                 return redirect()->away($res['payUrl']);
             }
             return back()->with('error','Không thể tạo thanh toán MoMo.');
         }
+        else{
+            session([
+                'checkout_phone' => $request->phone,
+                'checkout_address' => $request->address,
+                'checkout_note' => $request->note,
+                'checkout_provider'=>'cod',
+                'checkout_order_code'=>$orderCode
+            ]);
+            return redirect()->away(url('/users/paysuccess'));
+        }
     }
+    
+
+    
 
     // VNPAY RETURN/IPN
     public function vnPayCheck(Request $request, VnpayService $vnpay)
