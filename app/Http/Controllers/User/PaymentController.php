@@ -17,6 +17,7 @@ class PaymentController extends Controller
     // ====================== VNPAY RETURN (redirect về site) ======================
     public function vnpayReturn(Request $request)
     {
+        dd($request->all());
         $vnp_HashSecret = config('vnpay.hash_secret');
         $data = $request->all();
 
@@ -32,6 +33,7 @@ class PaymentController extends Controller
         $myHash = hash_hmac('sha512', $hashData, $vnp_HashSecret);
 
         if ($myHash !== $vnp_SecureHash) {
+            dd($vnp_SecureHash);
             return redirect()->route('users.checkout.show')->with('error', 'Sai chữ ký VNPAY');
         }
 
@@ -42,10 +44,11 @@ class PaymentController extends Controller
         $payment = Payment::where('request_payload->txn_ref', $txnRef)->first();
 
         if ($rsp === '00' && $payment) {
+
             return redirect()->away(url('/users/paysuccess'));
         }
 
-        return redirect()->route('users.checkout.show')->with('error', 'Thanh toán thất bại: ' . $rsp);
+        return redirect()->away(url('/users/cart'));
     }
 
     // ====================== VNPAY IPN (server-to-server) ======================
