@@ -43,8 +43,7 @@ return [
     */
 
     'debug' => (bool) env('APP_DEBUG', false),
-'timezone' => env('APP_TIMEZONE', 'UTC'),
-
+    'timezone' => 'Asia/Ho_Chi_Minh',
 
     /*
     |--------------------------------------------------------------------------

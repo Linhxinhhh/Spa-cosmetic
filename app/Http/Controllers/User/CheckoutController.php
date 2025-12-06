@@ -106,6 +106,7 @@ class CheckoutController extends Controller
         // 3) ĐI CỔNG
         if ($request->provider === 'vnpay') {
             $url = $vnpay->createPaymentUrl($payload);  // trả về URL đầy đủ
+      
             return redirect()->away($url);
         } else if ($request->provider === 'momo'){
             $res = $momo->createPayment($payload);      // JSON từ MoMo
