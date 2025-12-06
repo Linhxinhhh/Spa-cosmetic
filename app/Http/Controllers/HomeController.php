@@ -52,6 +52,11 @@ public function index()
     $productsFeatured = Product::active()
         ->whereNotNull('discount_percent')->where('discount_percent', '>', 0)
         ->orderByDesc('discount_percent')->take(8)->get();
+        $products = Product::where('is_featured', 1)
+    ->whereNotNull('slug')
+    ->orderBy('created_at', 'DESC')
+    ->take(3)
+    ->get();
 
     // Bán chạy: theo sold_quantity
     $productsBest = Product::active()
@@ -117,11 +122,13 @@ public function index()
         ->orderByDesc('order_items_count')
         ->take(6)
         ->get();
-        return view('Users.home', ['bannersTop' => $bannersTop],compact('productsAll','productsNew','productsFeatured','productsBest','brands','featuredServices',  'categoryPager',
+        return view('Users.home', 
+        ['bannersTop' => $bannersTop],compact('productsAll','productsNew','productsFeatured','productsBest','brands','featuredServices',  'categoryPager',
         'currentCategory',
-        'servicesPager','priceCategories','featuredProducts','productLeft','productRight','hotCategories','bestSellers'));
+        'servicesPager','priceCategories','featuredProducts','productLeft','productRight','hotCategories','bestSellers','products', 'brands')); 
+    
     }
-    public function show($id)
+     public function show($id)
     {
         $product = Product::findOrFail($id);
         return view('Users.products.show', compact('product, brands '));
