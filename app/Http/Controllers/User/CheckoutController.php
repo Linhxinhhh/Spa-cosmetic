@@ -64,8 +64,6 @@ class CheckoutController extends Controller
             'txn_ref'    => $txnRef_requertId,
             'txn_ref_tmp'    => $txnRef_orderId,
         ];
-
-        // 3) ĐI CỔNG
         if ($request->provider === 'vnpay') {
             session([
                 'checkout_phone' => $request->phone,
