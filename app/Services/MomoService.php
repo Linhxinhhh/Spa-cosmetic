@@ -7,12 +7,12 @@ class MomoService
 {
     public function createPayment(array $data): array
     {
-        $endpoint    = config('services.momo.endpoint');
-        $partnerCode = config('services.momo.partner_code');
-        $accessKey   = config('services.momo.access_key');
-        $secretKey   = config('services.momo.secret_key');
-        $returnUrl   = config('services.momo.return_url');
-        $ipnUrl      = config('services.momo.ipn_url');
+        $endpoint    = 'https://test-payment.momo.vn/v2/gateway/api/create';
+        $partnerCode = 'MOMO';
+        $accessKey   = 'F8BBA842ECF85';
+        $secretKey   = 'K951B6PE1waDMi640xX08PD3vg6EkVlz';
+        $returnUrl   = 'https://spa-cosmetic-copy-production.up.railway.app/users/cart';
+        $ipnUrl      = 'https://spa-cosmetic-copy-production.up.railway.app/users/cart';
 
         $payload = [
             'partnerCode' => $partnerCode,
