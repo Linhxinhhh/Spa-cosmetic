@@ -617,7 +617,7 @@
     <div class="row g-4">
       @forelse($featuredProducts as $p)
         @php
-          $img = $p->image_url ?? asset('images/placeholder-4x3.jpg');
+          $img = $p->imagesRel->first()->url;
           $plink = $productShow($p->slug);
           $price = (float) ($p->discount_price ?: $p->price);
           $priceCompare = $p->discount_price && $p->price > 0 ? (float) $p->price : null;
