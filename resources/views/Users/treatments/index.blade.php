@@ -48,7 +48,7 @@
                         <p class="text-muted mb-4">
                             Bạn chưa có liệu trình điều trị nào. Hãy đặt lịch với chúng tôi để bắt đầu hành trình chăm sóc sức khỏe.
                         </p>
-                        <a href="{{ route('services.index') }}" class="btn btn-primary px-4">
+                        <a href="{{ route('user.services.index') }}" class="btn btn-primary px-4">
                             <i class="bi bi-plus-circle me-2"></i>Đặt lịch ngay
                         </a>
                     </div>
