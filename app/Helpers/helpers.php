@@ -132,49 +132,73 @@ if (!function_exists('product_hover_src')) {
    return $img?->url ? Storage::disk('r2')->temporaryUrl($img->url, now()->addMinutes(5)) : "http://www.nhadattanphu.xyz/Content/images/noImage.png";
     }
 }
-if (!function_exists('src_img_get')) {
-    function src_img_get($url)
-    {
-        // Ảnh fallback
-        $fallback = "http://www.nhadattanphu.xyz/Content/images/noImage.png";
+function r2_normalize_path($input)
+{
+    if (!$input) return null;
 
-        // Không có ảnh → trả fallback
-        if (!$url) {
+    // Nếu là JSON array → lấy phần tử đầu
+    if (is_string($input) && Str::startsWith(trim($input), '[')) {
+        $arr = json_decode($input, true);
+        if (json_last_error() === JSON_ERROR_NONE && is_array($arr)) {
+            $input = $arr[0] ?? null;
+        }
+    }
+    if (!$input) return null;
+
+    // Nếu là full URL → tách lấy path và loại bỏ query
+    if (Str::startsWith($input, ['http://', 'https://'])) {
+        $parts = parse_url($input);
+        $path  = $parts['path'] ?? '';
+        // Bỏ leading slash
+        $input = ltrim($path, '/');
+    }
+
+    // Loại bỏ prefix bucket nếu có (vd: hadophat-tmp/...)
+    $bucket = env('R2_BUCKET'); // đặt trong .env
+    if ($bucket && Str::startsWith($input, $bucket . '/')) {
+        $input = Str::after($input, $bucket . '/');
+    }
+
+    // Trả về object key, ví dụ: service_categories/xxx.png
+    return $input;
+}
+
+if (!function_exists('src_img_get')) {
+    function src_img_get($url = null)
+    {
+        $fallback = asset('images/no-image.jpg'); // ảnh đẹp bạn vừa tạo
+
+        if (empty($url) || trim($url) === '' || $url === 'null') {
             return $fallback;
         }
 
-        // Nếu path là URL trực tiếp → trả luôn
+        // Nếu đã là URL đầy đủ → trả luôn
         if (Str::startsWith($url, ['http://', 'https://'])) {
             return $url;
         }
-       
 
-        // Nếu có domain public từ .env (dùng Cloudflare Images/R2 public URL)
+        // ƯU TIÊN PUBLIC DOMAIN → HIỆN ẢNH THỰC NGAY, KHÔNG HẾT HẠN, NHANH NHẤT
         if ($domain = env('R2_PUBLIC_DOMAIN')) {
             return rtrim($domain, '/') . '/' . ltrim($url, '/');
         }
-     
-        // THÊM 2 DÒNG NÀY ĐỂ FIX 100% (chỉ thêm – không xóa gì cả)
-        $paths = [$url, 'hadophat-tmp/' . ltrim($url, '/'), 'hadophat-tmp/service_categories/' . basename($url)];
 
-        // Nếu bucket private → tạo temporary URL (giống product_main_src)
-        try {
-            foreach ($paths as $path) {
-                if (Storage::disk('r2')->exists($path)) {
-                    return Storage::disk('r2')->temporaryUrl(
-                        $path,
-                        now()->addMinutes(30) // tăng lên 30 phút cho ổn định
-                    );
-                }
+        // Thử tất cả các đường dẫn thực tế trên R2 của bạn
+        $paths = [
+            ltrim($url, '/'),                                            // service_categories/xxx.jpg
+            'hadophat-tmp/' . ltrim($url, '/'),                          // hadophat-tmp/service_categories/xxx.jpg
+            'hadophat-tmp/product_categories/' . basename($url),         // hadophat-tmp/product_categories/xxx.jpg
+            'product_categories/' . basename($url),
+        ];
+
+        foreach ($paths as $path) {
+            if (Storage::disk('r2')->exists($path)) {
+                return Storage::disk('r2')->temporaryUrl($path, now()->addHours(2));
             }
-            // nếu không tồn tại ở cả 3 đường dẫn → trả fallback
-            return $fallback;
-        } catch (Throwable $e) {
-            return $fallback;
         }
+
+        return $fallback;
     }
 }
-
 
 if (!function_exists('product_final_price')) {
     function product_final_price($p)
