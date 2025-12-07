@@ -590,7 +590,7 @@
         @endphp
         <div class="col-md-6 col-xl-3">
           <div class="svc-card">
-            <a href="{{ $link }}"><img class="thumb" src="{{ $img }}" alt="{{ $svc->service_name }}"></a>
+            <a href="{{ $link }}"><img class="thumb" src="{{ src_img_get($img )}}" alt="{{ $svc->service_name }}"></a>
             <div class="body">
               <h6 class="mb-2">
                 <a class="text-decoration-none text-dark fw-bold" href="{{ $link }}">{{ $svc->service_name }}</a>
@@ -624,7 +624,7 @@
         @endphp
         <div class="col-6 col-md-4 col-xl-3">
           <div class="svc-card h-100">
-            <a href="{{ $plink }}"><img class="thumb" src="{{ $img }}" alt="{{ $p->product_name }}"></a>
+            <a href="{{ $plink }}"><img class="thumb" src="{{ src_img_get($img) }}" alt="{{ $p->product_name }}"></a>
             <div class="body">
               <h6 class="mb-2">
                 <a class="text-decoration-none text-dark fw-bold" href="{{ $plink }}">{{ $p->product_name }}</a>
@@ -667,14 +667,14 @@
       <div class="col-lg-6">
         <h2 class="section-title mb-4">Đội ngũ chuyên gia</h2>
         <div class="team-member d-flex gap-3 align-items-center mb-3">
-          <img class="rounded-circle" src="{{ asset('images/team/doctor1.jpg') }}" alt="Bác sĩ da liễu" width="72" height="72">
+          <img class="rounded-circle" src="{{ asset('images/profile/user-1.jpg') }}" alt="Bác sĩ da liễu" width="72" height="72">
           <div>
             <strong class="d-block fs-5">Bác sĩ A</strong>
             <div class="text-muted">Da liễu | 10+ năm kinh nghiệm</div>
           </div>
         </div>
         <div class="team-member d-flex gap-3 align-items-center mb-3">
-          <img class="rounded-circle" src="{{ asset('images/team/doctor2.jpg') }}" alt="Chuyên gia chăm sóc da" width="72" height="72">
+          <img class="rounded-circle" src="{{ asset('images/profile/user-2.jpg') }}" alt="Chuyên gia chăm sóc da" width="72" height="72">
           <div>
             <strong class="d-block fs-5">Chuyên gia B</strong>
             <div class="text-muted">Chăm sóc da | 7+ năm kinh nghiệm</div>
