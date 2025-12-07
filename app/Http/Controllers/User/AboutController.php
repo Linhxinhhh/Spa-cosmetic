@@ -73,7 +73,7 @@ class AboutController extends Controller
 
             // Chuẩn hoá URL ảnh từ 'main_image'
             $items->transform(function ($p) {
-                $p->image_url = $p->main_image ? $this->toPublicUrl($p->main_image) : null;
+                $p->image_url = $p->main_image;
                 return $p;
             });
 
