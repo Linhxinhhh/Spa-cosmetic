@@ -24,7 +24,7 @@ if (!function_exists('product_img')) {
     {
         $val = $p->thumbnail ?: $p->images;
         if (!$val)
-            return asset('images/placeholder-4x3.jpg');
+            return "http://www.nhadattanphu.xyz/Content/images/noImage.png";
 
         // JSON array
         if (is_string($val) && Str::startsWith(trim($val), '[')) {
@@ -44,7 +44,7 @@ if (!function_exists('product_img')) {
         }
 
         if (!$val)
-            return asset('images/placeholder-4x3.jpg');
+            return "http://www.nhadattanphu.xyz/Content/images/noImage.png";
 
         if (Str::startsWith($val, ['http://', 'https://', '//']))
             return $val;
@@ -71,10 +71,10 @@ if (!function_exists('final_price')) {
 }
 
 if (!function_exists('asset_from_mixed')) {
-    function asset_from_mixed($path, $placeholder = 'images/placeholder-4x3.jpg')
+    function asset_from_mixed($path, $placeholder = 'http://www.nhadattanphu.xyz/Content/images/noImage.png')
     {
         if (!$path)
-            return asset($placeholder);
+            return $placeholder;
         if (Str::startsWith($path, ['http://', 'https://', '//']))
             return $path;
         $p = ltrim(preg_replace('#^(public/|storage/)#', '', $path), '/');
@@ -109,7 +109,7 @@ if (!function_exists('product_image_candidates')) {
         if (!empty($item->thumbnail))
             array_unshift($list, asset_from_mixed($item->thumbnail));
         if (!$list)
-            $list[] = asset('images/placeholder-4x3.jpg');
+            $list[] = "http://www.nhadattanphu.xyz/Content/images/noImage.png";
         return array_values(array_unique($list));
     }
 }
@@ -166,7 +166,10 @@ function r2_normalize_path($input)
 if (!function_exists('src_img_get')) {
     function src_img_get($url = null)
     {
+
         $fallback = asset('images/no-image.jpg');
+
+        $fallback = 'http://www.nhadattanphu.xyz/Content/images/noImage.png'; // ảnh đẹp bạn vừa tạo
 
         if (empty($url) || trim($url) === '' || $url === 'null') {
             return $fallback;
@@ -233,7 +236,7 @@ if (!function_exists('service_image')) {
             return src_img_get($firstImage->image_url);
         }
 
-        return $fallback ? asset('images/default-service.jpg') : null;
+        return $fallback ? 'http://www.nhadattanphu.xyz/Content/images/noImage.png' : null;
     }
 }
 function r2_url($path)

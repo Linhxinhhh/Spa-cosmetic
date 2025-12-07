@@ -250,7 +250,7 @@
                         @forelse($hotServices as $s)
                             @php
                             $name   = $s->name ?? $s->service_name;
-                            $thumb  = $img($s->thumbnail ?? null);
+                            $thumb  = src_img_get( url: $s->thumbnail);
                             $price  = number_format($s->price ?? 0, 0, ',', '.');
                             $rating = $s->rating_avg ?? 4.8;           // fallback
                             $count  = $s->rating_count ?? 12;          // fallback
@@ -307,7 +307,7 @@
                             <a class="d-block  overflow-hidden shadow hero-main position-relative group-hover"
                              href="{{ $hero ? route('users.guides.show', ['guide' => $hero->slug]) : '#' }}">
                                 <img class="img-cover transition-scale"
-                                     src="{{ $hero ? $img($hero->thumbnail) : asset('images/default-post.png') }}"
+                                     src="{{ src_img_get( url: $hero->thumbnail) }}"
                                      alt="{{ $hero->title ?? 'banner' }}">
                                 <div class="overlay-hero"></div>
                                 @if($hero)
@@ -322,7 +322,7 @@
                                 <a class="d-block overflow-hidden shadow hero-side position-relative group-hover"
                                    href="{{ route('users.guides.show', ['guide' => $h->slug]) }}">
                                     <img class="img-cover transition-scale" 
-                                         src="{{ $img($h->thumbnail) }}" 
+                                         src="{{ src_img_get( url: $h->thumbnail) }}" 
                                          alt="{{ $h->title }}">
                                     <div class="overlay-hero"></div>
                                     <div class="side-title">{{ $h->title }}</div>
@@ -344,7 +344,7 @@
                             <div class="col-12 col-md-6 col-lg-4">
                             <a href="{{ route('users.faq.index', $g->slug) }}" class="card h-100 border-0 shadow-sm text-decoration-none">
                                 <div class="ratio ratio-16x9">
-                                <img src="{{ $g->cover_image ? asset('storage/'.$g->cover_image) : asset('images/placeholder-16x9.jpg') }}"
+                                <img src="{{ src_img_get( url: $g->cover_image) }}"
                                     class="w-100 h-100 object-fit-cover" alt="{{ $g->question  }}">
                                 </div>
                                 <div class="card-body">
@@ -368,7 +368,7 @@
                                     <a href="{{ route('users.guides.show', ['guide' => $g->slug]) }}"
                                        class="d-block  overflow-hidden bg-white shadow-sm hover-shadow-lg position-relative card-16x9 group-hover">
                                         <img class="img-cover transition-scale"
-                                             src="{{ $img($g->thumbnail) }}" 
+                                             src="{{ src_img_get( url: $g->thumbnail)}}" 
                                              alt="{{ $g->title }}">
                                         <div class="overlay-card"></div>
                                         <div class="position-absolute bottom-0 start-0 end-0 p-3">
@@ -415,7 +415,7 @@
                     <a href="{{ route('users.guides.show',['guide' => $p->slug]) }}"
                         class="popular-item text-decoration-none">
                         <div class="popular-thumb">
-                        <img src="{{ $img($p->thumbnail) }}" alt="{{ $p->title }}">
+                        <img src="{{ src_img_get( url: $p->thumbnail) }}" alt="{{ $p->title }}">
                         </div>
                         <div class="popular-title">
                         {{ $p->title }}
