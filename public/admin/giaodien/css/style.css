@@ -12,7 +12,32 @@
 .table-modern thead th{border:none;padding:1rem;font-weight:600;text-align:center;vertical-align:middle}
 .table-modern tbody td{border:none;padding:1rem;vertical-align:middle;text-align:center;border-bottom:1px solid #e5e7eb}
 .table-modern tbody tr:hover{background:#eff6ff;transition:.3s}
-.status-badge{padding:8px 16px;border-radius:25px;font-size:.875rem;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+.status-badge {
+    padding: 3px 10px;           
+    border-radius: 12px;         
+    font-size: 0.70rem;          
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;       
+    display: inline-block;
+    line-height: 1.2;
+}
+.status-confirmed {
+    background: #d1fae5; 
+    color: #065f46;
+}
+
+.status-pending {
+    background: #fef9c3; 
+    color: #b45309;
+}
+
+.status-cancelled {
+    background: #fee2e2; 
+    color: #b91c1c;
+}
+
+
 .status-active{background:linear-gradient(135deg,#10b981 0%,#059669 100%);color:#fff}
 .status-inactive{background:linear-gradient(135deg,#ef4444 0%,#dc2626 100%);color:#fff}
 .service-image{width:80px;height:80px;object-fit:cover;border-radius:10px;box-shadow:0 4px 10px rgba(0,0,0,.1);transition:.3s}
