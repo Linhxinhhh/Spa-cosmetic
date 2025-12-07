@@ -76,4 +76,14 @@ class Appointment extends Model
         $end   = $this->end_time ?? '';
         return trim("$date $start - $end");
     }
+    public function getStatusLabelAttribute()
+{
+    return match ($this->status) {
+        'pending'   => 'Chờ xác nhận',
+        'confirmed' => 'Đã xác nhận',
+        'cancelled' => 'Đã hủy',
+        default     => 'Không xác định',
+    };
+}
+
 }
