@@ -163,7 +163,7 @@ if (!function_exists('category_img_src')) {
           {{-- LEFT: banner --}}
           <div class="col-lg-5">
             <div class="rounded-4 overflow-hidden h-100">
-              <img src="{{ category_img_src($cat) }}"
+              <img src="{{ src_img_get($cat->image) }}"
      alt="{{ $cat->category_name }}"
      class="w-100 h-100"
      style="object-fit:cover;">
