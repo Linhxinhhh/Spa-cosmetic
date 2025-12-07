@@ -108,7 +108,8 @@
                             <span class="status-badge 
                                 {{ $appointment->status == 'confirmed' ? 'status-confirmed' : 
                                    ($appointment->status == 'pending' ? 'status-pending' : 'status-cancelled') }}">
-                                {{ ucfirst($appointment->status) }}
+                                {{ $appointment->status_label }}
+
                             </span>
                         </td>
                       
