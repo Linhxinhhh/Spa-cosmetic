@@ -41,7 +41,7 @@ class AboutController extends Controller
             $items->transform(function ($s) {
                 $s->image_url = null;
                 if (isset($s->thumbnail) && $s->thumbnail) {
-                    $s->image_url = $this->toPublicUrl($s->thumbnail);
+                    $s->image_url = $s->thumbnail;
                 }
                 return $s;
             });

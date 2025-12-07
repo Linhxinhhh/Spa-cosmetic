@@ -585,7 +585,7 @@
     <div class="row g-4">
       @forelse($featuredServices as $svc)
         @php
-          $img = $svc->image_url ?? asset('images/placeholder-4x3.jpg');
+          $img = $svc->image_url;
           $link = $serviceShow($svc->slug);
         @endphp
         <div class="col-md-6 col-xl-3">
