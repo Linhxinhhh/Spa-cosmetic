@@ -97,10 +97,7 @@ class AboutController extends Controller
                     ->orderBy('brand_name')
                     ->take(12)
                     ->get()
-                    ->transform(function ($b) {
-                        $b->image_url = $b->logo;
-                        return $b;
-                    });
+                    ;
             }
 
             return $items;

@@ -654,8 +654,7 @@
       <h2 class="section-title mb-4">Thương hiệu đối tác</h2>
       <div class="logo-wall d-flex flex-wrap gap-5 align-items-center justify-content-center">
         @foreach($brands as $b)
-         
-          <img src="{{ src_img_get(  $b->image_url) }}" alt="{{ $b->image_url }}" loading="lazy" width="160" height="80">
+          <img src="{{ src_img_get(  $b->logo) }}" alt="{{ $b->logo }}" loading="lazy" width="160" height="80">
         @endforeach
       </div>
     </section>
