@@ -249,7 +249,7 @@
                   
                   
                         @php
-                            $img  = product_img_url($p);  // thay cho product_img_url($p)
+                            $img = src_img_get($p->image_url);
                             $orig = $p->price ?? 0;
                             $final = ($p->discount_price && $p->discount_price > 0 && $p->discount_price < $orig)
                                         ? $p->discount_price : $orig;
