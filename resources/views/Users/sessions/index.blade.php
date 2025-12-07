@@ -608,7 +608,7 @@
         $classOf = fn($st) => $statusMap[$st][1] ?? 'draft';
 
         // Statistics
-        $totalSessions = $sessions->total();
+        $totalSessions = $sessions?0:$sessions->total();
         $upcomingSessions = $sessions->filter(fn($s) => in_array($s->status, ['scheduled', 'confirmed']) && $s->scheduled_start?->greaterThan(now()))->count();
         $completedSessions = $sessions->where('status', 'completed')->count();
         $cancelledSessions = $sessions->whereIn('status', ['cancelled', 'canceled'])->count();
