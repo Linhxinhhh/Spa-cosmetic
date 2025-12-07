@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
-use App\Models\Customer;
+use App\Models\User;
 use App\Models\TreatmentSession;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,7 +16,7 @@ class CustomerSessionController extends Controller
     {
         $userId = Auth::id();
 
-        $customer = Customer::where('user_id', $userId)->first();
+        $customer = User::where('user_id', $userId)->first();
 
         if (!$customer) {
             $sessions = collect();
@@ -35,7 +35,6 @@ class CustomerSessionController extends Controller
             ->orderBy('scheduled_start')
             ->paginate(20);
         }
-
         return view('Users.sessions.index', compact('sessions'));
     }
 
