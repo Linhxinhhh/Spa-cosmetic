@@ -98,7 +98,7 @@ class AboutController extends Controller
                     ->take(12)
                     ->get()
                     ->transform(function ($b) {
-                        $b->image_url = isset($b->logo) ? $this->toPublicUrl($b->logo) : null;
+                        $b->image_url = $b->logo;
                         return $b;
                     });
             }
