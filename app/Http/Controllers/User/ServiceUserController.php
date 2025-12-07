@@ -118,8 +118,8 @@ class ServiceUserController extends Controller
 
         // Chuẩn hoá URL ảnh cho hero/heroSides/popularGuides
         $toUrl = function (?string $p) {
-            if (!$p) return asset('images/placeholder-16x9.jpg');
-            return Str::startsWith($p, ['http://','https://','/']) ? $p : asset('storage/'.$p);
+            if (!$p) return 'http://www.nhadattanphu.xyz/Content/images/noImage.png';
+            return src_img_get( url: $p);
         };
         if ($hero)        { $hero->thumb_url = $toUrl($hero->thumbnail); }
         $heroSides->transform(function($g) use ($toUrl) { $g->thumb_url = $toUrl($g->thumbnail); return $g; });
