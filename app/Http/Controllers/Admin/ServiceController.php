@@ -226,14 +226,14 @@ class ServiceController extends Controller
             }
         }
         foreach ($request->file('images', []) as $file) {
-    if (!$file->isValid()) continue;
-    $url = $this->storeImageFile($file, $service->service_id, 'main');
-    $img = $service->images()->create([
-        'image_url'  => $url,
-        'sort_order' => ++$maxSort,
-        'is_main'    => false,
-    ]);
-}
+            if (!$file->isValid()) continue;
+            $url = $this->storeImageFile($file, $service->service_id, 'main');
+            $img = $service->images()->create([
+                'image_url'  => $url,
+                'sort_order' => ++$maxSort,
+                'is_main'    => false,
+            ]);
+        }
 
         // 2. UPLOAD ẢNH CHÍNH MỚI (nếu có)
 foreach ($request->file('images', []) as $file) {
@@ -275,10 +275,10 @@ foreach ($request->file('images', []) as $file) {
 
         // 4. CẬP NHẬT THUMBNAIL TRONG BẢNG services
         if ($request->hasFile('thumbnail')) {
-    $path = $request->file('thumbnail')->store('services', 'r2');
-    $service->thumbnail = $path; // chỉ lưu path
-   
-}
+            $path = $request->file('thumbnail')->store('services', 'r2');
+            $service->thumbnail = $path; // chỉ lưu path
+        
+        }
 
 
 
@@ -319,16 +319,14 @@ foreach ($request->file('images', []) as $file) {
 
         return redirect()->route('admin.services.index')->with('success', 'Xóa dịch vụ thành công!');
     }
-          protected function storeImageFile($file,$serviceId): string
-    {
+          protected function storeImageFile($file,$id,$folder): string
+            {
 
-        $path = Storage::disk('r2')->put("services/{$serviceId}", $file);
+                $path = "services/$id/$folder";
+                $filename = uniqid() . "." . $file->getClientOriginalExtension();
 
+                Storage::disk('r2')->put("$path/$filename", file_get_contents($file));
 
-        if (env('R2_PUBLIC_DOMAIN')) {
-            return env('R2_PUBLIC_DOMAIN') . '/' . $path;
-        }
-
-        return $path;
-    }
+                return "$path/$filename";
+            }
 }

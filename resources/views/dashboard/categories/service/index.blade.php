@@ -143,8 +143,7 @@
                             @endphp
                             <tr class="hover:bg-blue-50 transition-colors duration-150">
                                <td class="px-6 py-4">
-                                <label for="">{{ $category->image }}</label>
-    <img src="{{ src_img_get($category->image, asset('images/default-category.png')) }}"
+    <img src="{{ src_img_get($category->image) }}"
          alt="{{ $category->category_name }}"
          class="w-12 h-12 rounded-lg object-cover ring-1 ring-gray-200 bg-gray-50">
 </td>
