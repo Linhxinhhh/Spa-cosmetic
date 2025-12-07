@@ -188,7 +188,7 @@
                                 </h6>
                                 <div class="d-flex align-items-center justify-content-between mt-3">
                                     <span class="h5 fw-bold text-danger mb-0">
-                                        {{ number_format($r->final_price ?? 0,0,',','.') }}đ
+                                        {{ number_format($r->price_original ?? 0,0,',','.') }}đ
                                     </span>
                                     <i class="bi bi-arrow-right-circle-fill text-primary fs-4"></i>
                                 </div>

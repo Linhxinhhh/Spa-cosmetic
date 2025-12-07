@@ -125,12 +125,20 @@ class ServiceCategoryController extends Controller
             'slug'          => Str::slug($request->category_name),
       'parent_id'     => $request->filled('parent_id') ? $request->parent_id : $category->parent_id,
         ];
-
         if ($request->hasFile('image')) {
-            if ($category->image && Storage::disk('public')->exists($category->image)) {
-                Storage::disk('public')->delete($category->image);
+
+            // Xóa ảnh cũ trên R2 (nếu có)
+            if ($category->image) {
+                Storage::disk('r2')->delete($category->image);
             }
-            $data['image'] = $request->file('image')->store('service_categories', 'public');
+
+            // Upload ảnh mới lên R2
+            $filename = uniqid() . '.' . $request->file('image')->getClientOriginalExtension();
+            $path = 'service_categories' . '/' . $filename;
+
+            Storage::disk('r2')->put($path, file_get_contents($request->file('image')));
+            // Lưu đường dẫn vào DB
+            $data['image'] = $path;
         }
 
         $category->update($data);
