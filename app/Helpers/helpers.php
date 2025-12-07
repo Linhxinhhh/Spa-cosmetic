@@ -166,27 +166,26 @@ function r2_normalize_path($input)
 if (!function_exists('src_img_get')) {
     function src_img_get($url = null)
     {
-        $fallback = asset('images/no-image.jpg'); // ảnh đẹp bạn vừa tạo
+        $fallback = asset('images/no-image.jpg');
 
         if (empty($url) || trim($url) === '' || $url === 'null') {
             return $fallback;
         }
 
-        // Nếu đã là URL đầy đủ → trả luôn
         if (Str::startsWith($url, ['http://', 'https://'])) {
             return $url;
         }
 
-        // ƯU TIÊN PUBLIC DOMAIN → HIỆN ẢNH THỰC NGAY, KHÔNG HẾT HẠN, NHANH NHẤT
+        // Nếu có domain public → trả về luôn
         if ($domain = env('R2_PUBLIC_DOMAIN')) {
             return rtrim($domain, '/') . '/' . ltrim($url, '/');
         }
 
-        // Thử tất cả các đường dẫn thực tế trên R2 của bạn
+        // Nếu không có domain public → thử signed URL
         $paths = [
-            ltrim($url, '/'),                                            // service_categories/xxx.jpg
-            'hadophat-tmp/' . ltrim($url, '/'),                          // hadophat-tmp/service_categories/xxx.jpg
-            'hadophat-tmp/product_categories/' . basename($url),         // hadophat-tmp/product_categories/xxx.jpg
+            ltrim($url, '/'),
+            'hadophat-tmp/' . ltrim($url, '/'),
+            'hadophat-tmp/product_categories/' . basename($url),
             'product_categories/' . basename($url),
         ];
 
