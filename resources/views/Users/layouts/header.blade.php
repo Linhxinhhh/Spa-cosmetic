@@ -85,6 +85,14 @@
 /* Màu link cho dễ nhìn trên nền cam */
 .navbar .nav-link{ color:#212529 !important; }
 .navbar .nav-link.active{ color:#fff !important; }
+#megaCatsToggle {
+    padding-left: 10px !important;     /* giảm khoảng cách bên trái */
+    padding-right: 10px !important;    /* giảm khoảng cách bên phải */
+}
+
+#megaCatsToggle i {
+    margin-right: 6px !important;      /* giảm khoảng cách giữa icon và chữ */
+}
 </style>
 
 <header id="site-header" class="site-header fixed-top bg-white shadow-sm">
