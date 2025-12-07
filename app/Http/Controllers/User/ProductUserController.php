@@ -19,9 +19,9 @@ class ProductUserController extends Controller
         $products = $this->buildProductQuery($request)
             ->paginate(12)
             ->appends($request->query());
-
         // Featured
         $featuredProducts = Product::where('is_featured', 1)->take(6)->get();
+       
         $productLeft  = $featuredProducts[0] ?? null;
         $productRight = $featuredProducts[1] ?? null;
 
@@ -228,7 +228,6 @@ public function byBrand(Brand $brand, Request $request)
             ->when($min === null && $max !== null, fn ($qb) =>
                 $qb->whereRaw('( ' . $priceExpr . ' ) <= ?', [$max])
             );
-
  return match ($sort) {
     'price_asc'  => $query->orderBy($priceExpr, 'asc'),
     'price_desc' => $query->orderBy($priceExpr, 'desc'),

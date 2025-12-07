@@ -73,12 +73,14 @@ if (!function_exists('final_price')) {
 if (!function_exists('asset_from_mixed')) {
     function asset_from_mixed($path, $placeholder = 'http://www.nhadattanphu.xyz/Content/images/noImage.png')
     {
+
         if (!$path)
             return $placeholder;
         if (Str::startsWith($path, ['http://', 'https://', '//']))
             return $path;
         $p = ltrim(preg_replace('#^(public/|storage/)#', '', $path), '/');
-        return Storage::disk('public')->exists($p) ? Storage::url($p) : asset($p);
+
+        return $p;
     }
 }
 
