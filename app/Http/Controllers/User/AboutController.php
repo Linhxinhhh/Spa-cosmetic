@@ -41,7 +41,7 @@ class AboutController extends Controller
             $items->transform(function ($s) {
                 $s->image_url = null;
                 if (isset($s->thumbnail) && $s->thumbnail) {
-                    $s->image_url = $this->toPublicUrl($s->thumbnail);
+                    $s->image_url = $s->thumbnail;
                 }
                 return $s;
             });
@@ -73,7 +73,7 @@ class AboutController extends Controller
 
             // Chuẩn hoá URL ảnh từ 'main_image'
             $items->transform(function ($p) {
-                $p->image_url = $p->main_image ? $this->toPublicUrl($p->main_image) : null;
+                $p->image_url = $p->main_image;
                 return $p;
             });
 
@@ -97,10 +97,7 @@ class AboutController extends Controller
                     ->orderBy('brand_name')
                     ->take(12)
                     ->get()
-                    ->transform(function ($b) {
-                        $b->image_url = isset($b->logo) ? $this->toPublicUrl($b->logo) : null;
-                        return $b;
-                    });
+                    ;
             }
 
             return $items;
