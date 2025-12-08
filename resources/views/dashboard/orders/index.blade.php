@@ -261,6 +261,33 @@
   @endif
 
 </div>
+
+
+
+{{-- Font Awesome (nếu chưa có) --}}
+<script>
+if (!document.querySelector('link[href*="font-awesome"]')) {
+  const l=document.createElement('link');l.rel='stylesheet';
+  l.href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css';
+  document.head.appendChild(l);
+}
+</script>
+<script>
+function loadOrderData(id) {
+    fetch(`/admin/orders/${id}/json`)
+        .then(res => res.json())
+        .then(o => {
+            document.getElementById('edit_status').value = o.status ?? '';
+            document.getElementById('edit_payment_status').value = o.payment_status ?? '';
+            document.getElementById('edit_address').value = o.shipping_address ?? '';
+
+            // Set đúng action update
+            document.getElementById('editOrderForm').action = `/admin/orders/${id}`;
+        })
+        .catch(err => console.error('Lỗi load order:', err));
+}
+</script>
+
 <!-- EDIT ORDER MODAL -->
 <div class="modal fade" id="editOrderModal" tabindex="-1" aria-labelledby="editOrderModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-centered">
@@ -316,14 +343,4 @@
     </div>
   </div>
 </div>
-
-
-{{-- Font Awesome (nếu chưa có) --}}
-<script>
-if (!document.querySelector('link[href*="font-awesome"]')) {
-  const l=document.createElement('link');l.rel='stylesheet';
-  l.href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css';
-  document.head.appendChild(l);
-}
-</script>
 @endsection

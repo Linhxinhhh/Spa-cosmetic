@@ -203,6 +203,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/orders/{order}', [\App\Http\Controllers\Admin\OrderController::class, 'show'])->name('orders.show');
         Route::put('/orders/{order}/status', [\App\Http\Controllers\Admin\OrderController::class, 'updateStatus'])->name('status');
         Route::put('/orders/{order}/payment', [\App\Http\Controllers\Admin\OrderController::class, 'updatePayment'])->name('payment');
+        Route::get('/orders/{order}/json', function (\App\Models\Order $order) {
+            return response()->json($order);
+        })->name('orders.json');
+
         // Banner
         Route::get('banners', [BannerController::class, 'index'])->name('banners.index');
         Route::get('banners/create', [BannerController::class, 'create'])->name('banners.create')->middleware('checkrole:admin,create');
