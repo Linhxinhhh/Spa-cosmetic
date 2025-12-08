@@ -58,15 +58,15 @@
   
     {{-- Cột trái: ảnh sản phẩm --}}
 <div class="img-box col-md-5">
-  <div class="border rounded p-3 position-relative text-center">
+<div class="border rounded p-3 d-flex justify-content-center align-items-center"
+     style="height: 400px; overflow: hidden;">
+
     <img id="mainPreview"
          src="{{ product_main_src($product) ?? asset('images/placeholder-4x3.jpg') }}"
          alt="{{ $product->product_name }}"
-         class="img-fluid product-img"
-         style="max-height: 400px; object-fit: contain;">
-
-
-  </div>
+         class="img-fluid"
+         style="max-height: 100%; max-width: 100%; object-fit: contain;">
+</div>
 
 {{-- Thumbnail list + Nút yêu thích --}}
 <div class="d-flex align-items-center justify-content-between mt-3">
@@ -206,7 +206,9 @@
             <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ
           </button>
         </form>
-        
+        <a href="#" class="btn btn-danger btn-lg px-4">
+          Mua ngay
+        </a>
       </div>
     </div>
   </div>

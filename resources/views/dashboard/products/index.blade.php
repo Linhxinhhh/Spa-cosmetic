@@ -218,41 +218,7 @@
             transform: scale(1.02);
         }
 
-        .btn-add {
-            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
-            border: none;
-            color: #fff;
-            padding: 12px 20px;
-            border-radius: 12px;
-            font-weight: 600;
-            box-shadow: 0 6px 18px rgba(37, 99, 235, .35);
-            transition: transform .2s ease, box-shadow .2s ease;
-        }
-
-        .btn-add:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 24px rgba(37, 99, 235, .45);
-        }
-
-        /* Nút Export Excel (gradient xanh như mock) */
-        .btn-excel {
-            background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
-            border: none;
-            color: #fff;
-            padding: 12px 20px;
-            border-radius: 12px;
-            font-weight: 600;
-            box-shadow: 0 6px 18px rgba(59, 130, 246, .35);
-            display: inline-flex;
-            align-items: center;
-            gap: .5rem;
-            transition: transform .2s ease, box-shadow .2s ease;
-        }
-
-        .btn-excel:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 24px rgba(59, 130, 246, .45);
-        }
+     
     </style>
 @endpush
 
@@ -307,11 +273,11 @@
             </form>
             <!-- Form Lọc Sản phẩm -->
             <form method="GET" action="{{ route('admin.products.index') }}"
-                class="flex gap-3 items-center bg-white rounded-xl shadow-lg px-4 py-3 border border-blue-100">
+                class="flex gap-3 items-center bg-white rounded-xl shadow-lg px-4 py-2 border border-blue-100">
 
                 {{-- Trạng thái --}}
                 <select name="status"
-                    class="px-5 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition w-40">
+                    class="px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition w-40">
                     <option value="">Tất cả trạng thái</option>
                     <option value="1" {{ request('status') == '1' ? 'selected' : '' }}>Đang bán</option>
                     <option value="2" {{ request('status') == '2' ? 'selected' : '' }}>Ngưng bán</option>

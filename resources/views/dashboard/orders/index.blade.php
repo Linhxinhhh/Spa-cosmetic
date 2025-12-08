@@ -225,6 +225,12 @@
                  style="background:#1e40af;color:#fff;border-radius:10px;font-weight:600;">
                 <i class="fas fa-eye me-1"></i>Xem
               </a>
+                              <button class="btn btn-sm btn-outline-primary"
+            data-bs-toggle="modal"
+            data-bs-target="#editOrderModal{{ $o->order_id }}">
+        <i class="fas fa-edit me-1"> Sửa
+    </button>
+
             </div>
           </td>
         </tr>
@@ -254,6 +260,8 @@
 
 </div>
 
+
+
 {{-- Font Awesome (nếu chưa có) --}}
 <script>
 if (!document.querySelector('link[href*="font-awesome"]')) {
@@ -262,4 +270,94 @@ if (!document.querySelector('link[href*="font-awesome"]')) {
   document.head.appendChild(l);
 }
 </script>
+<script>
+function loadOrderData(id) {
+    fetch(`/admin/orders/${id}/json`)
+        .then(res => res.json())
+        .then(o => {
+            document.getElementById('edit_status').value = o.status ?? '';
+            document.getElementById('edit_payment_status').value = o.payment_status ?? '';
+            document.getElementById('edit_address').value = o.shipping_address ?? '';
+
+            // Set đúng action update
+            document.getElementById('editOrderForm').action = `/admin/orders/${id}`;
+        })
+        .catch(err => console.error('Lỗi load order:', err));
+}
+</script>
+
+<!-- EDIT ORDER MODAL -->
+<div class="modal fade" id="editOrderModal" tabindex="-1" aria-labelledby="editOrderModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content rounded-3 shadow-lg">
+
+      <!-- HEADER -->
+      <div class="modal-header" style="background:#2563eb;">
+        <h5 class="modal-title fw-bold text-white">
+          <i class="fas fa-pen-to-square me-2"></i> Cập nhật thông tin đơn hàng
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+
+      <!-- FORM -->
+      <form id="editOrderForm" method="POST">
+        @csrf
+        @method('PUT')
+
+        <div class="modal-body">
+
+          <!-- ROW 1 -->
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">
+                <i class="fas fa-truck-fast me-1 text-primary"></i> Trạng thái đơn hàng
+              </label>
+              <select name="status" id="edit_status" class="form-select rounded-2 shadow-sm">
+                @foreach($statusMap as $k => $v)
+                  <option value="{{ $k }}">{{ $v }}</option>
+                @endforeach
+              </select>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">
+                <i class="fas fa-credit-card me-1 text-success"></i> Trạng thái thanh toán
+              </label>
+              <select name="payment_status" id="edit_payment_status" class="form-select rounded-2 shadow-sm">
+                @foreach($payMap as $k => $v)
+                  <option value="{{ $k }}">{{ $v }}</option>
+                @endforeach
+              </select>
+            </div>
+          </div>
+
+          <!-- ROW 2 -->
+          <div class="mb-3">
+            <label class="form-label fw-semibold">
+              <i class="fas fa-location-dot me-2 text-danger"></i> Địa chỉ giao hàng
+            </label>
+            <input id="edit_address"
+                   name="shipping_address"
+                   class="form-control rounded-2 shadow-sm"
+                   placeholder="Nhập địa chỉ giao hàng...">
+          </div>
+
+        </div>
+
+        <!-- FOOTER -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-light" data-bs-dismiss="modal">
+            <i class="fas fa-xmark me-1"></i> Đóng
+          </button>
+          <button class="btn btn-primary px-4 fw-bold">
+            <i class="fas fa-save me-1"></i> Lưu thay đổi
+          </button>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+</div>
+
 @endsection

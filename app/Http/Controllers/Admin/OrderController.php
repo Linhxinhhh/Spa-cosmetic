@@ -96,4 +96,13 @@ public function show(Order $order)
         $order->update(['payment_status' => $r->payment_status]);
         return back()->with('success','Cập nhật trạng thái thanh toán thành công.');
     }
+    public function edit(Order $order)
+{
+    return view('dashboard.orders.edit', [
+        'order'     => $order,
+        'statusMap' => Order::STATUS,
+        'payMap'    => Order::PAYMENT_STATUS,
+    ]);
+}
+
 }

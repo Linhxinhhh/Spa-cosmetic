@@ -21,8 +21,8 @@
                 </h1>
                 <p class="mb-0 opacity-90">Tổng cộng: <strong>{{ $services->total() }}</strong> dịch vụ</p>
             </div>
-            <div class="col-lg-4 text-end">
-                <div class="d-flex justify-content-end gap-3">
+            <div class="col-lg-4 text-left">
+                <div class="d-flex justify-content-start gap-3">
                     <a href="#" class="btn-excel"><i class="fas fa-file-excel"></i> Xuất Excel</a>
                     <a href="{{ route('admin.services.create') }}" class="btn-add"><i class="fas fa-plus me-2"></i>Thêm dịch vụ</a>
                 </div>
@@ -36,32 +36,46 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
     @endif
+               {{-- tim kiem va loc  ---}}
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
 
-    <!-- Search & Filter -->
-    <div class="row mb-4 g-3">
-        <div class="col-xl-5">
-            <form action="{{ route('admin.services.index') }}" method="GET" class="input-group shadow-sm">
-                <input type="text" name="q" value="{{ request('q') }}" class="form-control py-3" placeholder="Tìm tên, mô tả dịch vụ..." style="border-radius:12px 0 0 12px;">
-                <button class="btn btn-primary px-4" style="border-radius:0 12px 12px 0;"><i class="fas fa-search"></i></button>
+            {{--Tìm kiếm --}}
+            <form action="{{ route('admin.services.index') }}" method="GET"
+                class="flex gap-3 items-center bg-white rounded-xl shadow-lg px-4 py-3 border border-blue-100">
+                <input type="text" name="keyword" value="{{ request('keyword') }}" placeholder="Tìm dịch vụ..."
+                    class="px-3 py-2 border border-gray-200 rounded-lg w-64 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200">
+                <button type="submit"
+                    class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200">
+                    <i class="fas fa-search mr-1"></i>
+                </button>
             </form>
-        </div>
-        <div class="col-xl-7">
-            <form method="GET" class="d-flex flex-wrap gap-2 align-items-center justify-content-end">
-                <select name="status" class="form-select w-auto py-2">
-                    <option value="">Trạng thái</option>
-                    <option value="1" {{ request('status')=='1'?'selected':'' }}>Hoạt động</option>
-                    <option value="0" {{ request('status')=='0'?'selected':'' }}>Tạm ngưng</option>
+            <!-- Form Lọc Sản phẩm -->
+            <form method="GET" action="{{ route('admin.services.index') }}"
+                class="flex gap-3 items-center bg-white rounded-xl shadow-lg px-4 py-2 border border-blue-100">
+
+                {{-- Trạng thái --}}
+                <select name="status"
+                    class="px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition w-40">
+                    <option value="">Tất cả trạng thái</option>
+                    <option value="1" {{ request('status') == '1' ? 'selected' : '' }}>Hoạt động</option>
+                    <option value="0" {{ request('status') == '0' ? 'selected' : '' }}>Tạm ngưng</option>
                 </select>
-                <select name="category_id" class="form-select w-auto py-2">
-                    <option value="">Danh mục</option>
+
+                {{-- Danh mục --}}
+                <select name="category_name"
+                    class="px-5 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition w-56">
+                    <option value="">Tất cả danh mục </option>
                     @foreach($categories as $cat)
-                        <option value="{{ $cat->category_id }}" {{ request('category_id')==$cat->category_id?'selected':'' }}>
+                        <option value="{{ $cat->category_name }}" {{ request('category_name') == $cat->category_name ? 'selected' : '' }}>
                             {{ $cat->category_name }}
                         </option>
                     @endforeach
                 </select>
-                <select name="type" class="form-select w-auto py-2">
-                    <option value="">Loại</option>
+
+               
+                <select name="type"
+                    class="px-5 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition w-56">
+                   <option value="">Loại</option>
                     <option value="Lẻ" {{ request('type')=='Lẻ'?'selected':'' }}>Lẻ</option>
                     <option value="Gói" {{ request('type')=='Gói'?'selected':'' }}>Gói</option>
                 </select>
@@ -69,12 +83,20 @@
                     <input class="form-check-input" type="checkbox" name="featured" value="1" {{ request('featured')?'checked':'' }}>
                     <label class="form-check-label text-primary fw-600">Nổi bật</label>
                 </div>
-                <button type="submit" class="btn btn-outline-primary px-4">Lọc</button>
-                <a href="{{ route('admin.services.index') }}" class="btn btn-outline-secondary px-4">Xóa lọc</a>
+                {{-- Nút lọc --}}
+                <button type="submit" style="margin-left: 20px;"
+                    class="px-5 py-2 bg-blue-50 text-blue-600 font-medium rounded-lg hover:bg-blue-100 transition-colors duration-200">
+                    <i class="fas fa-filter mr-2"></i> Lọc
+                </button>
+
+                {{-- Xoá lọc --}}
+                <a href="{{ route('admin.services.index') }}" style="margin-left: 10px"
+                    class="px-5 py-2 bg-gray-50 text-gray-700 font-medium rounded-lg hover:bg-gray-100 transition-colors duration-200">
+                    Xoá
+                </a>
             </form>
         </div>
-    </div>
-
+ 
     <!-- Table -->
     <div class="card border-0 shadow rounded-3 overflow-hidden">
         <div class="table-responsive">
