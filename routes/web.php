@@ -206,6 +206,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/orders/{order}/json', function (\App\Models\Order $order) {
             return response()->json($order);
         })->name('orders.json');
+        Route::put('/orders/{order}', [\App\Http\Controllers\Admin\OrderController::class, 'update'])->name('orders.update');
 
         // Banner
         Route::get('banners', [BannerController::class, 'index'])->name('banners.index');

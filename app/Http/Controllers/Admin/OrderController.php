@@ -96,6 +96,22 @@ public function show(Order $order)
         $order->update(['payment_status' => $r->payment_status]);
         return back()->with('success','Cập nhật trạng thái thanh toán thành công.');
     }
+     public function update(Request $r, Order $order)
+    {
+        $r->validate([
+            'status'          => ['required', Rule::in(array_keys(Order::STATUS))],
+            'payment_status'  => ['required', Rule::in(array_keys(Order::PAYMENT_STATUS))],
+            'shipping_address'=> ['nullable', 'string'],
+        ]);
+
+        $order->update([
+            'status'          => $r->status,
+            'payment_status'  => $r->payment_status,
+            'shipping_address'=> $r->shipping_address,
+        ]);
+
+        return back()->with('success', 'Cập nhật đơn hàng thành công.');
+    }
     public function edit(Order $order)
 {
     return view('dashboard.orders.edit', [
