@@ -112,12 +112,12 @@ class CustomerSessionController extends Controller
 
     // kiểm tra buổi có thuộc khách đang login không
     protected function authorizeSession(TreatmentSession $session)
-    {
-        $userId = Auth::id();
-        $customer = Customer::where('user_id', $userId)->first();
+{
+    $userId = Auth::id();
 
-        if (!$customer || (int)$session->plan->customer_id !== (int)($customer->id ?? $customer->customer_id)) {
-            abort(403);
-        }
+    // Nếu user hiện tại KHÔNG phải là customer của plan → chặn
+    if ((int)$userId !== (int)$session->plan->customer_id) {
+        abort(403);
     }
+}
 }
