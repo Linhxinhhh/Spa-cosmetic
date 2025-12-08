@@ -206,9 +206,7 @@
             <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ
           </button>
         </form>
-        <a href="#" class="btn btn-danger btn-lg px-4">
-          Mua ngay
-        </a>
+        
       </div>
     </div>
   </div>
