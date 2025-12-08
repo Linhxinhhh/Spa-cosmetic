@@ -38,52 +38,68 @@
     @endif
 
     <!-- Search & Filter -->
- <div class="row mb-4 g-3 align-items-center">
-    <!-- Form tìm kiếm -->
-    <div class="col-xl-5">
-        <form action="{{ route('admin.services.index') }}" method="GET" class="input-group shadow-sm w-100">
-            <input type="text" name="q" value="{{ request('q') }}" class="form-control py-3"
-                   placeholder="Tìm tên, mô tả dịch vụ..."
-                   style="border-radius:12px 0 0 12px;">
-            <button class="btn btn-primary px-4" style="border-radius:0 12px 12px 0;">
-                <i class="fas fa-search"></i>
-            </button>
-        </form>
-    </div>
+ <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-md-between gap-3 mb-4">
+    
+    <!-- Form Tìm kiếm -->
+    <form action="{{ route('admin.services.index') }}" 
+          method="GET" 
+          class="d-flex align-items-center gap-2 bg-white shadow-sm px-3 py-2 rounded-3 border border-primary-subtle">
 
-    <!-- Form lọc -->
-    <div class="col-xl-7">
-        <form method="GET" class="d-flex flex-nowrap gap-2 align-items-center justify-content-end">
-            <select name="status" class="form-select w-auto py-2">
-                <option value="">Trạng thái</option>
-                <option value="1" {{ request('status')=='1'?'selected':'' }}>Hoạt động</option>
-                <option value="0" {{ request('status')=='0'?'selected':'' }}>Tạm ngưng</option>
-            </select>
+        <input type="text" 
+               name="q" 
+               value="{{ request('q') }}" 
+               placeholder="Tìm tên, mô tả dịch vụ..." 
+               class="form-control border-0" 
+               style="width: 260px;">
 
-            <select name="category_id" class="form-select w-auto py-2">
-                <option value="">Danh mục</option>
-                @foreach($categories as $cat)
-                    <option value="{{ $cat->category_id }}" {{ request('category_id')==$cat->category_id?'selected':'' }}>
-                        {{ $cat->category_name }}
-                    </option>
-                @endforeach
-            </select>
+        <button type="submit" 
+                class="btn btn-primary px-4">
+            <i class="fas fa-search me-1"></i>Tìm
+        </button>
+    </form>
 
-            <select name="type" class="form-select w-auto py-2">
-                <option value="">Loại</option>
-                <option value="Lẻ" {{ request('type')=='Lẻ'?'selected':'' }}>Lẻ</option>
-                <option value="Gói" {{ request('type')=='Gói'?'selected':'' }}>Gói</option>
-            </select>
+    <!-- Form Lọc -->
+    <form method="GET" 
+          class="d-flex flex-wrap align-items-center gap-2 bg-white shadow-sm px-3 py-2 rounded-3 border border-primary-subtle">
 
-            <div class="form-check ms-3">
-                <input class="form-check-input" type="checkbox" name="featured" value="1" {{ request('featured')?'checked':'' }}>
-                <label class="form-check-label text-primary fw-600">Nổi bật</label>
-            </div>
+        <select name="status" class="form-select py-2 w-auto">
+            <option value="">Trạng thái</option>
+            <option value="1" {{ request('status')=='1'?'selected':'' }}>Hoạt động</option>
+            <option value="0" {{ request('status')=='0'?'selected':'' }}>Tạm ngưng</option>
+        </select>
 
-            <button type="submit" class="btn btn-outline-primary px-4">Lọc</button>
-            <a href="{{ route('admin.services.index') }}" class="btn btn-outline-secondary px-4">Xóa lọc</a>
-        </form>
-    </div>
+        <select name="category_id" class="form-select py-2 w-auto">
+            <option value="">Danh mục</option>
+            @foreach($categories as $cat)
+                <option value="{{ $cat->category_id }}" 
+                    {{ request('category_id')==$cat->category_id?'selected':'' }}>
+                    {{ $cat->category_name }}
+                </option>
+            @endforeach
+        </select>
+
+        <select name="type" class="form-select py-2 w-auto">
+            <option value="">Loại</option>
+            <option value="Lẻ" {{ request('type')=='Lẻ'?'selected':'' }}>Lẻ</option>
+            <option value="Gói" {{ request('type')=='Gói'?'selected':'' }}>Gói</option>
+        </select>
+
+        <div class="form-check ms-2">
+            <input class="form-check-input" type="checkbox" name="featured" value="1" 
+                   {{ request('featured') ? 'checked' : '' }}>
+            <label class="form-check-label text-primary fw-semibold">Nổi bật</label>
+        </div>
+
+        <button type="submit" class="btn btn-outline-primary px-4">
+            <i class="fas fa-filter me-2"></i>Lọc
+        </button>
+
+        <a href="{{ route('admin.services.index') }}" 
+           class="btn btn-outline-secondary px-4">
+            Xóa lọc
+        </a>
+    </form>
+
 </div>
 
 
