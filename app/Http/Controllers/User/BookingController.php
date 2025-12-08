@@ -80,7 +80,6 @@ public function index()
     public function store(Request $request)
     {
         $authUser = Auth::user();
-
         // base rules
         $rules = [
             'service_id'       => 'required|exists:services,service_id',
@@ -118,7 +117,8 @@ public function index()
         // lấy thông tin KH từ user (nếu có) hoặc từ form
         $fullName = $data['full_name'] ?? $authUser?->name;
         $phone    = $data['phone']     ?? $authUser?->phone;
-        $email    = $data['email']     ?? $authUser?->email;
+        $email    = $data['email']     ?? $authUser?->email;     
+        $user_id    = $authUser->user_id ?? $authUser->id;     
 
         // tính end_time theo duration
         $endTime = null;
@@ -154,20 +154,19 @@ public function index()
             if ($service->type !== 'Gói') {
                 return;
             }
-
             // 2.1 tìm hoặc tạo customer
-            if ($authUser) {
-                $customer = Customer::firstOrCreate(
-                    ['user_id' => $authUser->user_id ?? $authUser->id],
-                    ['name' => $fullName, 'phone' => $phone, 'email' => $email]
-                );
-            } else {
-                $customer = Customer::create([
-                    'name'  => $fullName,
-                    'phone' => $phone,
-                    'email' => $email,
-                ]);
-            }
+            // if ($authUser) {
+            //     $customer = Customer::firstOrCreate(
+            //         ['user_id' => $authUser->user_id ?? $authUser->id],
+            //         ['name' => $fullName, 'phone' => $phone, 'email' => $email]
+            //     );
+            // } else {
+            //     $customer = Customer::create([
+            //         'name'  => $fullName,
+            //         'phone' => $phone,
+            //         'email' => $email,
+            //     ]);
+            // }
 
             // 2.2 lấy cấu hình gói
             $meta = DB::table('service_package_meta')
@@ -196,7 +195,7 @@ public function index()
 
             // 2.3 tạo plan
             $plan = TreatmentPlan::create([
-                'customer_id'          => $customer->id ?? $customer->customer_id,
+                'customer_id'          => $authUser?->user_id ?? $authUser?->id,
                 'package_service_id'   => $service->service_id,
                 'single_service_id'    => null,
                 'start_date'           => $data['appointment_date'],

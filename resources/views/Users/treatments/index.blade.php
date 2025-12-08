@@ -135,6 +135,7 @@
                             <!-- Card Footer -->
                             <div class="card-footer bg-light border-0 p-3">
                                 <div class="d-flex justify-content-end align-items-center">
+                                    
                                     <small class="text-primary fw-semibold">
                                         Xem chi tiết <i class="bi bi-arrow-right ms-1"></i>
                                     </small>
