@@ -46,7 +46,9 @@
                             <div class="text-center">
 
                                 {{-- Avatar Preview --}}
-                                <img id="avatar-preview" src="{{ src_img_get($u?->avatar_url) }}?t={{ $cacheBuster }}"
+
+
+                                <img id="avatar-preview" src="{{ 'https://res.cloudinary.com/dtjegxxr4/image/upload/v1765189418/Screenshot_2025-12-08_172200_ltffqa.png' }}"
                                     class="product-image mx-auto mb-4 rounded-full object-cover"
                                     style="width: 110px; height: 110px;" alt="User Avatar">
 

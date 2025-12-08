@@ -160,9 +160,10 @@
         <div class="flex items-center gap-4">
             <div class="hs-dropdown relative inline-flex [--placement:bottom-right] sm:[--trigger:hover]">
                 <a class="hs-dropdown-toggle cursor-pointer align-middle rounded-full">
-                    <img src="{{ src_img_get(auth('admin')->user()?->avatar_url ?? 'https://res.cloudinary.com/dtjegxxr4/image/upload/v1765189418/Screenshot_2025-12-08_172200_ltffqa.png') }}"
+                  <img src="{{ 'https://res.cloudinary.com/dtjegxxr4/image/upload/v1765189418/Screenshot_2025-12-08_172200_ltffqa.png' }}"
      class="w-9 h-9 rounded-full object-cover"
      alt="Avatar">
+
 
                 </a>
                 <div class="card hs-dropdown-menu transition-[opacity,margin] rounded-md duration hs-dropdown-open:opacity-100 opacity-0 mt-2 min-w-max w-[200px] hidden z-[12]" aria-labelledby="hs-dropdown-custom-icon-trigger">
