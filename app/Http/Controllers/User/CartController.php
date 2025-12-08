@@ -106,7 +106,7 @@ public function paysuccess(Request $request)
     $cart = $user->cart()->with('items.product')->first();
 
     if (!$cart || $cart->items->isEmpty()) {
-        return redirect()->route('cart.index')->with('error', 'Giỏ hàng trống.');
+        return redirect()->route('users.cart.index')->with('error', 'Giỏ hàng trống.');
     }
 
     // 1. Lấy dữ liệu tạm lưu
