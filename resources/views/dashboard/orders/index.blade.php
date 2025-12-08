@@ -225,6 +225,14 @@
                  style="background:#1e40af;color:#fff;border-radius:10px;font-weight:600;">
                 <i class="fas fa-eye me-1"></i>Xem
               </a>
+              <a href="#"
+                class="btn btn-sm btn-warning"
+                data-bs-toggle="modal"
+                data-bs-target="#editOrderModal"
+                onclick="loadOrderData({{ $o->order_id }})">
+                <i class="fas fa-edit me-1"></i>Sửa
+              </a>
+
             </div>
           </td>
         </tr>
@@ -253,6 +261,62 @@
   @endif
 
 </div>
+<!-- EDIT ORDER MODAL -->
+<div class="modal fade" id="editOrderModal" tabindex="-1" aria-labelledby="editOrderModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content rounded-3 shadow-lg">
+
+      <div class="modal-header bg-blue-600 text-white">
+        <h5 class="modal-title fw-bold">
+          <i class="fas fa-edit me-2"></i>Chỉnh sửa đơn hàng
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+
+      <form id="editOrderForm" method="POST">
+        @csrf
+        @method('PUT')
+
+        <div class="modal-body">
+
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Trạng thái đơn hàng</label>
+            <select name="status" id="edit_status" class="form-select">
+              @foreach($statusMap as $k => $v)
+                <option value="{{ $k }}">{{ $v }}</option>
+              @endforeach
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Trạng thái thanh toán</label>
+            <select name="payment_status" id="edit_payment_status" class="form-select">
+              @foreach($payMap as $k => $v)
+                <option value="{{ $k }}">{{ $v }}</option>
+              @endforeach
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Địa chỉ giao hàng</label>
+            <input id="edit_address" name="shipping_address" class="form-control">
+          </div>
+
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-light" data-bs-dismiss="modal">Đóng</button>
+          <button class="btn btn-primary px-4 fw-bold">
+            <i class="fas fa-save me-1"></i>Lưu thay đổi
+          </button>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+</div>
+
 
 {{-- Font Awesome (nếu chưa có) --}}
 <script>
