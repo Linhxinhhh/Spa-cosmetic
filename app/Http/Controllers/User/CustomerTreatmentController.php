@@ -16,17 +16,14 @@ class CustomerTreatmentController extends Controller
     {
             $userId = Auth::id(); // bảng users.user_id
 
-        $customer = Customer::where('user_id', $userId)->first();
+        
 
-        if (!$customer) {
-            $plans = collect();
-        } else {
             $plans = TreatmentPlan::with(['packageService','singleService'])
-                ->where('customer_id', $customer->id ?? $customer->customer_id)
+                ->where('customer_id', $userId)
                 ->orderByDesc('id')
                         ->paginate(10);
-        }
-
+                        
+        
 
         return view('Users.treatments.index', compact('plans'));
     }
@@ -34,13 +31,9 @@ class CustomerTreatmentController extends Controller
     // chi tiết 1 kế hoạch
      public function show(TreatmentPlan $plan)
     {
-        $userId = Auth::id();
-        $customer = Customer::where('user_id', $userId)->first();
 
-        // khách này không có customer / hoặc plan không thuộc về khách này
-        if (!$customer || (int)$plan->customer_id !== (int)($customer->id ?? $customer->customer_id)) {
-            abort(403);
-        }
+        $userId = Auth::id();
+
 
         $plan->load([
             'packageService',
