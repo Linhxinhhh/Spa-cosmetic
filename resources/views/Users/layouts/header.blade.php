@@ -1,12 +1,12 @@
 {{-- resources/views/partials/header.blade.php --}}
 <style>
 /* ===== Mega menu ===== */
-.mega-wrap { width: min(1100px, 95vw); }
+.mega-wrap { width: min(1000px, 80vw); }
 .mega-grid { display:grid; grid-template-columns:280px 1fr; gap:0; min-height:360px; max-height:70vh; }
 .mega-left { border-right:1px solid #eef0f3; padding:.75rem; overflow:auto; }
 .mega-parent{
-  width:100%; border:1px solid transparent; background:transparent; text-align:left; border-radius:.5rem;
-  padding:.6rem .75rem; display:flex; align-items:center; justify-content:space-between; color:#000;
+  width:70%; border:1px solid transparent; background:transparent; text-align:left; border-radius:.5rem;
+  padding: 6px 10px !important; display:flex; align-items:center; justify-content:space-between; color:#000;
 }
 .mega-parent:hover{ background:#f6f7fb; }
 .mega-parent.active{ background:#fff5eb; border-color:#ffe0bf; color:#d67100; }
@@ -75,24 +75,42 @@
     visibility: visible !important;
   }
 }
+.navbar .nav-item.dropdown > .dropdown-toggle {
+  color: #484848 !important;
+  font-weight: 600;
+}
 
-/* Phòng trường hợp có lib khác set .collapse { display:none !important } */
-#navbarCollapse.collapse:not(.show){
-  /* để Bootstrap quản lý ẩn/hiện trên mobile; không ảnh hưởng desktop vì rule trên đã chặn */
+.navbar .nav-item.dropdown > .dropdown-toggle i {
+  color: #484848 !important;
+  margin-right: 0.5rem;
+}
+
+.navbar .nav-item.dropdown > .dropdown-toggle::after {
+  border-top-color: #484848 !important;
+}
+
+.cat-hover {
+    color: #000 !important;
+    transition: 0.2s ease;
+}
+
+.cat-hover:hover {
+    color: white !important;      /* đổi màu chữ */
+   
+}
+
+
+.navbarCollapse.collapse:not(.show){
+
   display: none;
 }
 
 /* Màu link cho dễ nhìn trên nền cam */
 .navbar .nav-link{ color:#212529 !important; }
 .navbar .nav-link.active{ color:#fff !important; }
-#megaCatsToggle {
-    padding-left: 10px !important;     /* giảm khoảng cách bên trái */
-    padding-right: 10px !important;    /* giảm khoảng cách bên phải */
-}
 
-#megaCatsToggle i {
-    margin-right: 6px !important;      /* giảm khoảng cách giữa icon và chữ */
-}
+
+
 </style>
 
 <header id="site-header" class="site-header fixed-top bg-white shadow-sm">
@@ -232,13 +250,13 @@
         <div class="col-lg-3 d-none d-lg-block">
           <div class="navbar navbar-light position-relative" style="width:250px;">
             <div class="nav-item dropdown position-static w-100">
-              <a id="megaCatsToggle"
-                 class="btn w-100 text-start text-black d-flex align-items-center justify-content-between dropdown-toggle"
+                 <a id=""
+                 class="btn w-100 text-start text-black cat-hover d-flex align-items-center justify-content-between "
                  data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
                 <span class="fw-semibold"><i class="fas fa-bars me-2"></i> Danh mục</span>
               </a>
 
-              <div class="dropdown-menu border-0 shadow mega-wrap p-0">
+              <div class="dropdown-menu border-0 shadow mega-wrap p-0"> 
                 <div class="mega-tabs px-3 pt-3">
                   <ul class="nav nav-pills" id="catTabs" role="tablist">
                     <li class="nav-item" role="presentation">
@@ -374,7 +392,7 @@
 
                 <li class="nav-item dropdown">
                   <a href="#" class="nav-link dropdown-toggle {{ request()->is('bestseller.html') ? 'active text-white' : '' }}"
-                     data-bs-toggle="dropdown">Trang</a>
+                     data-bs-toggle="">Trang</a>
                   <div class="dropdown-menu m-0">
                     <a href="{{ route('users.products.index') }}" class="dropdown-item">Sản phẩm bán chạy</a>
                     <a href="{{ route('users.services.index') }}" class="dropdown-item">Dịch vụ nổi bật</a>
