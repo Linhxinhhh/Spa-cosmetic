@@ -77,7 +77,7 @@
       <div class="col-12 col-lg-6 order-3 order-lg-2">
         <form action="{{ route('users.services.index') }}" method="GET" class="d-flex border rounded-pill overflow-hidden">
           <input name="q" class="form-control border-0 rounded-0 w-100 py-3"
-                 type="text" placeholder="Tìm dịch vụ (ví dụ: triệt lông, chăm sóc da)..." value="{{ request('q') }}" />
+                 type="text" placeholder="Tìm kiếm dịch vụ mong muốn..." value="{{ request('q') }}" />
           <button class="btn btn-primary rounded-pill px-4" style="border:0" aria-label="Tìm kiếm">
             <i class="fas fa-search"></i>
           </button>

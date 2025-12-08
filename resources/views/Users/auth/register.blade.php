@@ -419,9 +419,9 @@
 <body class="auth-body">
   <div class="auth-card">
     <div class="auth-left">
-      <div class="brand">
-        <span class="logo"></span>
-        <a href="{{ url('/') }}" class="back-link">Trở lại trang →</a>
+      <div class="brand ">
+        
+        
       </div>
       <div class="hero-copy">
         <h3>Đăng ký ngay, <br>Để trải nghiệm và khám phá</h3>
