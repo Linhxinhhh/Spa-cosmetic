@@ -99,13 +99,7 @@
                 </a>
             </form>
         </div>
-
-
-
-
-
-
-    <!-- Table -->
+   <!-- Table -->
     <div class="card border-0 shadow rounded-3 overflow-hidden">
         <div class="table-responsive">
             <table class="table table-hover table-modern mb-0">
