@@ -225,11 +225,18 @@
                  style="background:#1e40af;color:#fff;border-radius:10px;font-weight:600;">
                 <i class="fas fa-eye me-1"></i>Xem
               </a>
-                              <button class="btn btn-sm btn-outline-primary"
-            data-bs-toggle="modal"
-            data-bs-target="#editOrderModal{{ $o->order_id }}">
-        <i class="fas fa-edit me-1"> Sửa
-    </button>
+             <a href="javascript:void(0)" 
+   class="btn btn-sm btn-warning text-white fw-bold"
+   style="border-radius:12px; padding: 6px 14px; box-shadow: 0 2px 8px rgba(255,193,7,.3);"
+   onclick="openEditModal(
+     {{ $o->id ?? $o->order_id }},
+     '{{ $o->status }}',
+     '{{ $o->payment_status }}',
+     `{!! addslashes(nl2br(e($o->shipping_address ?? ''))) !!}`,
+     '{{ $o->order_code ?? $o->order_id }}'
+   )">
+   <i class="fas fa-edit me-1"></i> Sửa
+</a>
 
             </div>
           </td>
@@ -286,33 +293,36 @@ function loadOrderData(id) {
 }
 </script>
 
-<!-- EDIT ORDER MODAL -->
-<div class="modal fade" id="editOrderModal" tabindex="-1" aria-labelledby="editOrderModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg modal-dialog-centered">
-    <div class="modal-content rounded-3 shadow-lg">
+<!-- EDIT ORDER MODAL - ĐẢM BẢO HIỆN ĐÚNG GIỮA MÀN HÌNH -->
+<div class="modal fade" id="editOrderModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+  <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content rounded-4 shadow-xl border-0" style="max-height: 95vh;">
 
-      <!-- HEADER -->
-      <div class="modal-header" style="background:#2563eb;">
-        <h5 class="modal-title fw-bold text-white">
-          <i class="fas fa-pen-to-square me-2"></i> Cập nhật thông tin đơn hàng
+      <div class="modal-header border-0 text-white position-relative" 
+           style="background: linear-gradient(135deg, #1e40af, #3b82f6); border-radius: 16px 16px 0 0;">
+        <h5 class="modal-title fw-bold fs-5 d-flex align-items-center gap-2">
+          <i class="fas fa-edit"></i>
+          Chỉnh sửa đơn hàng <span id="modalOrderCode" class="text-warning">#000000</span>
         </h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        <button type="button" class="btn-close btn-close-white shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
 
-      <!-- FORM -->
-      <form id="editOrderForm" method="POST">
+      <form id="editOrderForm" method="POST" action="">
         @csrf
         @method('PUT')
 
-        <div class="modal-body">
+        <div class="modal-body p-4 pt-3">
+          <div class="alert alert-primary border-0 rounded-3 py-3 text-center mb-4">
+            <i class="fas fa-receipt me-2"></i>
+            <strong>Đơn hàng:</strong> <span id="displayOrderCode" class="fs-5">#000000</span>
+          </div>
 
-          <!-- ROW 1 -->
-          <div class="row mb-3">
+          <div class="row g-4">
             <div class="col-md-6">
-              <label class="form-label fw-semibold">
-                <i class="fas fa-truck-fast me-1 text-primary"></i> Trạng thái đơn hàng
+              <label class="form-label fw-bold text-dark">
+                <i class="fas fa-truck me-1"></i> Trạng thái đơn hàng
               </label>
-              <select name="status" id="edit_status" class="form-select rounded-2 shadow-sm">
+              <select name="status" id="edit_status" class="form-select form-select-lg rounded-pill shadow-sm" required>
                 @foreach($statusMap as $k => $v)
                   <option value="{{ $k }}">{{ $v }}</option>
                 @endforeach
@@ -320,10 +330,10 @@ function loadOrderData(id) {
             </div>
 
             <div class="col-md-6">
-              <label class="form-label fw-semibold">
-                <i class="fas fa-credit-card me-1 text-success"></i> Trạng thái thanh toán
+              <label class="form-label fw-bold text-dark">
+                <i class="fas fa-credit-card me-1"></i> Trạng thái thanh toán
               </label>
-              <select name="payment_status" id="edit_payment_status" class="form-select rounded-2 shadow-sm">
+              <select name="payment_status" id="edit_payment_status" class="form-select form-select-lg rounded-pill shadow-sm" required>
                 @foreach($payMap as $k => $v)
                   <option value="{{ $k }}">{{ $v }}</option>
                 @endforeach
@@ -331,33 +341,60 @@ function loadOrderData(id) {
             </div>
           </div>
 
-          <!-- ROW 2 -->
-          <div class="mb-3">
-            <label class="form-label fw-semibold">
-              <i class="fas fa-location-dot me-2 text-danger"></i> Địa chỉ giao hàng
+          <div class="mt-3">
+            <label class="form-label fw-bold text-dark">
+              <i class="fas fa-map-location-dot me-1"></i> Địa chỉ giao hàng
             </label>
-            <input id="edit_address"
-                   name="shipping_address"
-                   class="form-control rounded-2 shadow-sm"
-                   placeholder="Nhập địa chỉ giao hàng...">
+            <textarea name="shipping_address" id="edit_address" rows="3" 
+                      class="form-control rounded-3 shadow-sm" 
+                      placeholder="Nhập địa chỉ giao hàng đầy đủ..."></textarea>
           </div>
-
         </div>
 
-        <!-- FOOTER -->
-        <div class="modal-footer">
-          <button type="button" class="btn btn-light" data-bs-dismiss="modal">
-            <i class="fas fa-xmark me-1"></i> Đóng
+        <div class="modal-footer border-0 bg-light rounded-bottom-4 py-3">
+          <button type="button" class="btn btn-secondary px-4 rounded-pill" data-bs-dismiss="modal">
+            <i class="fas fa-times"></i> Hủy
           </button>
-          <button class="btn btn-primary px-4 fw-bold">
-            <i class="fas fa-save me-1"></i> Lưu thay đổi
+          <button type="submit" class="btn btn-primary px-5 rounded-pill fw-bold shadow-sm">
+            <i class="fas fa-save"></i> Lưu thay đổi
           </button>
         </div>
-
       </form>
-
     </div>
   </div>
 </div>
 
+<!-- SCRIPT MỞ MODAL - ĐẢM BẢO KHÔNG BỊ ĐẨY XUỐNG DƯỚI -->
+<script>
+// Đảm bảo modal luôn hiện giữa màn hình dù scroll ở đâu
+document.getElementById('editOrderModal')?.addEventListener('show.bs.modal', function () {
+  // Fix trường hợp body bị thêm padding khi có scrollbar
+  document.body.style.paddingRight = '0px';
+  document.body.classList.remove('modal-open'); // tạm bỏ để tránh lỗi scroll
+  setTimeout(() => {
+    document.body.classList.add('modal-open');
+  }, 100);
+});
+
+function openEditModal(orderId, status, paymentStatus, address, orderCode) {
+  const code = orderCode || orderId;
+
+  // Điền dữ liệu
+  document.getElementById('modalOrderCode').textContent = code;
+  document.getElementById('displayOrderCode').textContent = '#' + code;
+  document.getElementById('edit_status').value = status || 'pending';
+  document.getElementById('edit_payment_status').value = paymentStatus || 'pending';
+  document.getElementById('edit_address').value = address ? address.replace(/\\n/g, '\n') : '';
+
+  // Set URL update
+  document.getElementById('editOrderForm').action = `/admin/orders/${orderId}`;
+
+  // Mở modal (dùng Bootstrap 5 API chính thức)
+  const modal = new bootstrap.Modal(document.getElementById('editOrderModal'), {
+    backdrop: 'static',
+    keyboard: false
+  });
+  modal.show();
+}
+</script>
 @endsection
