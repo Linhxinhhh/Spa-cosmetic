@@ -96,29 +96,28 @@ public function show(Order $order)
         $order->update(['payment_status' => $r->payment_status]);
         return back()->with('success','Cập nhật trạng thái thanh toán thành công.');
     }
-     public function update(Request $r, Order $order)
-    {
-        $r->validate([
-            'status'          => ['required', Rule::in(array_keys(Order::STATUS))],
-            'payment_status'  => ['required', Rule::in(array_keys(Order::PAYMENT_STATUS))],
-            'shipping_address'=> ['nullable', 'string'],
-        ]);
-
-        $order->update([
-            'status'          => $r->status,
-            'payment_status'  => $r->payment_status,
-            'shipping_address'=> $r->shipping_address,
-        ]);
-
-        return back()->with('success', 'Cập nhật đơn hàng thành công.');
-    }
     public function edit(Order $order)
 {
     return view('dashboard.orders.edit', [
-        'order'     => $order,
+        'order' => $order->load('items.product', 'user'),
         'statusMap' => Order::STATUS,
-        'payMap'    => Order::PAYMENT_STATUS,
+        'payMap' => Order::PAYMENT_STATUS,
     ]);
 }
 
+public function update(Request $request, Order $order)
+{
+    $request->validate([
+        'status'           => ['required', Rule::in(array_keys(Order::STATUS))],
+        'payment_status'   => ['required', Rule::in(array_keys(Order::PAYMENT_STATUS))],
+        'shipping_address' => ['nullable', 'string', 'max:500'],
+        'admin_note'       => ['nullable', 'string', 'max:1000'],
+    ]);
+
+    $order->update($request->only(['status', 'payment_status', 'shipping_address', 'admin_note']));
+
+    return redirect()
+        ->route('admin.orders.index', $order)
+        ->with('success', 'Cập nhật đơn hàng thành công!');
+}
 }

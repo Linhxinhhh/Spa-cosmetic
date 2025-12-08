@@ -26,7 +26,8 @@ use App\Http\Controllers\Admin\{
     FaqAdminController,
     TreatmentPlanController,
     TreatmentSessionController,
-    StaffController
+    StaffController,
+    OrderController
 };
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\User\{
@@ -199,15 +200,14 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('user-roles/{user}/edit', [UserRoleController::class, 'edit'])->name('user_roles.edit')->middleware('checkrole:admin,edit');
         Route::put('user-roles/{user}', [UserRoleController::class, 'update'])->name('user_roles.update')->middleware('checkrole:admin,update');
         // Đơn hàng
-        Route::get('/orders', [\App\Http\Controllers\Admin\OrderController::class, 'index'])->name('orders.index');
-        Route::get('/orders/{order}', [\App\Http\Controllers\Admin\OrderController::class, 'show'])->name('orders.show');
-        Route::put('/orders/{order}/status', [\App\Http\Controllers\Admin\OrderController::class, 'updateStatus'])->name('status');
-        Route::put('/orders/{order}/payment', [\App\Http\Controllers\Admin\OrderController::class, 'updatePayment'])->name('payment');
-        Route::get('/orders/{order}/json', function (\App\Models\Order $order) {
-            return response()->json($order);
-        })->name('orders.json');
-        Route::put('/orders/{order}', [\App\Http\Controllers\Admin\OrderController::class, 'update'])->name('orders.update');
+Route::put('/orders/{order}/update-status', [OrderController::class, 'updateStatus'])
+      ->name('orders.updateStatus');
 
+Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
+Route::get('/orders/{order}/edit', [OrderController::class, 'edit'])->name('orders.edit');
+Route::put('/orders/{order}', [OrderController::class, 'update'])
+     ->name('orders.update');
         // Banner
         Route::get('banners', [BannerController::class, 'index'])->name('banners.index');
         Route::get('banners/create', [BannerController::class, 'create'])->name('banners.create')->middleware('checkrole:admin,create');

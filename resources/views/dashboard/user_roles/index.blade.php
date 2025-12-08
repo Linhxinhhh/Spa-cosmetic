@@ -1,6 +1,6 @@
 @extends('dashboard.layouts.app')
 @section('breadcrumb-parent', 'Quản trị')
-@section('breadcrumb-child', 'Quản trị phân quyền')
+@section('breadcrumb-child', 'Phân quyền')
 @section('page-title', 'Danh sách phân quyền')
 @section('content')
 <style>
@@ -22,13 +22,13 @@
         padding: 24px;
         max-width: 1400px;
         margin: 0 auto;
-        background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+       
         min-height: 100vh;
     }
 
     .header-section {
         background: white;
-        border-radius: 16px;
+        border-radius: 16px;    
         padding: 24px;
         margin-bottom: 24px;
         box-shadow: var(--shadow);
@@ -64,9 +64,8 @@
     }
 
     .stat-card {
-        background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
-        color: white;
-        padding: 16px 20px;
+        background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+                padding: 16px 20px;
         border-radius: 12px;
         flex: 1;
         min-width: 150px;
@@ -94,7 +93,7 @@
     }
 
     .table-header {
-        background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+        background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
         padding: 20px 24px;
         color: white;
         display: flex;
@@ -391,23 +390,12 @@
         <h1 class="page-title">Quản lý quyền người dùng</h1>
         <p class="page-subtitle">Quản lý vai trò và quyền hạn của người dùng trong hệ thống</p>
         
-        <div class="stats-row">
-            <div class="stat-card">
-                <div class="stat-number">{{ $users->total() }}</div>
-                <div class="stat-label">Số lượng quản trị </div>
-            </div>
-          
-            <div class="stat-card" style="background: linear-gradient(135deg, var(--warning-color) 0%, #d97706 100%);">
-                <div class="stat-number">{{ $users->groupBy('roles')->count() }}</div>
-                <div class="stat-label">Vai trò</div>
-            </div>
-        </div>
-    </div>
+         </div>
 
     <!-- Table Section -->
     <div class="table-wrapper">
         <div class="table-header">
-            <h3 class="table-title">Danh sách người dùng</h3>
+            <h3 class="table-title text-white">Danh sách người dùng</h3>
             <div class="search-box">
                 <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path>
@@ -424,7 +412,8 @@
                     <th>Thông tin người dùng</th>
                     <th>Vai trò</th>
                
-                    <th>Hành động</th>
+                   <th style=" text-align:center;">Hành động</th>
+
                 </tr>
             </thead>
             <tbody>

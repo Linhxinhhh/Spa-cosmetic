@@ -1,6 +1,6 @@
 @extends('dashboard.layouts.app')
 @section('breadcrumb-parent', 'Quản trị')
-@section('breadcrumb-child', 'Quản trị phân quyền')
+@section('breadcrumb-child', 'Phân quyền')
 @section('page-title', 'Sửa phân quyền')
 @section('content')
 <style>
@@ -26,7 +26,7 @@
         padding: 24px;
         max-width: 1200px;
         margin: 0 auto;
-        background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+      
         min-height: 100vh;
     }
 
