@@ -391,7 +391,7 @@
                 </li>
 
                 <li class="nav-item dropdown">
-                  <a href="#" class="nav-link dropdown-toggle {{ request()->is('bestseller.html') ? 'active text-white' : '' }}"
+                  <a href="#" class="nav-link  {{ request()->is('bestseller.html') ? 'active text-white' : '' }}"
                      data-bs-toggle="">Trang</a>
                   <div class="dropdown-menu m-0">
                     <a href="{{ route('users.products.index') }}" class="dropdown-item">Sản phẩm bán chạy</a>
