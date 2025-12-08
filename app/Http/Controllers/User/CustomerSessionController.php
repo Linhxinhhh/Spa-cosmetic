@@ -16,17 +16,13 @@ class CustomerSessionController extends Controller
     {
         $userId = Auth::id();
 
-        $customer = User::where('user_id', $userId)->first();
-
-        if (!$customer) {
-            $sessions = collect();
-        } else {
+      
            $sessions = TreatmentSession::with([
                 'plan.packageService',
                 'plan.singleService',
             ])
-            ->whereHas('plan', function ($q) use ($customer) {
-                $q->where('customer_id', $customer->id ?? $customer->customer_id);
+            ->whereHas('plan', function ($q) use ($userId) {
+                $q->where('customer_id', $userId);
             })
             // CHỈ HIỆN BUỔI CHƯA XONG
             ->whereIn('status', ['scheduled', 'confirmed'])
@@ -34,7 +30,6 @@ class CustomerSessionController extends Controller
             ->where('scheduled_start', '>=', now()->subDay())
             ->orderBy('scheduled_start')
             ->paginate(20);
-        }
         return view('Users.sessions.index', compact('sessions'));
     }
 
