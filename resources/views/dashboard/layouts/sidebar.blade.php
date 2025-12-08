@@ -69,13 +69,13 @@
                  <li class="sidebar-item">
                     <a class="sidebar-link gap-3 py-2.5 my-1 text-base flex items-center relative rounded-md text-gray-500 w-full"
                         href="{{route('admin.appointments.index')}}">
-                       <i class="bi bi-people me-2"></i><span>Lịch Hẹn</span>
+                       <i class="bi bi-calendar-check"></i><span>Lịch Hẹn</span>
                     </a>
                 </li>
                  <li class="sidebar-item">
                     <a class="sidebar-link gap-3 py-2.5 my-1 text-base flex items-center relative rounded-md text-gray-500 w-full"
                         href="{{route('admin.treatment-plans.index')}}">
-                       <i class="bi bi-people me-2"></i><span>Liệu Trình</span>
+                      <i class="bi bi-clipboard-heart"></i><span>Liệu Trình</span>
                     </a>
                 </li>               
                 <li class="sidebar-item">
@@ -85,18 +85,8 @@
                     </a>
                 </li>
                 
-                <li class="sidebar-item">
-                    <a class="sidebar-link gap-3 py-2.5 my-1 text-base flex items-center relative rounded-md text-gray-500 w-full"
-                        href="#">
-                        <i class="bi bi-ticket-perforated me-2"></i> <span>Khuyến Mãi</span>
-                    </a>
-                </li>
-                   <li class="sidebar-item">
-                    <a class="sidebar-link gap-3 py-2.5 my-1 text-base flex items-center relative rounded-md text-gray-500 w-full"
-                        href="{{route('admin.staffs.index')}}">
-                        <i class="fas fa-user-circle"></i>  <span>Nhân viên</span>
-                    </a>
-                </li>
+     
+            
                 <li class="sidebar-item">
                 <a
                     href="{{ route('admin.guides.index') }}"

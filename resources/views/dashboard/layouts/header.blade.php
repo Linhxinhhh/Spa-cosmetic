@@ -160,7 +160,7 @@
         <div class="flex items-center gap-4">
             <div class="hs-dropdown relative inline-flex [--placement:bottom-right] sm:[--trigger:hover]">
                 <a class="hs-dropdown-toggle cursor-pointer align-middle rounded-full">
-                  <img src="{{ 'https://res.cloudinary.com/dtjegxxr4/image/upload/v1765189418/Screenshot_2025-12-08_172200_ltffqa.png' }}"
+                  <img src="{{ 'https://res.cloudinary.com/dtjegxxr4/image/upload/v1755764676/Screenshot_2025-08-21_152423_ntrotg.png' }}"
      class="w-9 h-9 rounded-full object-cover"
      alt="Avatar">
 

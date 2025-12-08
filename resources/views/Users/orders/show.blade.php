@@ -25,7 +25,9 @@
                     'Đã giao' => 'success',
                     'Đã hủy' => 'danger',
                     'Đang vận chuyển' => 'info',
-                    default => 'secondary'
+                    'Đang xử lý' => 'pending    ',
+                    default => 'secondary',
+                     
                 };
             @endphp
             <span class="badge bg-{{ $statusColor }} fs-6 px-3 py-2">
@@ -173,7 +175,8 @@
                                 'Đã thanh toán' => 'success',
                                 'Chưa thanh toán' => 'warning',
                                 'Thất bại' => 'danger',
-                                default => 'secondary'
+                                default => 'secondary',
+                                'Đang xử lý' => 'pending    ',
                             };
                         @endphp
                         <span class="badge bg-{{ $paymentColor }}">

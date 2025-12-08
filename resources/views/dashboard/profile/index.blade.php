@@ -47,7 +47,7 @@
                             $u = auth('admin')->user() ?: auth()->user();
                         @endphp
                         <div class="text-center">
-                            <img src="{{ 'https://res.cloudinary.com/dtjegxxr4/image/upload/v1765189418/Screenshot_2025-12-08_172200_ltffqa.png' }}"
+                            <img src="{{ 'https://res.cloudinary.com/dtjegxxr4/image/upload/v1755764676/Screenshot_2025-08-21_152423_ntrotg.png' }}"
                                 class="product-image mx-auto mb-4 rounded-full object-cover"
                                 style="width: 80px; height: 80px;" alt="User Avatar">
 
