@@ -1,8 +1,8 @@
 @extends('dashboard.layouts.app')
 
 @section('breadcrumb-parent', 'Quản trị')
-@section('breadcrumb-child', 'Quản trị danh mục dịch vụ')
-@section('page-title', 'Danh mục dịch vụ')
+@section('breadcrumb-child', 'Danh mục dịch vụ')
+@section('page-title', ' Danh mục dịch vụ')
 
 @section('content')
 <div class="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">

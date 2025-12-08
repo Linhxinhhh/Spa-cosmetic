@@ -1,8 +1,8 @@
 @extends('dashboard.layouts.app')
 
 @section('breadcrumb-parent', 'Quản trị')
-@section('breadcrumb-child', 'Quản trị sản phẩm')
-@section('page-title', 'Sản phẩm')
+@section('breadcrumb-child', 'Sản phẩm')
+@section('page-title', 'Danh sách sản phẩm')
 
 @push('styles')
     <style>
@@ -328,7 +328,7 @@
                         <th style="width: 50px;">
                             <i class="fas fa-hashtag mr-1"></i>ID
                         </th>
-                        <th style="width: 100px;">
+                        <th style="width: 200px;">
                             <i class="fas fa-tag mr-1"></i>Tên sản phẩm
                         </th>
                         <th style="width: 200px;">

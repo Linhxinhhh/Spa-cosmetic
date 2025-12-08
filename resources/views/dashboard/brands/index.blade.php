@@ -1,8 +1,8 @@
 @extends('dashboard.layouts.app')
 
 @section('breadcrumb-parent', 'Quản trị')
-@section('breadcrumb-child', 'Quản trị thương hiệu')
-@section('page-title', 'Danh mục thương hiệu')
+@section('breadcrumb-child', 'Thương hiệu')
+@section('page-title', 'Danh sách thương hiệu')
 
 @push('styles')
 <link href="{{ asset('admin/giaodien/css/style.css') }}" rel="stylesheet">

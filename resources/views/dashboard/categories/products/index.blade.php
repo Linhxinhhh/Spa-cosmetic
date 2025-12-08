@@ -1,7 +1,7 @@
 @extends('dashboard.layouts.app')
 
 @section('breadcrumb-parent', 'Quản trị')
-@section('breadcrumb-child', 'Quản trị danh mục sản phẩm')
+@section('breadcrumb-child', 'Danh mục sản phẩm')
 @section('page-title', 'Danh mục sản phẩm')
 
 @section('content')

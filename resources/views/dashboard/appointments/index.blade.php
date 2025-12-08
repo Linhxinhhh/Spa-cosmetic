@@ -1,9 +1,9 @@
 
 @extends('dashboard.layouts.app')
 
-@section('page-title', 'Quản lý lịch hẹn')
-
-@section('content')
+@section('breadcrumb-parent', 'Quản trị')
+@section('breadcrumb-child', 'Lịch hẹn')
+@section('page-title', 'Danh sách  lịch hẹn')
 
 @push('styles')
 

@@ -1,6 +1,8 @@
 @extends('dashboard.layouts.app')
 
-@section('page-title','Quản lý phản hồi')
+@section('breadcrumb-parent', 'Quản trị')
+@section('breadcrumb-child', 'Phản hồi khách hàng')
+@section('page-title', 'Phản hồi khách hàng')
 
 @push('styles')
 <style>

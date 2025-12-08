@@ -2,7 +2,7 @@
 
 @section('breadcrumb-parent','Quản trị')
 @section('breadcrumb-child','Đơn hàng')
-@section('page-title','Quản lý Đơn hàng')
+@section('page-title','Danh sách đơn hàng ')
 
 @section('content')
 <style>

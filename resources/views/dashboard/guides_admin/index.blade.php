@@ -1,5 +1,7 @@
 @extends('dashboard.layouts.app')
-@section('title', 'Quản lý Cẩm nang')
+@section('breadcrumb-parent', 'Quản trị')
+@section('breadcrumb-child', 'Bài viết')
+@section('page-title', 'Danh sách bài viết')
 
 @section('content')
   <div class="min-h-screen from-slate-50 to-blue-50">
