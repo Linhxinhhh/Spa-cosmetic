@@ -20,16 +20,16 @@
         </div>
         <div class="col-md-4 text-md-end">
             @php
-                $statusColor = match($order->status) {
-                    'Đang xử lý' => 'warning',
-                    'Đã giao' => 'success',
-                    'Đã hủy' => 'danger',
-                    'Đang vận chuyển' => 'info',
-                    'Đang xử lý' => 'pending    ',
-                    default => 'secondary',
-                     
-                };
-            @endphp
+        
+    $statusColor = match($order->status) {
+        'Đang xử lý'      => 'warning',
+        'Đang vận chuyển' => 'processing',
+        'Đã giao'         => 'success',
+        'Đã hủy'          => 'danger',
+        default           => 'secondary',
+    };
+@endphp
+
             <span class="badge bg-{{ $statusColor }} fs-6 px-3 py-2">
                 <i class="bi bi-truck"></i> {{ $order->status }}
             </span>
@@ -171,14 +171,14 @@
                     <div>
                         <small class="text-muted d-block mb-1">Trạng thái thanh toán</small>
                         @php
-                            $paymentColor = match($order->payment_status) {
-                                'Đã thanh toán' => 'success',
-                                'Chưa thanh toán' => 'warning',
-                                'Thất bại' => 'danger',
-                                default => 'secondary',
-                                'Đang xử lý' => 'pending    ',
-                            };
-                        @endphp
+    $paymentColor = match($order->payment_status) {
+        'Đã thanh toán'   => 'paid',
+        'Chưa thanh toán' => 'warning',
+        'Thất bại'        => 'danger',
+        'Đang xử lý'      => 'info',
+        default           => 'secondary',
+    };
+@endphp
                         <span class="badge bg-{{ $paymentColor }}">
                             {{ $order->payment_status }}
                         </span>

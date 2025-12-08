@@ -118,7 +118,7 @@
     }
 
     .back-link {
-      background: rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.2); 
       padding: 12px 20px;
       border-radius: 50px;
       color: var(--white);
@@ -398,10 +398,7 @@
 <body class="auth-body">
   <div class="auth-card">
     <div class="auth-left">
-      <div class="brand">
-        <span style="color: #5a4a4b" class="logo"></span>
-        <a style="margin-right:15px;" href="{{ url('/') }}" class="back-link">Quay lại trang →</a>
-      </div>
+  
       <div style="margin-left:20px;margin-bottom:10px;"   class="hero-copy">
         <h3>Chào mừng bạn trở lại<br></h3>
         <p>Đăng nhập ngay để trải nghiệm dịch vụ đẳng cấp<br> từ Lyn Cosmetic & Spa</p>
