@@ -206,9 +206,13 @@
             <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ
           </button>
         </form>
-        <a href="#" class="btn btn-danger btn-lg px-4">
-          Mua ngay
-        </a>
+        <form action="{{ route('users.checkout.buynow') }}" method="POST">
+            @csrf
+            <input type="hidden" name="product_id" value="{{ $product->product_id }}">
+            <button type="submit" class="btn btn-danger btn-lg px-4">
+                Mua ngay
+            </button>
+        </form>
       </div>
     </div>
   </div>
