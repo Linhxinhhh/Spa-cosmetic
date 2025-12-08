@@ -36,71 +36,73 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
     @endif
+   <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
 
-    <!-- Search & Filter -->
- <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-md-between gap-3 mb-4">
-    
-    <!-- Form Tìm kiếm -->
-    <form action="{{ route('admin.services.index') }}" 
-          method="GET" 
-          class="d-flex align-items-center gap-2 bg-white shadow-sm px-3 py-2 rounded-3 border border-primary-subtle">
+            {{--Tìm kiếm sp--}}
+            <form action="{{ route('admin.services.index') }}" method="GET"
+                class="flex gap-3 items-center bg-white rounded-xl shadow-lg px-4 py-3 border border-blue-100">
+                <input type="text" name="keyword" value="{{ request('keyword') }}" placeholder="Tìm dịch vụ..."
+                    class="px-3 py-2 border border-gray-200 rounded-lg w-64 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200">
+                <button type="submit"
+                    class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200">
+                    <i class="fas fa-search mr-1"></i>
+                </button>
+            </form>
+            <!-- Form Lọc Sản phẩm -->
+            <form method="GET" action="{{ route('admin.products.index') }}"
+                class="flex gap-3 items-center bg-white rounded-xl shadow-lg px-4 py-3 border border-blue-100">
 
-        <input type="text" 
-               name="q" 
-               value="{{ request('q') }}" 
-               placeholder="Tìm tên, mô tả dịch vụ..." 
-               class="form-control border-0" 
-               style="width: 260px;">
-
-        <button type="submit" 
-                class="btn btn-primary px-4">
-            <i class="fas fa-search me-1"></i>Tìm
-        </button>
-    </form>
-
-    <!-- Form Lọc -->
-    <form method="GET" 
-          class="d-flex flex-wrap align-items-center gap-2 bg-white shadow-sm px-3 py-2 rounded-3 border border-primary-subtle">
-
-        <select name="status" class="form-select py-2 w-auto">
-            <option value="">Trạng thái</option>
+                {{-- Trạng thái --}}
+                <select name="status"
+                    class="px-5 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition w-40">
+                   <option value="">Trạng thái</option>
             <option value="1" {{ request('status')=='1'?'selected':'' }}>Hoạt động</option>
             <option value="0" {{ request('status')=='0'?'selected':'' }}>Tạm ngưng</option>
-        </select>
+                </select>
 
-        <select name="category_id" class="form-select py-2 w-auto">
-            <option value="">Danh mục</option>
+                {{-- Danh mục --}}
+                <select name="category_name"
+                    class="px-5 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition w-56">
+                       <option value="">Danh mục</option>
             @foreach($categories as $cat)
                 <option value="{{ $cat->category_id }}" 
                     {{ request('category_id')==$cat->category_id?'selected':'' }}>
                     {{ $cat->category_name }}
                 </option>
             @endforeach
-        </select>
+                </select>
 
-        <select name="type" class="form-select py-2 w-auto">
-            <option value="">Loại</option>
+                {{-- Thương hiệu --}}
+                <select name="type"
+                    class="px-5 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition w-56">
+                    <option value="">Loại</option>
             <option value="Lẻ" {{ request('type')=='Lẻ'?'selected':'' }}>Lẻ</option>
             <option value="Gói" {{ request('type')=='Gói'?'selected':'' }}>Gói</option>
-        </select>
+                </select>
 
-        <div class="form-check ms-2">
-            <input class="form-check-input" type="checkbox" name="featured" value="1" 
-                   {{ request('featured') ? 'checked' : '' }}>
-            <label class="form-check-label text-primary fw-semibold">Nổi bật</label>
+                {{-- Nổi bật --}}
+                <div class="flex items-center">
+                    <input type="checkbox" name="featured" value="1"
+                        {{ request('featured') ? 'checked' : '' }}
+                        class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                    <label class="ml-2 block text-sm text-gray-700 font-medium">Nổi bật</label>
+                {{-- Nút lọc --}}
+                <button type="submit" style="margin-left: 20px;"
+                    class="px-5 py-2 bg-blue-50 text-blue-600 font-medium rounded-lg hover:bg-blue-100 transition-colors duration-200">
+                    <i class="fas fa-filter mr-2"></i> Lọc
+                </button>
+
+                {{-- Xoá lọc --}}
+                 <a href="{{ route('admin.services.index') }}" 
+                    class="px-5 py-2 bg-gray-50 text-gray-700 font-medium rounded-lg hover:bg-gray-100 transition-colors duration-200">
+                    Xoá 
+                </a>
+            </form>
         </div>
 
-        <button type="submit" class="btn btn-outline-primary px-4">
-            <i class="fas fa-filter me-2"></i>Lọc
-        </button>
 
-        <a href="{{ route('admin.services.index') }}" 
-           class="btn btn-outline-secondary px-4">
-            Xóa lọc
-        </a>
-    </form>
 
-</div>
+
 
 
     <!-- Table -->
