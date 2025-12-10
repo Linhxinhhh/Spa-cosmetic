@@ -47,7 +47,10 @@ class Order extends Model
 
     // Quan hệ (nếu có bảng order_items; nếu chưa dùng có thể bỏ)
     public function items(){ return $this->hasMany(OrderItem::class,'order_id','order_id'); }
-
+public function orders()
+{
+    return $this->hasMany(Order::class, 'user_id', 'user_id');
+}
     // Lọc
     public function scopeFilter($q, array $f){
         return $q

@@ -510,29 +510,29 @@
                             @elseif($order->status == 'pending') status-pending
                             @else status-cancel
                             @endif">
-                            
+
                             @switch($order->status)
                                 @case('completed')
                                     Hoàn tất
                                     @break
 
-                                @case('shipping')
+                                @case('shipped')
                                     Đang vận chuyển
                                     @break
 
-                                @case('pending')
+                                @case('processing')
                                     Đang xử lý
                                     @break
 
-                                @case('cancel')
-                                    Đã hủy
+                                @case('pending')
+                                    Chờ xử lý
                                     @break
 
                                 @default
                                     Không xác định
                             @endswitch
                         </span>
-
+                        {{ $order->status }}
                         </td>
                     </tr>
                     @endforeach

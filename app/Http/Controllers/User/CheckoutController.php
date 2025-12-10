@@ -35,6 +35,10 @@ class CheckoutController extends Controller
         ]);
 
         $user = $request->user();
+        $user->update([
+            'phone'   => $request->phone,
+            'address' => $request->address,
+        ]);
         $cart = $user->cart()->with('items.product')->first();
         if (!$cart || $cart->items->isEmpty()) {
             return back()->with('error','Giỏ hàng trống.');

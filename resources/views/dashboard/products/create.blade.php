@@ -309,7 +309,7 @@
                 <div class="form-group">
                     <label class="form-label">
                     <i class="fas fa-flask mr-1"></i>Dung tích
-                    <small class="text-muted">(ví dụ: 140ml, 500ml, 2x500ml)</small>
+                    <small class="text-white">(ví dụ: 140ml, 500ml, 2x500ml)</small>
                     </label>
                     <div class="input-icon">
                     <i class="fas fa-beaker"></i>
@@ -326,7 +326,7 @@
                     {{-- Quick-fill gợi ý --}}
                     <div class="mt-2 d-flex gap-2 flex-wrap text-white">
                     @foreach(['140ml','500ml','2x500ml','500+140ml'] as $cap)
-                        <button type="button" class="btn btn-sm btn-outline-primary"
+                        <button type="button" class="btn btn-sm btn-outline-primary text-white"
                                 onclick="document.querySelector('[name=capacity]').value='{{ $cap }}'">{{ $cap }}</button>
                     @endforeach
                     </div>

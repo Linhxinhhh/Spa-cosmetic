@@ -94,7 +94,7 @@
                     <tbody>
                         @forelse($customers as $c)
                             <tr>
-                                <td>{{ $c->id }}</td>
+                                <td>{{ $c->user_id }}</td>
 
                                 {{-- Tên khách hàng --}}
                                 <td class="fw-semibold">

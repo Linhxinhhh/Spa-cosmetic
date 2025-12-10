@@ -19,20 +19,48 @@
             </p>
         </div>
         <div class="col-md-4 text-md-end">
-            @php
-        
+           @php
+    // Map trạng thái DB → tiếng Việt
+    $statusText = match($order->status) {
+        'pending'    => 'Chờ xử lý',
+        'processing' => 'Đang xử lý',
+        'shipped'    => 'Đang vận chuyển',
+        'delivered'  => 'Hoàn tất',
+        'cancelled'  => 'Đã hủy',
+        default      => 'Không xác định',
+    };
+
+    // Map trạng thái DB → màu Bootstrap
     $statusColor = match($order->status) {
-        'Đang xử lý'      => 'warning',
-        'Đang vận chuyển' => 'processing',
-        'Đã giao'         => 'success',
-        'Đã hủy'          => 'danger',
-        default           => 'secondary',
+        'pending'    => 'warning',
+        'processing' => 'info',
+        'shipped'    => 'primary',
+        'delivered'  => 'success',
+        'cancelled'  => 'danger',
+        default      => 'secondary',
+    };
+@endphp
+                 @php
+    // Map DB enum → tiếng Việt
+    $statuspay = match($order->payment_status) {
+        'pending' => 'Chưa thanh toán',
+        'paid'    => 'Đã thanh toán',
+        'failed'  => 'Thất bại',
+        default   => 'Không xác định',
+    };
+
+    // Map DB enum → màu Bootstrap
+    $paymentColor = match($order->payment_status) {
+        'pending' => 'warning', // vàng
+        'paid'    => 'success', // xanh lá
+        'failed'  => 'danger',  // đỏ
+        default   => 'secondary',
     };
 @endphp
 
-            <span class="badge bg-{{ $statusColor }} fs-6 px-3 py-2">
-                <i class="bi bi-truck"></i> {{ $order->status }}
-            </span>
+           <span class="badge bg-{{ $statusColor }}">
+    {{ $statusText }}
+</span>
         </div>
     </div>
 
@@ -161,27 +189,31 @@
                     </h6>
                 </div>
                 <div class="card-body">
-                    <div class="mb-3">
-                        <small class="text-muted d-block mb-1">Phương thức</small>
-                        <div class="d-flex align-items-center">
-                            <i class="bi bi-wallet2 text-primary me-2"></i>
-                            <strong>{{ $order->payment_method }}</strong>
-                        </div>
-                    </div>
+            <div class="mb-3">
+    <small class="text-muted d-block mb-1">Phương thức</small>
+
+    @php
+        $paymentText = match ($order->payment_method) {
+            'cod'   => 'Tiền mặt',
+            'momo'  => 'Ví MoMo',
+            'vnpay' => 'VNPAY',
+            default => 'Không xác định',
+        };
+    @endphp
+
+    <div class="d-flex align-items-center">
+        <i class="bi bi-wallet2 text-primary me-2"></i>
+        <strong>{{ $paymentText }}</strong>
+    </div>
+</div>
+
                     <div>
                         <small class="text-muted d-block mb-1">Trạng thái thanh toán</small>
-                        @php
-    $paymentColor = match($order->payment_status) {
-        'Đã thanh toán'   => 'paid',
-        'Chưa thanh toán' => 'warning',
-        'Thất bại'        => 'danger',
-        'Đang xử lý'      => 'info',
-        default           => 'secondary',
-    };
-@endphp
-                        <span class="badge bg-{{ $paymentColor }}">
-                            {{ $order->payment_status }}
-                        </span>
+
+
+<span class="badge bg-{{ $paymentColor }}">
+    {{ $statuspay}}
+</span>
                     </div>
                 </div>
             </div>

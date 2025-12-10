@@ -15,24 +15,20 @@ class CustomerController extends Controller
     public function index(Request $r)
     {
         $q = trim((string) $r->q);
-
         // Lấy user có role "customer" + số đơn hàng + tổng tiền
         $customers = User::query()
-            ->withCount('orders')                     // đếm số đơn hàng
-            ->withSum('orders', 'total')              // tổng tiền đã mua
-            ->whereHas('roles', function ($role) {
-                $role->where('name', 'customer');
-            })
-            ->when($q, function ($qr) use ($q) {
-                $qr->where(function ($x) use ($q) {
-                    $x->where('name', 'like', "%{$q}%")
-                      ->orWhere('email', 'like', "%{$q}%")
-                      ->orWhere('phone', 'like', "%{$q}%");
-                });
-            })
-            ->latest('created_at')
-            ->paginate(10)
-            ->withQueryString();
+    ->withCount('orders')                     
+    ->doesntHave('roles')
+    ->when($q, function ($qr) use ($q) {
+        $qr->where(function ($x) use ($q) {
+            $x->where('name', 'like', "%{$q}%")
+              ->orWhere('email', 'like', "%{$q}%")
+              ->orWhere('phone', 'like', "%{$q}%");
+        });
+    })
+    ->latest('created_at')
+    ->paginate(10)
+    ->withQueryString();
 
         return view('dashboard.customers.index', compact('customers', 'q'));
     }
