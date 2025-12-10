@@ -54,7 +54,6 @@ class CustomerTreatmentController extends Controller
             ->where('treatment_plans.customer_id', $customerId)
             ->orderBy('scheduled_start')
             ->get();
-
         return view('Users.treatments.sessions', compact('sessions'));
     }
 }
