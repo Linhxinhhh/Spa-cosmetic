@@ -86,8 +86,6 @@
                             <th>Khách hàng</th>
                             <th>Liên hệ</th>
                             <th>Địa chỉ</th>
-                            <th>Sinh nhật</th>
-                            <th>Điểm tích lũy</th>
                             <th>Hành động</th>
                         </tr>
                     </thead>
@@ -114,36 +112,7 @@
                                 </td>
                                 {{-- Địa chỉ / Sinh nhật / Điểm --}}
                                 <td>{{ $c->address ?? optional($c->user)->address ?? '—' }}</td>
-                                @php
-
-
-
-                                    $raw = $c->birthday;
-                                    $birthdayText = '—';
-
-                                    if (!empty($raw)) {
-                                        try {
-                                            if ($raw instanceof \Carbon\CarbonInterface) {
-                                                $birthdayText = $raw->format('d/m/Y');
-                                            } elseif (str_contains((string) $raw, '/')) {
-                                                // DB lưu kiểu d/m/Y hoặc d/m/Y H:i:s
-                                                $fmt = str_contains((string) $raw, ' ') ? 'd/m/Y H:i:s' : 'd/m/Y';
-                                                $birthdayText = \Carbon\Carbon::createFromFormat($fmt, $raw)->format('d/m/Y');
-                                            } else {
-                                                // DB lưu Y-m-d hoặc Y-m-d H:i:s
-                                                $birthdayText = \Carbon\Carbon::parse($raw)->format('d/m/Y');
-                                            }
-                                        } catch (\Throwable $e) {
-                                            // Parse lỗi thì hiển thị nguyên văn
-                                            $birthdayText = (string) $raw;
-                                        }
-                                    }
-                                @endphp
-
-                                <td>{{ $birthdayText }}</td>
-
-
-                                <td>{{ number_format((int) $c->loyalty_points) }}</td>
+                               
 
                                 {{-- Hành động --}}
                                 <td>
