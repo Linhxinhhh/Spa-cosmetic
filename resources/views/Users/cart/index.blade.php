@@ -555,15 +555,18 @@
                 </div>
 
                 {{-- Price --}}
-                <div class="text-lg-center mb-3 mb-lg-0">
-                 @php $priceWithVAT = $price * 1.05; @endphp
-<div class="price-current">{{ number_format($priceWithVAT,0,',','.') }}₫</div>
+   {{-- Price --}}
+<div class="text-lg-center mb-3 mb-lg-0">
 
-                  @if($hasSale)
-                    <div class="price-original">{{ number_format($orig, 0, ',', '.') }}₫</div>
-                  @endif
-                  <div class="d-lg-none small text-muted">Đơn giá</div>
-                </div>
+    <div class="price-current">{{ number_format($price, 0, ',', '.') }}₫</div>
+
+    @if($hasSale)
+        <div class="price-original">{{ number_format($orig, 0, ',', '.') }}₫</div>
+    @endif
+
+    <div class="d-lg-none small text-muted">Đơn giá</div>
+</div>
+
 
                 {{-- Quantity --}}
                 <div class="text-lg-center mb-3 mb-lg-0">
@@ -577,7 +580,7 @@
 
                 {{-- Line Total --}}
                 <div class="text-lg-end">
-                  <div class="price-current fs-5">{{ number_format($lineTotal,0,',','.') }}₫</div>
+                  <div class="price-current fs-5">{{ number_format($subtotal,0,',','.') }}₫</div>
 
                   <div class="d-lg-none small text-muted">Thành tiền</div>
                 </div>
