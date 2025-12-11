@@ -1,6 +1,9 @@
 @extends('dashboard.layouts.app')
-
+@section('breadcrumb-parent', 'Quản trị')
+@section('breadcrumb-child', 'Kế hoạch liệu trình')
+@section('page-title', 'Chỉnh sửa kế hoạch liệu trình')
 @section('content')
+
 <style>
     .status-update-container {
         max-width: 900px;
