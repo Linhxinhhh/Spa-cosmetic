@@ -541,7 +541,7 @@
 @endswitch
 
                         </span>
-                        {{ $order->status }}
+                    
                         </td>
                     </tr>
                     @endforeach
