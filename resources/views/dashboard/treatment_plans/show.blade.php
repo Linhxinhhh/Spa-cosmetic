@@ -2,7 +2,7 @@
 
 @section('breadcrumb-parent', 'Quản trị')
 @section('breadcrumb-child', 'Kế hoạch liệu trình')
-@section('page-title', 'Chi tiết kế hoạch #{{ $plan->id }}')
+@section('page-title', 'Chi tiết kế hoạch' )
 
 @push('styles')
 <link href="{{asset('admin/giaodien/css/style.css')}}" rel="stylesheet">
@@ -83,8 +83,7 @@
                         <th style="width: 80px">Buổi</th>
                         <th style="min-width: 200px">Thời gian</th>
                         <th style="min-width: 180px">Nội dung</th>
-                        <th style="min-width: 160px">Nhân viên</th>
-                        <th style="width: 120px">Phòng</th>
+                     
                         <th style="width: 140px">Trạng thái</th>
                         <th style="width: 100px" class="text-end">Thao tác</th>
                     </tr>
@@ -120,39 +119,7 @@
                                     <span class="fw-medium">{{ $s->packageStep->title ?? 'Buổi '.$s->session_no }}</span>
                                 </div>
                             </td>
-                            <td>
-                                @if($s->staff)
-                                    <div class="staff-info">
-                                        <div class="staff-avatar">
-                                            {{ strtoupper(substr($s->staff->name, 0, 1)) }}
-                                        </div>
-                                        <div class="staff-details">
-                                            <div class="staff-name">{{ $s->staff->name }}</div>
-                                            @if($s->staff->phone ?? false)
-                                                <div class="staff-contact">
-                                                    <i class="fas fa-phone small"></i> {{ $s->staff->phone }}
-                                                </div>
-                                            @endif
-                                        </div>
-                                    </div>
-                                @else
-                                    <span class="text-muted">
-                                        <i class="fas fa-user-slash me-1"></i>Chưa chỉ định
-                                    </span>
-                                @endif
-                            </td>
-                            <td>
-                                @if($s->room_id)
-                                    <div class="room-badge">
-                                        <i class="fas fa-door-open me-1"></i>
-                                        Phòng {{ $s->room_id }}
-                                    </div>
-                                @else
-                                    <span class="text-muted">
-                                        <i class="fas fa-minus-circle me-1"></i>Chưa có
-                                    </span>
-                                @endif
-                            </td>
+                           
                             <td>
                                 @include('dashboard.treatment_plans._status-badge', ['status' => $s->status])
                             </td>
