@@ -50,6 +50,9 @@ public function index()
     'delivered'    => DB::table('orders')->where('status','delivered')->count(),
     'cancel'   => DB::table('orders')->where('status','cancel')->count(),
 ];
+       $totalServices = DB::table('appointments')
+    ->whereNotNull('service_id')
+    ->count();
              // Top dịch vụ được đặt nhiều nhất (dựa vào orders_count)
 $topServices = DB::table('appointments as a')
     ->join('services as b', 'a.service_id', '=', 'b.service_id')
@@ -82,7 +85,8 @@ $topServices = DB::table('appointments as a')
     'latestOrders',
     'orderStatus',
     'totalUsers',
-    'totalReviews'
+    'totalReviews',
+    'totalServices'
 ));
     }
 }

@@ -32,6 +32,11 @@ class AnalyticsController extends Controller
           $totalUsers = DB::table('users')->count();
         // Tổng số sản phẩm đã bán
         $totalProductsSold = DB::table('order_items')->sum('quantity');
+        $totalServices = DB::table('appointments')
+    ->whereNotNull('service_id')
+    ->count();
+   
+
          $totalReviews = DB::table('reviews')->count();
         // Top 5 sản phẩm bán chạy
         $topProducts = DB::table('order_items')
@@ -78,7 +83,8 @@ class AnalyticsController extends Controller
     'latestOrders',
     'orderStatus',
     'totalUsers',
-    'totalReviews'
+    'totalReviews',
+    'totalServices'
 ));
     }
 }

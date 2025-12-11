@@ -445,7 +445,7 @@
                 <i class="fa-solid fa-cogs"></i> {{-- Icon phù hợp cho dịch vụ --}}
             </div>
             <div class="stats-content">
-                <h5>{{ $totalServices ?? 0 }}</h5> {{-- Giả sử biến $totalServices từ controller --}}
+                <h5>{{ $totalServices }}</h5> {{-- Giả sử biến $totalServices từ controller --}}
                 <small>Dịch vụ</small>
                 <a href="#" class="stats-link text-danger">
                     Chi tiết <i class="fa-solid fa-arrow-right"></i>
