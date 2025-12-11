@@ -97,8 +97,17 @@
                                     <div class="col-md-3 mb-3 mb-md-0">
                                         <div>
                                             <small class="text-muted d-block mb-1">Tổng tiền</small>
-                                            <h5 class="mb-0 text-danger fw-bold">{{ number_format($o->total_amount, 0, ',', '.') }}₫
-                                            </h5>
+                                            @php
+    $subtotal = $o->total_amount;
+    $vat = round($subtotal * 0.05);
+    $totalWithVat = $subtotal + $vat;
+@endphp
+
+<h5 class="mb-0 text-danger fw-bold">
+    {{ number_format($totalWithVat, 0, ',', '.') }}₫
+</h5>
+<small class="text-muted">(Đã bao gồm VAT 5%)</small>
+
                                         </div>
                                     </div>
 

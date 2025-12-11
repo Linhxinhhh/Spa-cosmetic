@@ -63,22 +63,28 @@ class CartController extends Controller
 public function index()
 {
     $orderCode = 'LCS' . now()->format('YmdHis');
-
-    // ---- USER ĐANG ĐĂNG NHẬP ----
+    
+    // ---- USER ĐĂNG NHẬP ----
     if (Auth::check()) {
         $cart  = $this->myCart();
         $items = $cart->items()->with(['product.imagesRel'])->get();
 
-        // TÍNH TỔNG TIỀN
+        // TÍNH TỔNG TIỀN + VAT
         $subtotal = $items->sum(function ($it) {
-            return product_final_price($it->product) * $it->quantity;
+            $price = product_final_price($it->product);
+            $qty   = $it->quantity;
+            return $price * $qty;
         });
 
+        $subtotalWithVat = (int) round($subtotal * 1.05);
+        
+
         return view('Users.cart.index', [
-            'cart'      => $cart,
-            'items'     => $items,
-            'orderCode' => $orderCode,
-            'subtotal'  => $subtotal,
+            'cart'           => $cart,
+            'items'          => $items,
+            'orderCode'      => $orderCode,
+            'subtotal'       => $subtotal,
+            'subtotalWithVat'=> $subtotalWithVat,
         ]);
     }
 
@@ -87,16 +93,21 @@ public function index()
     $items        = $this->buildViewItemsForGuest($sessionItems);
     $cart         = null;
 
-    // TÍNH TỔNG TIỀN
+    // TÍNH TỔNG TIỀN + VAT
     $subtotal = $items->sum(function ($it) {
-        return product_final_price($it->product) * $it->quantity;
+        $price = product_final_price($it->product);
+        $qty   = $it->quantity;
+        return $price * $qty;
     });
 
+    $subtotalWithVat = (int) round($subtotal * 1.05);
+
     return view('Users.cart.index', [
-        'cart'      => $cart,
-        'items'     => $items,
-        'orderCode' => $orderCode,
-        'subtotal'  => $subtotal,
+        'cart'           => $cart,
+        'items'          => $items,
+        'orderCode'      => $orderCode,
+        'subtotal'       => $subtotal,
+        'subtotalWithVat'=> $subtotalWithVat,
     ]);
 }
 

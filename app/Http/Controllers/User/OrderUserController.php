@@ -18,6 +18,7 @@ class OrderUserController extends Controller
     }
 
     // Chi tiết đơn hàng
+ // Chi tiết đơn hàng
     public function show($orderId)
     {
         $order = Order::with('items.product')
@@ -25,6 +26,38 @@ class OrderUserController extends Controller
             ->where('user_id', Auth::id()) // chặn xem đơn của người khác
             ->firstOrFail();
 
-        return view('Users.orders.show', compact('order'));
+        // -----------------------
+        // 🧮 TÍNH TẠM TÍNH (subtotal)
+        // -----------------------
+        $itemsTotal = $order->items->sum(function ($it) {
+            $base = (int)$it->price * (int)$it->quantity;
+
+            // xử lý chiết khấu
+            $disc = 0;
+            if (!is_null($it->discount_price) && $it->discount_price > 0) {
+                $disc = (int)$it->discount_price;
+            } elseif ($it->discount_percent > 0) {
+                $disc = (int) round($base * $it->discount_percent / 100);
+            }
+
+            return max(0, $base - $disc);
+        });
+
+        // -----------------------
+        // 🧮 VAT 5%
+        // -----------------------
+        $vatAmount = (int) round($itemsTotal * 0.05);
+
+        // -----------------------
+        // 🧮 Tổng thanh toán
+        // -----------------------
+        $grandTotal = $itemsTotal + $vatAmount;
+
+        return view('Users.orders.show', [
+            'order'       => $order,
+            'itemsTotal'  => $itemsTotal,
+            'vatAmount'   => $vatAmount,
+            'grandTotal'  => $grandTotal,
+        ]);
     }
 }

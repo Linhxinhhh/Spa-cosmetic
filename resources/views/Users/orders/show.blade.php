@@ -115,7 +115,9 @@
                                         </div>
                                     </td>
                                     <td class="text-center">
-                                        <span class="text-muted">{{ number_format($item->price, 0, ',', '.') }}₫</span>
+                                        <span class="text-muted">@php $priceWithVAT = $item->price * 1.05; @endphp
+{{ number_format($priceWithVAT, 0, ',', '.') }}₫
+</span>
                                     </td>
                                     <td class="text-center">
                                         <span class="badge bg-light text-dark border">x{{ $item->quantity }}</span>
@@ -129,7 +131,15 @@
                                     </td>
                                     <td class="text-end pe-4">
                                         <strong class="text-primary">
-                                            {{ number_format($item->quantity * $item->price, 0, ',', '.') }}₫
+                                           @php
+    $priceWithVAT = $item->price * 1.05; // giá có VAT
+    $totalWithVAT = $priceWithVAT * $item->quantity;
+@endphp
+
+<strong class="text-primary">
+    {{ number_format($totalWithVAT, 0, ',', '.') }}₫
+</strong>
+
                                         </strong>
                                     </td>
                                 </tr>
@@ -154,7 +164,8 @@
                             <div class="text-muted">Tạm tính:</div>
                         </div>
                         <div class="col-6 text-end">
-                            <strong>{{ number_format($order->total_amount, 0, ',', '.') }}₫</strong>
+                            <strong>{{ number_format($grandTotal, 0, ',', '.') }}₫</strong>
+
                         </div>
                         
                         <div class="col-6">
@@ -171,8 +182,10 @@
                         </div>
                         <div class="col-6 text-end">
                             <h4 class="mb-0 text-danger fw-bold">
-                                {{ number_format($order->total_amount, 0, ',', '.') }}₫
-                            </h4>
+                               @php $totalVAT = $order->items->sum(fn($i) => $i->price * $i->quantity * 1.05); @endphp
+
+{{ number_format($totalVAT, 0, ',', '.') }}₫
+
                         </div>
                     </div>
                 </div>
