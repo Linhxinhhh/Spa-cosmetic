@@ -476,6 +476,7 @@
                 <h5 class="text-center">Thống kê trạng thái đơn hàng</h5>
                 <canvas id="statusChart"></canvas>
             </div>
+            
         </div>
 
     </div>
@@ -505,32 +506,40 @@
                         <td >{{ $order->created_at }}</td>
                         <td>
                          <span class="status-badge 
-                        @if($order->status == 'completed') status-completed
-                            @elseif($order->status == 'shipping') status-shipping
-                            @elseif($order->status == 'pending') status-pending
-                            @else status-cancel
-                            @endif">
+    @if($order->status == 'pending') status-pending
+    @elseif($order->status == 'processing') status-shipping
+    @elseif($order->status == 'shipped') status-shipping
+    @elseif($order->status == 'delivered') status-completed
+    @elseif($order->status == 'canceled') status-cancel
+    @endif
+">
 
-                            @switch($order->status)
-                                @case('completed')
-                                    Hoàn tất
-                                    @break
 
-                                @case('shipped')
-                                    Đang vận chuyển
-                                    @break
+                        @switch($order->status)
+    @case('pending')
+        Chờ xử lý
+        @break
 
-                                @case('processing')
-                                    Đang xử lý
-                                    @break
+    @case('processing')
+        Đang xử lý
+        @break
 
-                                @case('pending')
-                                    Chờ xử lý
-                                    @break
+    @case('shipped')
+        Đang vận chuyển
+        @break
 
-                                @default
-                                    Không xác định
-                            @endswitch
+    @case('delivered')
+        Đã giao
+        @break
+
+    @case('canceled')
+        Đã hủy
+        @break
+
+    @default
+        Không xác định
+@endswitch
+
                         </span>
                         {{ $order->status }}
                         </td>
@@ -656,14 +665,15 @@ new Chart(document.getElementById('revenueChart'), {
 });
 
 /* === Biểu đồ trạng thái đơn hàng === */
+console.log(@json($orderStatus));
 new Chart(document.getElementById('statusChart'), {
     type: 'doughnut',
     data: {
-        labels: ["Hoàn tất", "Đang vận chuyển", "Đang xử lý", "Hủy"],
+        labels: ["Hoàn tất", "Đang vận chuyển", "Chờ xử lý", "Hủy"],
         datasets: [{
             data: [
-                {{ $orderStatus['completed'] ?? 0 }},
-                {{ $orderStatus['shipping'] ?? 0 }},
+                {{ $orderStatus['delivered'] ?? 0 }},
+                {{ $orderStatus['shipped'] ?? 0 }},
                 {{ $orderStatus['pending'] ?? 0 }},
                 {{ $orderStatus['cancel'] ?? 0 }},
             ],

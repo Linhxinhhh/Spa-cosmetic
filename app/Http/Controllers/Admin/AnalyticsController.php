@@ -48,11 +48,13 @@ class AnalyticsController extends Controller
     'cancel'    => DB::table('orders')->where('status','cancel')->count(),
 ];
         // Top dịch vụ được đặt nhiều nhất (dựa vào orders_count)
-        $topServices = DB::table('services')
-            ->select('service_name', 'orders_count')
-            ->orderByDesc('orders_count')
-            ->limit(5)
-            ->get();
+       $topServices = DB::table('appointments as a')
+    ->join('services as b', 'a.service_id', '=', 'b.service_id')
+    ->selectRaw('COUNT(a.user_id) AS total_used, b.service_name')
+    ->groupBy('b.service_name')
+    ->orderByDesc('total_used')
+    ->get();
+
 
         // Doanh thu theo tháng (12 tháng gần nhất)
    $revenueMonthly = DB::table('orders')
