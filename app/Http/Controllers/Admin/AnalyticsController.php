@@ -14,10 +14,10 @@ use App\Models\Appointment; // nếu có
 
 class AnalyticsController extends Controller
 {
-    public function index()
+   public function index()
     {
-        $latestOrders = DB::table('orders')
-            ->leftJoin('users', 'orders.user_id', '=', 'users.user_id')
+         $latestOrders = DB::table('orders')
+           ->leftJoin('users', 'orders.user_id', '=', 'users.user_id')
             ->select('orders.*', 'users.name as customer_name')
             ->orderByDesc('order_id')
             ->limit(10)
@@ -29,15 +29,15 @@ class AnalyticsController extends Controller
         $totalProducts = DB::table('products')->count();
         // Tổng số đơn hàng
         $totalOrders = DB::table('orders')->count();
-        $totalUsers = DB::table('users')->count();
+          $totalUsers = DB::table('users')->count();
         // Tổng số sản phẩm đã bán
         $totalProductsSold = DB::table('order_items')->sum('quantity');
         $totalServices = DB::table('appointments')
-            ->whereNotNull('service_id')
-            ->count();
+    ->whereNotNull('service_id')
+    ->count();
+   
 
-
-        $totalReviews = DB::table('reviews')->count();
+         $totalReviews = DB::table('reviews')->count();
         // Top 5 sản phẩm bán chạy
         $topProducts = DB::table('order_items')
             ->join('products', 'order_items.product_id', '=', 'products.product_id')
@@ -47,46 +47,44 @@ class AnalyticsController extends Controller
             ->limit(5)
             ->get();
         $orderStatus = [
-            'completed' => DB::table('orders')->where('status', 'completed')->count(),
-            'shipping' => DB::table('orders')->where('status', 'shipping')->count(),
-            'pending' => DB::table('orders')->where('status', 'pending')->count(),
-            'cancel' => DB::table('orders')->where('status', 'cancel')->count(),
-        ];
-
-        dd($orderStatus);
+    'completed' => DB::table('orders')->where('status','completed')->count(),
+    'shipping'  => DB::table('orders')->where('status','shipping')->count(),
+    'pending'   => DB::table('orders')->where('status','pending')->count(),
+    'cancel'    => DB::table('orders')->where('status','cancel')->count(),
+];
         // Top dịch vụ được đặt nhiều nhất (dựa vào orders_count)
-        $topServices = DB::table('appointments as a')
-            ->join('services as b', 'a.service_id', '=', 'b.service_id')
-            ->selectRaw('COUNT(a.user_id) AS total_used, b.service_name')
-            ->groupBy('b.service_name')
-            ->orderByDesc('total_used')
-            ->get();
+       $topServices = DB::table('appointments as a')
+    ->join('services as b', 'a.service_id', '=', 'b.service_id')
+    ->selectRaw('COUNT(a.user_id) AS total_used, b.service_name')
+    ->groupBy('b.service_name')
+    ->orderByDesc('total_used')
+    ->get();
 
 
         // Doanh thu theo tháng (12 tháng gần nhất)
-        $revenueMonthly = DB::table('orders')
-            ->selectRaw("DATE(created_at) as day, SUM(total_amount) as revenue")
-            ->groupBy('day')
-            ->orderBy('day', 'ASC')
-            ->get();
+   $revenueMonthly = DB::table('orders')
+    ->selectRaw("DATE(created_at) as day, SUM(total_amount) as revenue")
+    ->groupBy('day')
+    ->orderBy('day', 'ASC')
+    ->get();
         $paymentMethodCount = DB::table('orders')
-            ->select('payment_method', DB::raw('COUNT(*) as total'))
-            ->groupBy('payment_method')
-            ->pluck('total', 'payment_method');
+    ->select('payment_method', DB::raw('COUNT(*) as total'))
+    ->groupBy('payment_method')
+    ->pluck('total','payment_method');        
         return view('dashboard.analytics.index', compact(
-            'totalRevenue',
-            'totalProducts',
-            'totalOrders',
-            'totalProductsSold',
-            'topProducts',
-            'topServices',
-            'revenueMonthly',
-            'paymentMethodCount',
-            'latestOrders',
-            'orderStatus',
-            'totalUsers',
-            'totalReviews',
-            'totalServices'
-        ));
+    'totalRevenue',
+    'totalProducts',
+    'totalOrders',
+    'totalProductsSold',
+    'topProducts',
+    'topServices',
+    'revenueMonthly',
+    'paymentMethodCount',
+    'latestOrders',
+    'orderStatus',
+    'totalUsers',
+    'totalReviews',
+    'totalServices'
+));
     }
 }

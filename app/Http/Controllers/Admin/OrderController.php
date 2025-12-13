@@ -32,6 +32,7 @@ public function index(Request $r)
         ->latest('created_at')
         ->paginate(20)
         ->withQueryString();
+        
 
     return view('dashboard.orders.index', [
         'orders'    => $orders,
