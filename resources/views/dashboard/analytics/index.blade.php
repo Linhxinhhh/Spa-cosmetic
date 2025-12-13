@@ -507,7 +507,7 @@
                         <td>
                          <span class="status-badge 
     @if($order->status == 'pending') status-pending
-    @elseif($order->status == 'processing') status-shipping
+    {{-- @elseif($order->status == 'processing') status-shipping --}}
     @elseif($order->status == 'shipped') status-shipping
     @elseif($order->status == 'delivered') status-completed
     @elseif($order->status == 'canceled') status-cancel
