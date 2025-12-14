@@ -621,9 +621,11 @@
                 <div class="stat-icon icon-total">
                     <i class="fas fa-clipboard-list"></i>
                 </div>
-                <div class="stat-number">{{ $totalSessions }}</div>
+                <div class="stat-number">{{ $totalSessions ?? 'NULL' }}</div>
+
                 <div class="stat-label">Tổng số buổi</div>
             </div>
+            
             <div class="stat-card">
                 <div class="stat-icon icon-upcoming">
                     <i class="fas fa-clock"></i>
@@ -641,8 +643,6 @@
           
         </div>
 
-        {{-- Sessions Grid --}}
-       {{-- Sessions Grid --}}
 <div class="sessions-grid">
     @foreach($sessions as $s)
         <div class="session-card">
