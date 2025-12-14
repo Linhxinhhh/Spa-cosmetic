@@ -294,8 +294,7 @@ public function rescheduleAppointment(Request $request, $id)
 {
     $request->validate([
         'appointment_date' => 'required|date',
-        'start_time'       => 'required',
-        'end_time'         => 'required',
+        'start_time'       => 'required|date_format:H:i',
     ]);
 
     $appointment = Appointment::where('appointment_id', $id)
@@ -306,16 +305,26 @@ public function rescheduleAppointment(Request $request, $id)
         return back()->with('error', 'Buổi đã hoàn thành, không thể thay đổi.');
     }
 
+    // Ghép ngày + giờ bắt đầu
+    $startDateTime = Carbon::createFromFormat(
+        'Y-m-d H:i',
+        $request->appointment_date . ' ' . $request->start_time
+    );
+
+    // ⏱️ Thời lượng buổi (phút)
+    $durationMinutes = 60; // hoặc lấy từ service
+
+    $endDateTime = $startDateTime->copy()->addMinutes($durationMinutes);
+
     $appointment->update([
-        'appointment_date' => $request->appointment_date,
-        'start_time'       => $request->start_time,
-        'end_time'         => $request->end_time,
-        'status'           => 'confirmed', // Hoặc scheduled tùy bạn
+        'appointment_date' => $startDateTime->format('Y-m-d'),
+        'start_time'       => $startDateTime->format('H:i:s'),
+        'end_time'         => $endDateTime->format('H:i:s'),
+        'status'           => 'confirmed',
         'notes'            => 'Khách đã dời lịch qua website',
     ]);
 
     return back()->with('success', 'Bạn đã dời lịch hẹn thành công.');
 }
-
 
 } 

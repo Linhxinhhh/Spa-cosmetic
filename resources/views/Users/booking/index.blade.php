@@ -79,44 +79,43 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                         </div>
 
-                        <form action="{{ route('users.booking.reschedule', $a->appointment_id) }}" method="POST">
-                            @csrf
+                     <form action="{{ route('users.booking.reschedule', $a->appointment_id) }}" method="POST">
+    @csrf
 
-                            <div class="modal-body">
+    <div class="modal-body">
+        <p>
+            Thời gian hiện tại:
+            <strong>
+                {{ \Carbon\Carbon::parse($a->appointment_date)->format('d/m/Y') }}
+                {{ \Carbon\Carbon::parse($a->start_time)->format('H:i') }}
+            </strong>
+        </p>
 
-                                <div class="mb-3">
-                                    <label class="form-label">Ngày mới:</label>
-                                    <input type="date" name="appointment_date"
-                                           class="form-control"
-                                           value="{{ $a->appointment_date }}" required>
-                                </div>
+        <div class="mb-3">
+            <label class="form-label">Ngày mới</label>
+            <input type="date"
+                   name="appointment_date"
+                   class="form-control"
+                   value="{{ \Carbon\Carbon::parse($a->appointment_date)->format('Y-m-d') }}"
+                   required>
+        </div>
 
-                                <div class="mb-3">
-                                    <label class="form-label">Giờ bắt đầu:</label>
-                                    <input type="time" name="start_time"
-                                           class="form-control"
-                                           value="{{ $a->start_time }}" required>
-                                </div>
+        <div class="mb-3">
+            <label class="form-label">Giờ bắt đầu</label>
+            <input type="time"
+                   name="start_time"
+                   class="form-control"
+                   value="{{ \Carbon\Carbon::parse($a->start_time)->format('H:i') }}"
+                   required>
+        </div>
+    </div>
 
-                                <div class="mb-3">
-                                    <label class="form-label">Giờ kết thúc:</label>
-                                    <input type="time" name="end_time"
-                                           class="form-control"
-                                           value="{{ $a->end_time }}" required>
-                                </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+        <button type="submit" class="btn btn-warning text-white">Xác nhận dời lịch</button>
+    </div>
+</form>
 
-                            </div>
-
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                    Hủy
-                                </button>
-                                <button type="submit" class="btn btn-warning text-white">
-                                    Xác nhận dời lịch
-                                </button>
-                            </div>
-
-                        </form>
 
                     </div>
                 </div>
