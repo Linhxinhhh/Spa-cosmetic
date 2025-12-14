@@ -11,45 +11,62 @@ use Carbon\Carbon;
 
 class CustomerSessionController extends Controller
 {
+// public function index()
+// {
+//     $userId = Auth::id();
+
+//     // Query gốc
+//     $baseQuery = TreatmentSession::whereHas('plan', function ($q) use ($userId) {
+//         $q->where('customer_id', $userId);
+//     });
+
+//     // THỐNG KÊ
+//     $totalSessions = (clone $baseQuery)->count();
+
+//     $upcomingSessions = (clone $baseQuery)
+//         ->whereIn('status', ['scheduled', 'confirmed'])
+//         ->where('scheduled_start', '>', now())
+//         ->count();
+
+//     $completedSessions = (clone $baseQuery)
+//         ->where('status', 'completed')
+//         ->count();
+
+//     // DANH SÁCH HIỂN THỊ
+//     $sessions = (clone $baseQuery)
+//         ->with(['plan.packageService', 'plan.singleService'])
+//         ->whereIn('status', ['scheduled', 'confirmed'])
+//         ->where('scheduled_start', '>=', now()->subDay())
+//         ->orderBy('scheduled_start')
+//         ->paginate(20);
+
+//     return view('Users.sessions.index', compact(
+//         'sessions',
+//         'totalSessions',
+//         'upcomingSessions',
+//         'completedSessions'
+//     ));
+
+
+// }
 public function index()
-{
-    $userId = Auth::id();
-
-    // Query gốc
-    $baseQuery = TreatmentSession::whereHas('plan', function ($q) use ($userId) {
-        $q->where('customer_id', $userId);
-    });
-
-    // THỐNG KÊ
-    $totalSessions = (clone $baseQuery)->count();
-
-    $upcomingSessions = (clone $baseQuery)
-        ->whereIn('status', ['scheduled', 'confirmed'])
-        ->where('scheduled_start', '>', now())
-        ->count();
-
-    $completedSessions = (clone $baseQuery)
-        ->where('status', 'completed')
-        ->count();
-
-    // DANH SÁCH HIỂN THỊ
-    $sessions = (clone $baseQuery)
-        ->with(['plan.packageService', 'plan.singleService'])
-        ->whereIn('status', ['scheduled', 'confirmed'])
-        ->where('scheduled_start', '>=', now()->subDay())
-        ->orderBy('scheduled_start')
-        ->paginate(20);
-
-    return view('Users.sessions.index', compact(
-        'sessions',
-        'totalSessions',
-        'upcomingSessions',
-        'completedSessions'
-    ));
-
-
-}
-
+    {
+        $userId = Auth::id();
+           $sessions = TreatmentSession::with([
+                'plan.packageService',
+                'plan.singleService',
+            ])
+            ->whereHas('plan', function ($q) use ($userId) {
+                $q->where('customer_id', $userId);
+            })
+            ->whereIn('status', ['scheduled', 'confirmed', 'completed']) // Bao gồm cả buổi đã hoàn thành
+            
+            // ->where('scheduled_start', '>=', now()->subDay())
+            ->orderBy('scheduled_start')
+            ->paginate(20);
+            
+        return view('Users.sessions.index', compact('sessions'));
+    }
 
     // form dời lịch 1 buổi
     public function edit(TreatmentSession $session)
